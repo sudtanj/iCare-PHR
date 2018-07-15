@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "713034949688",
+    "firebase_url": "https://icare-89c17.firebaseio.com",
+    "project_id": "icare-89c17",
+    "storage_bucket": "icare-89c17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713034949688:android:e5e86bee729e90d6",
+        "android_client_info": {
+          "package_name": "sud_tanj.com.icare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713034949688-frr1mevgkrsthb780tcaftqnrig872fu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sud_tanj.com.icare",
+            "certificate_hash": "adddee7bc2cd88af61376c02ea26b32365724772"
+          }
+        },
+        {
+          "client_id": "713034949688-85becbtnb3inr12mo6uo1k5jcdsccc3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu9lSW7z-jadfQtC7JwoiOxGI9Gvl9r70"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713034949688-85becbtnb3inr12mo6uo1k5jcdsccc3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

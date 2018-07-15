@@ -1,4 +1,4 @@
-package sud_tanj.com.icare.iCareFragment;
+package sud_tanj.com.icare;
 
 import android.net.Uri;
 

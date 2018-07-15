@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">iCare</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_profile_name">Jane Doe</string>
+    <string name="default_email">janedoe@person.com</string>
+    <string name="Health_Data_Menu_Title">Health Data</string>
+    <string name="Health_Data_Menu_Description">A list about your currently available health data</string>
+
+    <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="login_failed_google">Login service is currently malfunction. Please try again later!</string>
+    <string name="login_successful_google">Login successful. Please wait while we transfer you to dashboard!</string>
+    <string name="failed_login_message_api">Sorry, currently login button is malfunctioning. Please try again later! Error Code=</string>
 </resources>
