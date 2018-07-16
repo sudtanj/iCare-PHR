@@ -34,6 +34,12 @@ dependencies {
     implementation 'in.championswimmer:Android-SocialButtons:1.3'
     implementation 'com.github.marcinmoskala.activitystarter:activitystarter:0.20'
     annotationProcessor 'com.github.marcinmoskala.activitystarter:activitystarter-compiler:0.20'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'org.altmail:display-textview:1.0.0'
+    implementation 'com.badoo.mobile:android-weak-handler:1.1'
+    implementation 'kr.pe.burt.android.lib:animategradientview:0.0.1'
+    implementation 'com.kaopiz:kprogresshud:1.1.0'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

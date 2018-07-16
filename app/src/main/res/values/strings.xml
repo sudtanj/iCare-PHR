@@ -7,6 +7,10 @@
     <string name="default_email">janedoe@person.com</string>
     <string name="Health_Data_Menu_Title">Health Data</string>
     <string name="Health_Data_Menu_Description">A list about your currently available health data</string>
+    <string name="Logo_Text">iCare</string>
+    <string name="loading_title">Please wait...</string>
+    <string name="Loading_google_account">Synchronizing with Google Server</string>
+    <string name="logo_description">Hello! is this your first time? or returning back? \n Choose one of the sign in method below!</string>
 
     <string name="title_activity_login_screen">LoginScreen</string>
     <string name="dummy_button">Dummy Button</string>

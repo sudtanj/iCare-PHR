@@ -11,6 +11,7 @@ import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
 import com.ncapdevi.fragnav.FragNavController;
 
 import activitystarter.Arg;
+import butterknife.ButterKnife;
 import io.paperdb.Paper;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
@@ -65,7 +66,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     private void initActivityBeforeLoad(Bundle savedInstanceState){
         //Init Offline Storage
         Paper.init(getApplicationContext());
-
+        //Init ButterKnife
+        ButterKnife.bind(this);
     }
 
     private void initActivityAfterLoad(Bundle savedInstanceState){
