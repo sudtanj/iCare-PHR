@@ -31,9 +31,10 @@ import sud_tanj.com.icare.R;
 
 public class LoginScreen extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
+    @BindView(R.id.logo_description)
+    DisplayTextView displayTextView;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-
 
     @OnClick(R.id.sign_in_button)
     public void submit(View v) {
@@ -69,15 +70,12 @@ public class LoginScreen extends AppCompatActivity {
         initUiComponent();
     }
 
-    @BindView(R.id.logo_description)
-    DisplayTextView displayTextView;
-
-    private void initUiComponent(){
+    private void initUiComponent() {
         displayTextView.setText(R.string.logo_description);
         displayTextView.startAnimation();
     }
 
-    private void initBackgroundService(){
+    private void initBackgroundService() {
         //Init Notification
         Notification.init(this);
         //Init ButterKnife
@@ -97,7 +95,7 @@ public class LoginScreen extends AppCompatActivity {
                 LoadingScreen.showLoadingScreen(getString(R.string.Loading_google_account));
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                Notification.notifyFailure(getString(R.string.failed_login_message_api)+e.getStatusCode());
+                Notification.notifyFailure(getString(R.string.failed_login_message_api) + e.getStatusCode());
             }
         }
     }
@@ -112,7 +110,7 @@ public class LoginScreen extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Notification.notifySuccessful(getString(R.string.login_successful_google));
-                            MainActivityStarter.start(LoginScreen.this,mAuth.getCurrentUser());
+                            MainActivityStarter.start(LoginScreen.this, mAuth.getCurrentUser());
                             Bungee.swipeRight(LoginScreen.this);
                         } else {
                             // If sign in fails, display a message to the user.

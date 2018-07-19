@@ -22,6 +22,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation "com.android.support:recyclerview-v7:27.1.1"
+    implementation "com.android.support:support-annotations:27.1.1"
+    implementation "com.android.support:cardview-v7:27.1.1"
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     //Custom
     implementation 'com.heinrichreimersoftware:material-drawer:2.3.3', {
@@ -40,6 +43,7 @@ dependencies {
     implementation 'com.badoo.mobile:android-weak-handler:1.1'
     implementation 'kr.pe.burt.android.lib:animategradientview:0.0.1'
     implementation 'com.kaopiz:kprogresshud:1.1.0'
+    implementation "com.mikepenz:aboutlibraries:6.1.0"
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

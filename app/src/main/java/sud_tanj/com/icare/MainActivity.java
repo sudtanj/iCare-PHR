@@ -8,12 +8,16 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseUser;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
+import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.ncapdevi.fragnav.FragNavController;
 
 import activitystarter.Arg;
 import butterknife.ButterKnife;
 import io.paperdb.Paper;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
+import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
+import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener {
@@ -39,7 +43,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                 new DrawerProfile()
                         .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
                         .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
-                        .setName(getString(R.string.default_profile_name))
+                        .setName(firebaseUser.getDisplayName())
                         .setDescription(getString(R.string.default_email))
                         .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
                             @Override
@@ -61,6 +65,19 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         })
         );
         addDivider();
+        addItem(
+                new DrawerItem()
+                        .setTextPrimary(getString(R.string.about_menu_title))
+                        .setTextSecondary(getString(R.string.about_menu_descriptioni))
+                        .setOnItemClickListener(new DrawerItem.OnItemClickListener() {
+                            @Override
+                            public void onClick(DrawerItem drawerItem, long id, int position) {
+                                new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT)
+                                        //start the activity
+                                        .start(MainActivity.this);
+                            }
+                        })
+        );
     }
 
     private void initActivityBeforeLoad(Bundle savedInstanceState){
@@ -68,12 +85,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         Paper.init(getApplicationContext());
         //Init ButterKnife
         ButterKnife.bind(this);
+        //Init Loading Screen
+        LoadingScreen.init(this);
     }
 
     private void initActivityAfterLoad(Bundle savedInstanceState){
         //init fragment manager
-        builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.content_container);
-        builder.rootFragment(HealthDataList.newInstance("A","b")).build();
+        FragmentBuilder.init(savedInstanceState,getSupportFragmentManager());
+        FragmentBuilder.changeFragment(HealthDataList.newInstance("A","B"));
         //Init Notification
         Notification.init(getApplicationContext());
     }

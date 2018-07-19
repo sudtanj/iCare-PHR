@@ -10,6 +10,8 @@
     <string name="Logo_Text">iCare</string>
     <string name="loading_title">Please wait...</string>
     <string name="Loading_google_account">Synchronizing with Google Server</string>
+    <string name="about_menu_title">About Us</string>
+    <string name="about_menu_descriptioni">Providing detail information about this apps</string>
     <string name="logo_description">Hello! is this your first time? or returning back? \n Choose one of the sign in method below!</string>
 
     <string name="title_activity_login_screen">LoginScreen</string>
