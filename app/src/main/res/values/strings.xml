@@ -13,7 +13,7 @@
     <string name="about_menu_title">About Us</string>
     <string name="about_menu_descriptioni">Providing detail information about this apps</string>
     <string name="logo_description">Hello! is this your first time? or returning back? \n Choose one of the sign in method below!</string>
-
+    <string name="logout_menu_title">Log out</string>
     <string name="title_activity_login_screen">LoginScreen</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

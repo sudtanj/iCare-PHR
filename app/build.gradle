@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'  // butterknife
+    }
 }
 
 dependencies {
@@ -27,16 +30,23 @@ dependencies {
     implementation "com.android.support:cardview-v7:27.1.1"
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     //Custom
+    def AASnapshotVersion = '4.4.0'
+    annotationProcessor "org.androidannotations:androidannotations:$AASnapshotVersion"
+    implementation "org.androidannotations:androidannotations-api:$AASnapshotVersion"
+    implementation 'net.steamcrafted:materialiconlib:1.1.5'
     implementation 'com.heinrichreimersoftware:material-drawer:2.3.3', {
         exclude group: 'com.android.support'
     }
+    implementation 'org.parceler:parceler-api:1.1.11'
+    annotationProcessor 'org.parceler:parceler:1.1.11'
     implementation 'com.ncapdevi:frag-nav:2.4.0'
     implementation 'com.github.GrenderG:Toasty:1.3.0'
     implementation 'com.github.Binary-Finery:Bungee:master-SNAPSHOT'
     implementation 'io.paperdb:paperdb:2.6'
     implementation 'in.championswimmer:Android-SocialButtons:1.3'
-    implementation 'com.github.marcinmoskala.activitystarter:activitystarter:0.20'
-    annotationProcessor 'com.github.marcinmoskala.activitystarter:activitystarter-compiler:0.20'
+    implementation 'com.github.marcinmoskala.activitystarter:activitystarter:0.60-beta.1'
+    annotationProcessor 'com.github.marcinmoskala.activitystarter:activitystarter-compiler:0.60-beta.1'
+    implementation 'com.github.MarcinMoskala.ActivityStarter:activitystarter-parceler-arg-converter:0.60-beta.1'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'org.altmail:display-textview:1.0.0'

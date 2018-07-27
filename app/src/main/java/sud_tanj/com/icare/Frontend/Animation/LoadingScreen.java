@@ -13,7 +13,7 @@ import sud_tanj.com.icare.R;
  * <p>
  * Created by Sudono Tanjung on 16/07/2018 - 20:50.
  * <p>
- * This class last modified by User
+ * This class last modified by BasicUser
  */
 public class LoadingScreen {
     private static KProgressHUD hud;

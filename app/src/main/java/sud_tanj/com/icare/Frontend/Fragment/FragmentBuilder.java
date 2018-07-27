@@ -15,7 +15,7 @@ import sud_tanj.com.icare.R;
  * <p>
  * Created by Sudono Tanjung on 19/07/2018 - 7:06.
  * <p>
- * This class last modified by User
+ * This class last modified by BasicUser
  */
 public class FragmentBuilder {
     private static FragNavController.Builder builder;

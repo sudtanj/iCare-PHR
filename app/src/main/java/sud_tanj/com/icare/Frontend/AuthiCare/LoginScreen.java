@@ -1,7 +1,6 @@
 package sud_tanj.com.icare.Frontend.AuthiCare;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,69 +12,54 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.altmail.displaytextview.DisplayTextView;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Fullscreen;
+import org.androidannotations.annotations.ViewById;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import spencerstudios.com.bungeelib.Bungee;
+import sud_tanj.com.icare.Backend.Login.BasicUser;
+import sud_tanj.com.icare.Backend.Login.GoogleUser;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
-import sud_tanj.com.icare.MainActivityStarter;
 import sud_tanj.com.icare.R;
 
-public class LoginScreen extends AppCompatActivity {
+@Fullscreen
+@EActivity(R.layout.activity_login_screen)
+public class LoginScreen extends AppCompatActivity implements OnCompleteListener<AuthResult> {
     private static final int RC_SIGN_IN = 9001;
-    @BindView(R.id.logo_description)
-    DisplayTextView displayTextView;
+    @ViewById(R.id.logo_description) DisplayTextView displayTextView;
     private GoogleSignInClient mGoogleSignInClient;
-    private FirebaseAuth mAuth;
+    private BasicUser basicUser=null;
 
     @OnClick(R.id.sign_in_button)
     public void submit(View v) {
-        int i = v.getId();
-        if (i == R.id.sign_in_button) {
-            signIn();
-        }
-        /**
-         else if (i == R.id.sign_out_button) {
-         signOut();
-         } else if (i == R.id.disconnect_button) {
-         revokeAccess();
-         }
-         */
+        signIn();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_screen);
-
-        initBackgroundService();
-
+    @AfterViews
+    protected void initFirebaseAuth(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        initUiComponent();
     }
 
-    private void initUiComponent() {
+    @AfterViews
+    protected void initUiComponent() {
         displayTextView.setText(R.string.logo_description);
         displayTextView.startAnimation();
     }
 
-    private void initBackgroundService() {
+    @AfterViews
+    protected void initBackgroundService() {
         //Init Notification
         Notification.init(this);
         //Init ButterKnife
@@ -90,34 +74,15 @@ public class LoginScreen extends AppCompatActivity {
 
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            LoadingScreen.showLoadingScreen(getString(R.string.Loading_google_account));
+            basicUser=new GoogleUser();
             try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                LoadingScreen.showLoadingScreen(getString(R.string.Loading_google_account));
-                firebaseAuthWithGoogle(account);
+                ((GoogleUser)(basicUser)).signIn(getApplicationContext(),task);
             } catch (ApiException e) {
                 Notification.notifyFailure(getString(R.string.failed_login_message_api) + e.getStatusCode());
+                LoadingScreen.hideLoadingScreen();
             }
         }
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        LoadingScreen.hideLoadingScreen();
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Notification.notifySuccessful(getString(R.string.login_successful_google));
-                            MainActivityStarter.start(LoginScreen.this, mAuth.getCurrentUser());
-                            Bungee.swipeRight(LoginScreen.this);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Notification.notifyFailure(getString(R.string.login_failed_google));
-                        }
-                    }
-                });
     }
 
     private void signIn() {
@@ -125,31 +90,17 @@ public class LoginScreen extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
-    }
-
-    private void revokeAccess() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google revoke access
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
+    //if google auth return result
+    @Override
+    public void onComplete(@NonNull Task<AuthResult> task) {
+        LoadingScreen.hideLoadingScreen();
+        if (task.isSuccessful()) {
+            // Sign in success, update UI with the signed-in user's information
+            Notification.notifySuccessful(getString(R.string.login_successful_google));
+            Bungee.swipeRight(LoginScreen.this);
+        } else {
+            // If sign in fails, display a message to the user.
+            Notification.notifyFailure(getString(R.string.login_failed_google));
+        }
     }
 }

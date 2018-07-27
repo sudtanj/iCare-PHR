@@ -13,7 +13,7 @@ import es.dmoral.toasty.Toasty;
  * <p>
  * Created by Sudono Tanjung on 15/07/2018 - 21:03.
  * <p>
- * This class last modified by User
+ * This class last modified by BasicUser
  */
 public class Notification {
     private static Context context=null;
