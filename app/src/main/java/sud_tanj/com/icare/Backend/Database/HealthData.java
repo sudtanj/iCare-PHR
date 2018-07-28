@@ -12,6 +12,7 @@ import java.util.Date;
  * This class last modified by User
  */
 public class HealthData {
+    private HybridDatabase hybridDatabase=null;
     private String healthDataId = null;
     private Date timeStamp = null;
 
