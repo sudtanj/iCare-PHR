@@ -25,7 +25,8 @@ public class IconBuilder {
     public static Drawable get(IconValue iconValue){
         Drawable drawable = MaterialDrawableBuilder.with(context) // provide a context
                 .setIcon(iconValue) // provide an icon
-                .setColor(R.color.colorPrimary) // set the icon color
+                //.setColor(R.color.theme_default_primary) // set the icon color
+                .setColorResource(R.color.theme_default_primary)
                 .setToActionbarSize() // set the icon size
                 .build(); // Finally call build
         return drawable;

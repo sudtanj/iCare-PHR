@@ -10,5 +10,8 @@ package sud_tanj.com.icare.Backend.Database;
  * This class last modified by User
  */
 public class HybridDatabase {
+    
+    public HybridDatabase(){
 
+    }
 }

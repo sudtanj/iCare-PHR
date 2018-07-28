@@ -2,55 +2,51 @@ package sud_tanj.com.icare;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Bundle;
+import android.view.Window;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
-import com.marcinmoskala.activitystarterparcelerargconverter.ParcelarArgConverter;
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.ncapdevi.fragnav.FragNavController;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
-import activitystarter.ActivityStarterConfig;
-import activitystarter.Arg;
-import butterknife.ButterKnife;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.WindowFeature;
+
 import io.paperdb.Paper;
 import spencerstudios.com.bungeelib.Bungee;
-import sud_tanj.com.icare.Backend.Login.BasicUser;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 
-@ActivityStarterConfig(converters = { ParcelarArgConverter.class })
+@EActivity(R.layout.activity_main)
+@WindowFeature(Window.FEATURE_ACTION_BAR)
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,DrawerItem.OnItemClickListener {
 
     private FragNavController.Builder builder;
-
-    @Arg BasicUser basicUser;
-   
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        initActivityBeforeLoad(savedInstanceState);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        initActivityAfterLoad(savedInstanceState);
-
-        initNavigationDrawer();
-        Notification.notifyUser("Hello "+basicUser.getDisplayName());
-    }
+    @Extra("firebaseUser")
+    FirebaseUser firebaseUser;
+    @Extra("googleSigninObject")
+    GoogleSignInOptions gso;
 
     private void initNavigationDrawer(){
         addProfile(
                 new DrawerProfile()
                         .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
                         .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
-                        .setName(basicUser.getDisplayName())
+                        .setName(firebaseUser.getDisplayName())
                         .setDescription(getString(R.string.default_email))
                         .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
                             @Override
@@ -61,7 +57,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         );
         addItem(
                 new DrawerItem()
-                        .setImage(getResources().getDrawable(R.drawable.ic_healthdata))
+                        .setImage(IconBuilder.get(IconValue.HEART_PULSE))
                         .setTextPrimary(getString(R.string.Health_Data_Menu_Title))
                         .setTextSecondary(getString(R.string.Health_Data_Menu_Description))
                         .setOnItemClickListener(this)
@@ -71,28 +67,30 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                 new DrawerItem()
                         .setTextPrimary(getString(R.string.about_menu_title))
                         .setTextSecondary(getString(R.string.about_menu_descriptioni))
+                        .setImage(IconBuilder.get(IconValue.ASSISTANT))
                         .setOnItemClickListener(this)
         );
-        addItem(new DrawerItem().setImage(IconBuilder.get(IconValue.LOGOUT_VARIANT)).setTextPrimary(getString(R.string.logout_menu_title)).setOnItemClickListener(this));
+        addItem(
+                new DrawerItem()
+                        .setImage(IconBuilder.get(IconValue.LOGOUT_VARIANT))
+                        .setTextPrimary(getString(R.string.logout_menu_title))
+                        .setOnItemClickListener(this));
     }
-
-    private void initActivityBeforeLoad(Bundle savedInstanceState){
+    @AfterViews
+    protected void initActivity(){
         //Init Offline Storage
         Paper.init(getApplicationContext());
-        //Init ButterKnife
-        ButterKnife.bind(this);
         //Init Loading Screen
         LoadingScreen.init(this);
         //Init Icon Builder
         IconBuilder.init(this);
-    }
-
-    private void initActivityAfterLoad(Bundle savedInstanceState){
         //init fragment manager
-        FragmentBuilder.init(savedInstanceState,getSupportFragmentManager());
-        FragmentBuilder.changeFragment(HealthDataList.newInstance("A","B"));
+        FragmentBuilder.init(getIntent().getExtras(),getSupportFragmentManager());
+        FragmentBuilder.changeFragment(HealthDataList_.newInstance("A","B"));
         //Init Notification
         Notification.init(getApplicationContext());
+        //init Drawer
+        initNavigationDrawer();
     }
 
     @Override
@@ -106,13 +104,17 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
 
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.about_menu_title))){
-            new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT)
+            new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT).withAboutAppName(getString(R.string.app_name))
                     //start the activity
                     .start(MainActivity.this);
             Bungee.card(MainActivity.this);
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.logout_menu_title))){
-
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+            FirebaseAuth.getInstance().signOut();
+            googleSignInClient.signOut();
+            googleSignInClient.revokeAccess();
+            finish();
         }
     }
 }
