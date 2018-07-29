@@ -1,5 +1,6 @@
 package sud_tanj.com.icare;
 
+import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.Window;
@@ -23,27 +24,32 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
-import java.util.Locale;
-
 import io.paperdb.Paper;
-import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferences;
+import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
 import spencerstudios.com.bungeelib.Bungee;
+import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
+import sud_tanj.com.icare.Frontend.Settings.SettingsFragment;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_ACTION_BAR)
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,DrawerItem.OnItemClickListener {
 
-    private FragNavController.Builder builder;
     @Extra("firebaseUser")
     FirebaseUser firebaseUser;
     @Extra("googleSigninObject")
     GoogleSignInOptions gso;
+    private FragNavController.Builder builder;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(new SharedFirebasePreferencesContextWrapper(newBase));
+    }
 
     private void initNavigationDrawer(){
         addProfile(
@@ -51,7 +57,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
                         .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
                         .setName(firebaseUser.getDisplayName())
-                        .setDescription(getString(R.string.default_email))
+                        .setDescription(getString(R.string.profile_age_drawer)+HybridPreferences.getInstance().getObject(SettingsFragment.AGE_SETTINGS,String.class))
                         .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
                             @Override
                             public void onClick(DrawerProfile drawerProfile, long id) {
@@ -61,7 +67,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         );
         addItem(
                 new DrawerItem()
-                        .setImage(IconBuilder.get(IconValue.HEART_PULSE))
+                        .setImage(IconBuilder.get(IconValue.CLIPBOARD_PULSE))
+                        .setTextPrimary(getString(R.string.Health_Data_Menu_Title))
+                        .setTextSecondary(getString(R.string.Health_Data_Menu_Description))
+                        .setOnItemClickListener(this)
+        );
+        addItem(
+                new DrawerItem()
+                        .setImage(IconBuilder.get(IconValue.DEVELOPER_BOARD))
                         .setTextPrimary(getString(R.string.Health_Data_Menu_Title))
                         .setTextSecondary(getString(R.string.Health_Data_Menu_Description))
                         .setOnItemClickListener(this)
@@ -102,9 +115,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         Notification.init(getApplicationContext());
         //init Drawer
         initNavigationDrawer();
-        //Init Firebase Shared Preferences
-        SharedFirebasePreferences.setPathPattern(String.format(Locale.ENGLISH, "users/shared_prefs/%s", firebaseUser.getUid()));
-        SharedFirebasePreferences.getDefaultInstance(getApplicationContext()).keepSynced(Boolean.TRUE);
+        //Init Hybrid Preferences
+        HybridPreferences.init(this);
     }
 
     @Override
