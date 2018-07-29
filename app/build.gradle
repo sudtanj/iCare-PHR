@@ -49,6 +49,9 @@ dependencies {
     implementation 'kr.pe.burt.android.lib:animategradientview:0.0.1'
     implementation 'com.kaopiz:kprogresshud:1.1.0'
     implementation "com.mikepenz:aboutlibraries:6.1.0"
+    implementation 'com.github.crysxd:shared-firebase-preferences:1.0.1'
+    implementation 'com.iamhabib:easy-preference:1.0.1'
+    implementation 'me.riddhimanadib.form-master:form-master:1.1.0'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

@@ -3,6 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="welcome_back_notification">Welcome Back, </string>
+    <string name="settings_menu_title">Settings</string>
+    <string name="settings_menu_description">All your personal preferences</string>
+    <string name="settings_personal_information_headings">\'s Personal Preferences</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="default_profile_name">Jane Doe</string>
     <string name="default_email">janedoe@person.com</string>

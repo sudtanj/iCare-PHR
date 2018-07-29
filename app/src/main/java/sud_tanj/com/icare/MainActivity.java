@@ -23,13 +23,17 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
+import java.util.Locale;
+
 import io.paperdb.Paper;
+import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferences;
 import spencerstudios.com.bungeelib.Bungee;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
+import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_ACTION_BAR)
@@ -65,6 +69,13 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         addDivider();
         addItem(
                 new DrawerItem()
+                        .setTextPrimary(getString(R.string.settings_menu_title))
+                        .setTextSecondary(getString(R.string.settings_menu_description))
+                        .setImage(IconBuilder.get(IconValue.SETTINGS))
+                        .setOnItemClickListener(this)
+        );
+        addItem(
+                new DrawerItem()
                         .setTextPrimary(getString(R.string.about_menu_title))
                         .setTextSecondary(getString(R.string.about_menu_descriptioni))
                         .setImage(IconBuilder.get(IconValue.ASSISTANT))
@@ -91,7 +102,9 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         Notification.init(getApplicationContext());
         //init Drawer
         initNavigationDrawer();
-
+        //Init Firebase Shared Preferences
+        SharedFirebasePreferences.setPathPattern(String.format(Locale.ENGLISH, "users/shared_prefs/%s", firebaseUser.getUid()));
+        SharedFirebasePreferences.getDefaultInstance(getApplicationContext()).keepSynced(Boolean.TRUE);
     }
 
     @Override
@@ -103,6 +116,10 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     public void onClick(DrawerItem drawerItem, long l, int position) {
         if(drawerItem.getTextPrimary().equals(getString(R.string.Health_Data_Menu_Title))){
 
+        }
+        if(drawerItem.getTextPrimary().equals(getString(R.string.settings_menu_title))){
+            //SettingsFragment settingsFragment=new SettingsFragment_();
+            FragmentBuilder.changeFragment(SettingsFragment_.builder().build());
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.about_menu_title))){
             new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT).withAboutAppName(getString(R.string.app_name))
@@ -117,5 +134,6 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
             googleSignInClient.revokeAccess();
             finish();
         }
+        closeDrawer();
     }
 }

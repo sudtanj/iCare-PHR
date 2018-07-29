@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="colorFormMasterHeaderBackground">@color/colorPrimary</color>
+    <color name="colorFormMasterHeaderText">@color/colorPrimaryDark</color>
 </resources>
