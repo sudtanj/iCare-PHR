@@ -10,5 +10,7 @@ package sud_tanj.com.icare.Backend.Database;
  * This class last modified by User
  */
 public interface OnDataChanges {
-    void onDataChanges();
+    void preLoad();
+    void onDataChanges(Object updatedObject);
+    void postLoad();
 }

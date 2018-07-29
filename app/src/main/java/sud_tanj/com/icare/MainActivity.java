@@ -91,6 +91,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         Notification.init(getApplicationContext());
         //init Drawer
         initNavigationDrawer();
+
     }
 
     @Override

@@ -31,7 +31,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     //Custom
     def AASnapshotVersion = '4.4.0'
-    implementation 'com.google.firebase:firebase-database:11.8.0'
     annotationProcessor "org.androidannotations:androidannotations:$AASnapshotVersion"
     implementation "org.androidannotations:androidannotations-api:$AASnapshotVersion"
     implementation 'net.steamcrafted:materialiconlib:1.1.5'
@@ -55,6 +54,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
     //Firebase UI
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
     //GooglePlay

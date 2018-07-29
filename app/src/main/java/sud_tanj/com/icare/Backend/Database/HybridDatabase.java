@@ -26,7 +26,12 @@ public class HybridDatabase implements ValueEventListener{
     public HybridDatabase(String path){
         this.path=path;
         this.onDataChangesArrayList=new ArrayList<>();
-        this.databaseReference=FirebaseDatabase.getInstance().getReference(path);
+        this.databaseReference=FirebaseDatabase.getInstance().getReference();
+        String[] pathTemp=path.split("/");
+        for(String temp:pathTemp){
+            this.databaseReference=this.databaseReference.child(temp);
+        }
+        pathTemp=null;
         this.databaseReference.addValueEventListener(this);
     }
 
@@ -37,13 +42,14 @@ public class HybridDatabase implements ValueEventListener{
     }
 
     public void setValue(Object value){
-        this.databaseReference.setValue(value);
+        this.databaseReference.push().setValue(value);
         Paper.book().write(this.path,value);
         fireEventListener();
     }
 
     public void onDataChanges(OnDataChanges onDataChanges){
         this.onDataChangesArrayList.add(onDataChanges);
+        fireEventListener();
     }
 
     public String getPath() {
@@ -52,19 +58,16 @@ public class HybridDatabase implements ValueEventListener{
 
     private void fireEventListener(){
         for(OnDataChanges temp:this.onDataChangesArrayList){
-            temp.onDataChanges();
+            temp.preLoad();
+            temp.onDataChanges(Paper.book().read(this.path));
+            temp.postLoad();
         }
     }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        if(this.path.contains(dataSnapshot.getKey())){
-            Paper.book().write(this.path,dataSnapshot.getValue());
-            fireEventListener();
-        }
-        String childPath=this.path+"/"+dataSnapshot.getKey();
-        if(Paper.book().contains(childPath)){
-            Paper.book().write(childPath,dataSnapshot.getValue());
+        if(!Paper.book().read(this.path).equals(dataSnapshot.getValue())) {
+            Paper.book().write(this.path, dataSnapshot.getValue());
             fireEventListener();
         }
     }

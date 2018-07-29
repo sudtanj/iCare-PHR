@@ -11,22 +11,22 @@ import java.util.Date;
  * <p>
  * This class last modified by User
  */
+
 public class HealthData {
-    private HybridDatabase hybridDatabase=null;
     private String healthDataId = null;
-    private Date timeStamp = null;
+    private Long timeStamp = null;
 
     public HealthData(String healthDataId, Date timeStamp) {
         this.healthDataId = healthDataId;
-        this.timeStamp = timeStamp;
+        this.timeStamp = timeStamp.getTime();
     }
 
     public Date getTimeStamp() {
-        return timeStamp;
+        return new Date(timeStamp);
     }
 
     public void setTimeStamp(Date timeStamp) {
-        this.timeStamp = timeStamp;
+        this.timeStamp = timeStamp.getTime();
     }
 
     public String getHealthDataId() {
