@@ -2,7 +2,11 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="profile_age_drawer"> Years old</string>
+    <string name="about_us_title">About us</string>
+    <string name="about_us_description">This apps is a health data management for personal uses. </string>
+    <string name="about_us_special1">This apps made for meet the requirement for banchelor degree at Pelita Harapan University.</string>
+    <string name="about_us_special1_description">Created by Sudono Tanjung (00000012273)</string>
+    <string name="profile_age_drawer">  Years old</string>
     <string name="age_settings_menu_title">Age</string>
     <string name="age_settings_menu_hint">Input your age for better health analysis</string>
     <string name="welcome_back_notification">Welcome Back, </string>

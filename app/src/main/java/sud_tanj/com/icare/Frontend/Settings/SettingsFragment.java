@@ -31,8 +31,6 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
 
     @AfterViews
     protected void initUi(){
-        //Init HybridPreferences
-        HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
         //Init setTitle
         getActivity().setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+getString(R.string.settings_personal_information_headings));
         //init Form
@@ -52,6 +50,9 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
         formItems.add(ageElement);
 
         mFormBuilder.addFormElements(formItems);
+
+        //Init HybridPreferences
+        HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package sud_tanj.com.icare;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.Window;
@@ -33,37 +35,57 @@ import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
+import sud_tanj.com.icare.Frontend.Settings.SettingsFragment;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_ACTION_BAR)
-public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,DrawerItem.OnItemClickListener {
+public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
 
     @Extra("firebaseUser")
     FirebaseUser firebaseUser;
     @Extra("googleSigninObject")
     GoogleSignInOptions gso;
     private FragNavController.Builder builder;
+    private DrawerProfile drawerProfile;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(new SharedFirebasePreferencesContextWrapper(newBase));
     }
 
-    private void initNavigationDrawer(){
-        addProfile(
-                new DrawerProfile()
-                        .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
-                        .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
-                        .setName(firebaseUser.getDisplayName())
-                        .setDescription(getString(R.string.profile_age_drawer))
-                        .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
-                            @Override
-                            public void onClick(DrawerProfile drawerProfile, long id) {
-                                Toast.makeText(MainActivity.this, "Clicked profile #" + id, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-        );
+    @AfterViews
+    protected void initActivity(){
+        //Init Offline Storage
+        Paper.init(getApplicationContext());
+        //Init Loading Screen
+        LoadingScreen.init(this);
+        //Init Icon Builder
+        IconBuilder.init(this);
+        //init fragment manager
+        FragmentBuilder.init(getIntent().getExtras(),getSupportFragmentManager());
+        FragmentBuilder.changeFragment(HealthDataList_.newInstance("A","B"));
+        //Init Notification
+        Notification.init(getApplicationContext());
+        //Init Hybrid Preferences
+        HybridPreferences.init(this);
+        HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @AfterViews
+    protected void initNavigationDrawer(){
+        drawerProfile=new DrawerProfile()
+                .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
+                .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
+                .setName(firebaseUser.getDisplayName())
+                .setDescription(HybridPreferences.getFirebaseInstance().getString(SettingsFragment.AGE_SETTINGS,"")+getString(R.string.profile_age_drawer))
+                .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
+                    @Override
+                    public void onClick(DrawerProfile drawerProfile, long id) {
+                        Toast.makeText(MainActivity.this, "Clicked profile #" + id, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        addProfile(drawerProfile);
         addItem(
                 new DrawerItem()
                         .setImage(IconBuilder.get(IconValue.CLIPBOARD_PULSE))
@@ -99,24 +121,6 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         .setTextPrimary(getString(R.string.logout_menu_title))
                         .setOnItemClickListener(this));
     }
-    @AfterViews
-    protected void initActivity(){
-        //Init Offline Storage
-        Paper.init(getApplicationContext());
-        //Init Loading Screen
-        LoadingScreen.init(this);
-        //Init Icon Builder
-        IconBuilder.init(this);
-        //init fragment manager
-        FragmentBuilder.init(getIntent().getExtras(),getSupportFragmentManager());
-        FragmentBuilder.changeFragment(HealthDataList_.newInstance("A","B"));
-        //Init Notification
-        Notification.init(getApplicationContext());
-        //init Drawer
-        initNavigationDrawer();
-        //Init Hybrid Preferences
-        HybridPreferences.init(this);
-    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -133,7 +137,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
             FragmentBuilder.changeFragment(SettingsFragment_.builder().build());
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.about_menu_title))){
-            new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT).withAboutAppName(getString(R.string.app_name))
+            new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT)
+                    .withAboutAppName(getString(R.string.app_name))
+                    .withAboutIconShown(Boolean.TRUE)
+                    .withActivityTitle(getString(R.string.about_us_title))
+                    .withAboutDescription(getString(R.string.about_us_description))
+                    .withAboutSpecial1(getString(R.string.about_us_special1))
+                    .withAboutSpecial1Description(getString(R.string.about_us_special1_description))
+                    .withShowLoadingProgress(Boolean.TRUE)
                     //start the activity
                     .start(MainActivity.this);
             Bungee.card(MainActivity.this);
@@ -146,5 +157,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
             finish();
         }
         closeDrawer();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if(s.equals(SettingsFragment.AGE_SETTINGS)){
+            drawerProfile.setDescription(sharedPreferences.getString(s,"")+getString(R.string.profile_age_drawer));
+            removeProfile(drawerProfile);
+            addProfile(drawerProfile);
+        }
     }
 }
