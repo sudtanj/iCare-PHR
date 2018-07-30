@@ -6,8 +6,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.Window;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -15,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
+import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile.OnProfileClickListener;
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
@@ -34,16 +38,16 @@ import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
+import sud_tanj.com.icare.Frontend.Listener.FirebaseProfilePictureListener;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_ACTION_BAR)
-public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
+public class MainActivity extends BaseActivity implements OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
 
-    @Extra("firebaseUser")
-    FirebaseUser firebaseUser;
+    private FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
     @Extra("googleSigninObject")
     GoogleSignInOptions gso;
     private FragNavController.Builder builder;
@@ -75,16 +79,11 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     @AfterViews
     protected void initNavigationDrawer(){
         drawerProfile=new DrawerProfile()
-                .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
+                .setAvatar(IconBuilder.get(IconValue.CLOUD_OFF_OUTLINE))
                 .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
                 .setName(firebaseUser.getDisplayName())
                 .setDescription(HybridPreferences.getFirebaseInstance().getString(SettingsFragment.AGE_SETTINGS,"")+getString(R.string.profile_age_drawer))
-                .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
-                    @Override
-                    public void onClick(DrawerProfile drawerProfile, long id) {
-                        Toast.makeText(MainActivity.this, "Clicked profile #" + id, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                .setOnProfileClickListener(this);
         addProfile(drawerProfile);
         addItem(
                 new DrawerItem()
@@ -120,6 +119,16 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         .setImage(IconBuilder.get(IconValue.LOGOUT_VARIANT))
                         .setTextPrimary(getString(R.string.logout_menu_title))
                         .setOnItemClickListener(this));
+
+        //Init profile picture component
+        Glide.with(this)
+                .asBitmap()
+                .load(firebaseUser.getPhotoUrl())
+                .apply(new RequestOptions()
+                        .signature(new ObjectKey(System.currentTimeMillis()))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .into(new FirebaseProfilePictureListener(drawerProfile,this));
     }
 
     @Override
@@ -135,6 +144,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         if(drawerItem.getTextPrimary().equals(getString(R.string.settings_menu_title))){
             //SettingsFragment settingsFragment=new SettingsFragment_();
             FragmentBuilder.changeFragment(SettingsFragment_.builder().build());
+            getSupportActionBar().setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+getString(R.string.settings_personal_information_headings));
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.about_menu_title))){
             LibsSupportFragment aboutFragment=new LibsBuilder()
@@ -167,5 +177,10 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
             removeProfile(drawerProfile);
             addProfile(drawerProfile);
         }
+    }
+
+    @Override
+    public void onClick(DrawerProfile drawerProfile, long l) {
+        Notification.notifyUser(getString(R.string.profile_changing_guide));
     }
 }

@@ -2,8 +2,9 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="profile_changing_guide">Your profile is tied and sync to your sign in account. \n Please refer to your sign in account guidelines to change display name and photo </string>
     <string name="sensor_catalogue_menu_title">Sensor Catalogue</string>
-    <string name="sensor_catalogue_menu_description">Here you can find all listing for available sensors.</string>
+    <string name="sensor_catalogue_menu_description">List about available sensors</string>
     <string name="about_us_title">About us</string>
     <string name="about_us_description">This apps is a health data management for personal uses. It built on top of open sources libraries.</string>
     <string name="about_us_special1">This apps made for meet the requirement for banchelor degree at Pelita Harapan University.</string>
@@ -18,8 +19,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="default_profile_name">Jane Doe</string>
     <string name="default_email">janedoe@person.com</string>
-    <string name="Health_Data_Menu_Title">Health Data</string>
-    <string name="Health_Data_Menu_Description">Here is list about your currently available health data</string>
+    <string name="Health_Data_Menu_Title">Data Catalogue</string>
+    <string name="Health_Data_Menu_Description">List about your health data</string>
     <string name="Logo_Text">iCare</string>
     <string name="loading_title">Please wait...</string>
     <string name="Loading_google_account">Synchronizing with Google Server</string>

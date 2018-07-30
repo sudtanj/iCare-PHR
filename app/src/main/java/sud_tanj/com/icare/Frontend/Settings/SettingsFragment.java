@@ -5,8 +5,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -31,8 +29,6 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
 
     @AfterViews
     protected void initUi(){
-        //Init setTitle
-        getActivity().setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+getString(R.string.settings_personal_information_headings));
         //init Form
         mFormBuilder = new FormBuilder(getContext(), settingsRecycler,this);
         // declare form elements

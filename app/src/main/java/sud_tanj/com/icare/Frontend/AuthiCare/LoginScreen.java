@@ -50,8 +50,10 @@ public class LoginScreen extends AppCompatActivity implements OnCompleteListener
     @AfterViews
     protected void initFirebaseAuth() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("713034949688-85becbtnb3inr12mo6uo1k5jcdsccc3a.apps.googleusercontent.com")
                 .requestEmail()
+                .requestProfile()
+                .requestId()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -104,11 +106,10 @@ public class LoginScreen extends AppCompatActivity implements OnCompleteListener
         FirebaseUser currentUser=mAuth.getCurrentUser();
         if (currentUser != null) {
             finish();
-            FirebaseUser tempUser=mAuth.getCurrentUser();
-            tempUser.reload();
+            currentUser.reload();
+            System.out.println(currentUser.getPhotoUrl());
             Notification.notifySuccessful(getString(R.string.welcome_back_notification)+currentUser.getDisplayName());
-            MainActivity_.intent(LoginScreen.this).firebaseUser(tempUser).gso(gso).start();
-            Bungee.swipeRight(LoginScreen.this);
+            startMainActivity();
         }
     }
 
@@ -120,8 +121,7 @@ public class LoginScreen extends AppCompatActivity implements OnCompleteListener
             // Sign in success, update UI with the signed-in user's information
             finish();
             Notification.notifySuccessful(getString(R.string.login_successful_google));
-            MainActivity_.intent(LoginScreen.this).firebaseUser(mAuth.getCurrentUser()).gso(gso).start();
-            Bungee.swipeRight(LoginScreen.this);
+            startMainActivity();
             FirebaseUser currentUser=mAuth.getCurrentUser();
             //Message the user
             Notification.notifyUser("Hello "+currentUser.getDisplayName());
@@ -129,5 +129,9 @@ public class LoginScreen extends AppCompatActivity implements OnCompleteListener
             // If sign in fails, display a message to the user.
             Notification.notifyFailure(getString(R.string.login_failed_google));
         }
+    }
+    private void startMainActivity(){
+        MainActivity_.intent(LoginScreen.this).gso(gso).start();
+        Bungee.swipeRight(LoginScreen.this);
     }
 }
