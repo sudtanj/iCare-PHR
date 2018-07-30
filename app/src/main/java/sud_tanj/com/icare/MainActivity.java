@@ -33,7 +33,6 @@ import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
-import sud_tanj.com.icare.Frontend.Settings.SettingsFragment;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
@@ -57,7 +56,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.drawable.ic_arduino))
                         .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
                         .setName(firebaseUser.getDisplayName())
-                        .setDescription(getString(R.string.profile_age_drawer)+HybridPreferences.getInstance().getObject(SettingsFragment.AGE_SETTINGS,String.class))
+                        .setDescription(getString(R.string.profile_age_drawer))
                         .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
                             @Override
                             public void onClick(DrawerProfile drawerProfile, long id) {

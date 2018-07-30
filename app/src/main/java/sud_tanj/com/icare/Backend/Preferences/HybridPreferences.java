@@ -2,9 +2,6 @@ package sud_tanj.com.icare.Backend.Preferences;
 
 import android.content.Context;
 
-import com.iamhabib.easy_preference.EasyPreference;
-import com.iamhabib.easy_preference.EasyPreference.Builder;
-
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferences;
 
 /**
@@ -16,17 +13,14 @@ import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferences;
  * <p>
  * This class last modified by User
  */
-public class HybridPreferences {
-    private static Builder builder;
+public class HybridPreferences{
     private static SharedFirebasePreferences sharedFirebasePreferences;
 
     public static void init(Context context){
         sharedFirebasePreferences=SharedFirebasePreferences.getDefaultInstance(context);
         sharedFirebasePreferences.pull();
-        builder=EasyPreference.with(context);
+        sharedFirebasePreferences.push();
+        sharedFirebasePreferences.keepSynced(Boolean.TRUE);
     }
-
-    public static Builder getInstance(){
-        return builder;
-    }
+    public static SharedFirebasePreferences getFirebaseInstance(){return sharedFirebasePreferences;}
 }

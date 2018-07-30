@@ -2,7 +2,7 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="profile_age_drawer">Age </string>
+    <string name="profile_age_drawer"> Years old</string>
     <string name="age_settings_menu_title">Age</string>
     <string name="age_settings_menu_hint">Input your age for better health analysis</string>
     <string name="welcome_back_notification">Welcome Back, </string>
