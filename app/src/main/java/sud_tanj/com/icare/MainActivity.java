@@ -17,6 +17,7 @@ import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import com.ncapdevi.fragnav.FragNavController;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
@@ -28,7 +29,6 @@ import org.androidannotations.annotations.WindowFeature;
 
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
-import spencerstudios.com.bungeelib.Bungee;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
@@ -96,8 +96,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         addItem(
                 new DrawerItem()
                         .setImage(IconBuilder.get(IconValue.DEVELOPER_BOARD))
-                        .setTextPrimary(getString(R.string.Health_Data_Menu_Title))
-                        .setTextSecondary(getString(R.string.Health_Data_Menu_Description))
+                        .setTextPrimary(getString(R.string.sensor_catalogue_menu_title))
+                        .setTextSecondary(getString(R.string.sensor_catalogue_menu_description))
                         .setOnItemClickListener(this)
         );
         addDivider();
@@ -137,7 +137,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
             FragmentBuilder.changeFragment(SettingsFragment_.builder().build());
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.about_menu_title))){
-            new LibsBuilder().withActivityStyle(ActivityStyle.LIGHT)
+            LibsSupportFragment aboutFragment=new LibsBuilder()
+                    .withActivityStyle(ActivityStyle.LIGHT)
                     .withAboutAppName(getString(R.string.app_name))
                     .withAboutIconShown(Boolean.TRUE)
                     .withActivityTitle(getString(R.string.about_us_title))
@@ -145,9 +146,9 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                     .withAboutSpecial1(getString(R.string.about_us_special1))
                     .withAboutSpecial1Description(getString(R.string.about_us_special1_description))
                     .withShowLoadingProgress(Boolean.TRUE)
-                    //start the activity
-                    .start(MainActivity.this);
-            Bungee.card(MainActivity.this);
+                    .supportFragment();
+            FragmentBuilder.changeFragment(aboutFragment);
+            getSupportActionBar().setTitle(R.string.about_us_title);
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.logout_menu_title))){
             GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);

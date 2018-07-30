@@ -104,8 +104,10 @@ public class LoginScreen extends AppCompatActivity implements OnCompleteListener
         FirebaseUser currentUser=mAuth.getCurrentUser();
         if (currentUser != null) {
             finish();
+            FirebaseUser tempUser=mAuth.getCurrentUser();
+            tempUser.reload();
             Notification.notifySuccessful(getString(R.string.welcome_back_notification)+currentUser.getDisplayName());
-            MainActivity_.intent(LoginScreen.this).firebaseUser(mAuth.getCurrentUser()).gso(gso).start();
+            MainActivity_.intent(LoginScreen.this).firebaseUser(tempUser).gso(gso).start();
             Bungee.swipeRight(LoginScreen.this);
         }
     }
