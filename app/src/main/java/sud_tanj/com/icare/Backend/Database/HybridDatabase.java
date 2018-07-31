@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import io.paperdb.Paper;
+import lombok.Getter;
 
 /**
  * This class is part of iCare Project
@@ -21,6 +22,7 @@ import io.paperdb.Paper;
  */
 public class HybridDatabase implements ValueEventListener{
     private DatabaseReference databaseReference;
+    @Getter
     private String path;
     private ArrayList<OnDataChanges> onDataChangesArrayList;
     public HybridDatabase(String path){
@@ -50,10 +52,6 @@ public class HybridDatabase implements ValueEventListener{
     public void onDataChanges(OnDataChanges onDataChanges){
         this.onDataChangesArrayList.add(onDataChanges);
         fireEventListener();
-    }
-
-    public String getPath() {
-        return path;
     }
 
     private void fireEventListener(){

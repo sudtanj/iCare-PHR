@@ -14,6 +14,7 @@ import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferences;
  * This class last modified by User
  */
 public class HybridPreferences{
+    protected static Context context;
     private static SharedFirebasePreferences sharedFirebasePreferences;
 
     public static void init(Context context){

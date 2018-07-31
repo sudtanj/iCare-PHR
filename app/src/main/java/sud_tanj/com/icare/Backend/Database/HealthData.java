@@ -2,6 +2,9 @@ package sud_tanj.com.icare.Backend.Database;
 
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * This class is part of iCare Project
  * Any modified within this class without reading the
@@ -13,27 +16,13 @@ import java.util.Date;
  */
 
 public class HealthData {
+    @Getter @Setter
     private String healthDataId = null;
+    @Getter @Setter
     private Long timeStamp = null;
 
     public HealthData(String healthDataId, Date timeStamp) {
         this.healthDataId = healthDataId;
         this.timeStamp = timeStamp.getTime();
-    }
-
-    public Date getTimeStamp() {
-        return new Date(timeStamp);
-    }
-
-    public void setTimeStamp(Date timeStamp) {
-        this.timeStamp = timeStamp.getTime();
-    }
-
-    public String getHealthDataId() {
-        return healthDataId;
-    }
-
-    public void setHealthDataId(String healthDataId) {
-        this.healthDataId = healthDataId;
     }
 }
