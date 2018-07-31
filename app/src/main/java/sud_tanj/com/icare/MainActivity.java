@@ -31,8 +31,11 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
+import java.sql.Date;
+
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
+import sud_tanj.com.icare.Backend.Database.HealthData;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
@@ -129,7 +132,10 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 )
                 .into(new FirebaseProfilePictureListener(drawerProfile,this));
+        healthData=new HealthData("200",new Date(20000));
     }
+
+    private HealthData healthData;
 
     @Override
     public void onFragmentInteraction(Uri uri) {
