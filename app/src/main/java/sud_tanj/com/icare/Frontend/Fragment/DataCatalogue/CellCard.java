@@ -46,6 +46,7 @@ public class CellCard extends AbstractItem<CellCard, CellCard.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder{
+        @Getter
         private RecyclerView numberUnit;
         //@Getter
         //ImageView imageView;
