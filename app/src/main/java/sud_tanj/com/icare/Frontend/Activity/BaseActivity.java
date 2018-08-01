@@ -2,6 +2,7 @@ package sud_tanj.com.icare.Frontend.Activity;
 
 import android.os.Bundle;
 
+import com.evernote.android.state.StateSaver;
 import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 
 /**
@@ -16,11 +17,14 @@ import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 public class BaseActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StateSaver.restoreInstanceState(this, savedInstanceState);
         super.onCreate(savedInstanceState);
     }
 
+
     @Override // This is optional, only when we want to keep arguments changes in case of rotation etc.
     protected void onSaveInstanceState(Bundle outState) {
+        StateSaver.saveInstanceState(this, outState);
         super.onSaveInstanceState(outState);
     }
 }

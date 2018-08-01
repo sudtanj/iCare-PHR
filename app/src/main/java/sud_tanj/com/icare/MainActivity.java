@@ -72,7 +72,11 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         IconBuilder.init(this);
         //init fragment manager
         FragmentBuilder.init(getIntent().getExtras(),getSupportFragmentManager());
-        FragmentBuilder.changeFragment(HealthDataList_.newInstance("A","B"));
+        if(FragmentBuilder.getLastFragment()==null){
+            FragmentBuilder.changeFragment(HealthDataList_.newInstance("A","B"));
+        } else {
+            FragmentBuilder.launchLastFragment();
+        }
         //Init Notification
         Notification.init(getApplicationContext());
         //Init Hybrid Preferences

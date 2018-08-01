@@ -2,6 +2,7 @@ package sud_tanj.com.icare.Frontend.Icon;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
@@ -27,6 +28,15 @@ public class IconBuilder {
                 .setIcon(iconValue) // provide an icon
                 //.setColor(R.color.theme_default_primary) // set the icon color
                 .setColorResource(R.color.theme_default_primary)
+                .setToActionbarSize() // set the icon size
+                .build(); // Finally call build
+        return drawable;
+    }
+    public static Drawable get(IconValue iconValue, @DrawableRes int colorRes){
+        Drawable drawable = MaterialDrawableBuilder.with(context) // provide a context
+                .setIcon(iconValue)// provide an icon
+                //.setColor(R.color.theme_default_primary) // set the icon color
+                .setColorResource(colorRes)
                 .setToActionbarSize() // set the icon size
                 .build(); // Finally call build
         return drawable;

@@ -1,13 +1,15 @@
 package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Cards;
 
-import android.graphics.Bitmap;
-import android.support.annotation.DrawableRes;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Utils.DecodeBitmapTask;
+import com.mikepenz.fastadapter.items.AbstractItem;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import sud_tanj.com.icare.R;
 
 /**
@@ -19,51 +21,43 @@ import sud_tanj.com.icare.R;
  * <p>
  * This class last modified by User
  */
-public class SliderCard extends RecyclerView.ViewHolder implements DecodeBitmapTask.Listener {
+@AllArgsConstructor
+public class SliderCard extends AbstractItem<SliderCard, SliderCard.ViewHolder>{
 
     private static int viewWidth = 0;
     private static int viewHeight = 0;
 
-    private final ImageView imageView;
+    private Drawable image;
 
-    private DecodeBitmapTask task;
-
-    public SliderCard(View itemView) {
-        super(itemView);
-        imageView = (ImageView) itemView.findViewById(R.id.image);
-    }
-
-    void setContent(@DrawableRes final int resId) {
-        if (viewWidth == 0) {
-            itemView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    itemView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                    viewWidth = itemView.getWidth();
-                    viewHeight = itemView.getHeight();
-                    loadBitmap(resId);
-                }
-            });
-        } else {
-            loadBitmap(resId);
-        }
-    }
-
-    void clearContent() {
-        if (task != null) {
-            task.cancel(true);
-        }
-    }
-
-    private void loadBitmap(@DrawableRes int resId) {
-        task = new DecodeBitmapTask(itemView.getResources(), resId, viewWidth, viewHeight, this);
-        task.execute();
+    @NonNull
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        ViewHolder viewHolder=new ViewHolder(v);
+        viewHolder.getImageView().setImageDrawable(image);
+        return viewHolder;
     }
 
     @Override
-    public void onPostExecuted(Bitmap bitmap) {
-        imageView.setImageBitmap(bitmap);
+    public int getType() {
+        return R.id.fastadapter_item;
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.layout_slider_card;
+    }
+
+    // Manually create the ViewHolder class
+    protected static class ViewHolder extends RecyclerView.ViewHolder{
+        @Getter
+        ImageView imageView;
+
+        //TODO: Declare your UI widgets here
+        public ViewHolder(View itemView) {
+            super(itemView);
+            imageView=(ImageView) itemView.findViewById(R.id.image);
+            //TODO: init UI
+        }
     }
 
 }

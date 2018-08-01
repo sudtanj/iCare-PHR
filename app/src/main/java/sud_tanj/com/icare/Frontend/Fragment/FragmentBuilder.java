@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.ncapdevi.fragnav.FragNavController;
 
+import lombok.Getter;
 import sud_tanj.com.icare.R;
 
 /**
@@ -19,10 +20,16 @@ import sud_tanj.com.icare.R;
  */
 public class FragmentBuilder {
     private static FragNavController.Builder builder;
+    @Getter
+    private static Fragment lastFragment;
     public static void init(Bundle savedInstanceState,FragmentManager fragmentManager){
         builder = FragNavController.newBuilder(savedInstanceState,fragmentManager, R.id.content_container);
     }
+    public static void launchLastFragment(){
+        changeFragment(lastFragment);
+    }
     public static void changeFragment(Fragment fragment){
+        lastFragment=fragment;
         builder.rootFragment(fragment).build();
     }
 }

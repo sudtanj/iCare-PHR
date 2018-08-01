@@ -18,36 +18,39 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.ramotion.cardslider.CardSliderLayoutManager;
 import com.ramotion.cardslider.CardSnapHelper;
 
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 
-import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Cards.SliderAdapter;
-import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Utils.DecodeBitmapTask;
+import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Cards.SliderCard;
+import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 
 @EFragment(R.layout.fragment_sensor_catalogue)
 public class Catalogue extends Fragment {
-    private final int[][] dotCoords = new int[5][2];
     private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
    // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
     private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
-    private final String[] countries = {"PARIS", "SEOUL", "LONDON", "BEIJING", "THIRA"};
-    private final String[] places = {"The Louvre", "Gwanghwamun", "Tower Bridge", "Temple of Heaven", "Aegeana Sea"};
-    private final String[] temperatures = {"21°C", "19°C", "17°C", "23°C", "20°C"};
-    private final String[] times = {"Aug 1 - Dec 15    7:00-18:00", "Sep 5 - Nov 10    8:00-16:00", "Mar 8 - May 21    7:00-18:00"};
+    private final String[] countries = {"Sensor A", "Sensor B", "Sensor C", "Sensor D", "Sensor E"};
+    private final String[] places = {"Description", "Description", "Description", "Description","Description"};
+    private final String[] temperatures = {"Available", "Unavailable", "17°C", "23°C", "20°C"};
+    private final String[] times = {"Jane Doe", "John Doe", "Jane Doe"};
 
-    private final SliderAdapter sliderAdapter = new SliderAdapter(pics, 20, new OnCardClickListener());
+   // private final SliderAdapter sliderAdapter = new SliderAdapter(pics, 20, new OnCardClickListener());
+    private FastAdapter fastAdapter;
 
     private CardSliderLayoutManager layoutManger;
-    private ImageSwitcher mapSwitcher;
     private TextSwitcher temperatureSwitcher;
     private TextSwitcher placeSwitcher;
     private TextSwitcher clockSwitcher;
     private TextSwitcher descriptionsSwitcher;
-    private View greenDot;
 
     private TextView country1TextView;
     private TextView country2TextView;
@@ -56,13 +59,16 @@ public class Catalogue extends Fragment {
     private long countryAnimDuration;
     private int currentPosition;
 
-    private DecodeBitmapTask decodeMapBitmapTask;
-    private DecodeBitmapTask.Listener mapLoadListener;
-
     RecyclerView sensorCatalogue;
+    @ViewById(R.id.catalogue_description_icon)
+    ImageView catalogueDescriptionIcon;
+    @ViewById(R.id.sensor_author)
+    ImageView sensorAuthorIcon;
 
     @AfterViews
     protected void init(){
+        catalogueDescriptionIcon.setImageDrawable(IconBuilder.get(IconValue.CLIPBOARD_TEXT));
+        sensorAuthorIcon.setImageDrawable(IconBuilder.get(IconValue.ARTIST));
         initRecyclerView();
         initCountryText();
         initSwitchers();
@@ -70,8 +76,16 @@ public class Catalogue extends Fragment {
 
 
     private void initRecyclerView() {
+        ItemAdapter itemAdapter = new ItemAdapter();
+        fastAdapter=FastAdapter.with(itemAdapter);
+        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
+        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
+        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
+        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
+        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
+
         sensorCatalogue = (RecyclerView) getActivity().findViewById(R.id.sensor_catalogue);
-        sensorCatalogue.setAdapter(sliderAdapter);
+        sensorCatalogue.setAdapter(fastAdapter);
         sensorCatalogue.setHasFixedSize(true);
 
         sensorCatalogue.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -86,14 +100,6 @@ public class Catalogue extends Fragment {
         layoutManger = (CardSliderLayoutManager) sensorCatalogue.getLayoutManager();
 
         new CardSnapHelper().attachToRecyclerView(sensorCatalogue);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (decodeMapBitmapTask != null) {
-            decodeMapBitmapTask.cancel(true);
-        }
     }
 
     private void initSwitchers() {
