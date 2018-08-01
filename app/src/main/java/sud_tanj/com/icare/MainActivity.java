@@ -31,16 +31,14 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
-import java.sql.Date;
-
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
-import sud_tanj.com.icare.Backend.Database.HealthData;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
+import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataUi_;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
-import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Catalogue_;
+import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.SensorUi_;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Listener.FirebaseProfilePictureListener;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
@@ -65,7 +63,7 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     @AfterViews
     protected void initActivity(){
         //Init Offline Storage
-        Paper.init(getApplicationContext());
+        Paper.init(this);
         //Init Loading Screen
         LoadingScreen.init(this);
         //Init Icon Builder
@@ -73,7 +71,7 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         //init fragment manager
         FragmentBuilder.init(getIntent().getExtras(),getSupportFragmentManager());
         if(FragmentBuilder.getLastFragment()==null){
-            FragmentBuilder.changeFragment(HealthDataList_.newInstance("A","B"));
+           FragmentBuilder.changeFragment(DataUi_.builder().build());
         } else {
             FragmentBuilder.launchLastFragment();
         }
@@ -137,10 +135,7 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 )
                 .into(new FirebaseProfilePictureListener(drawerProfile,this));
-        healthData=new HealthData("200",new Date(20000));
     }
-
-    private HealthData healthData;
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -150,10 +145,10 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     @Override
     public void onClick(DrawerItem drawerItem, long l, int position) {
         if(drawerItem.getTextPrimary().equals(getString(R.string.Health_Data_Menu_Title))){
-
+            FragmentBuilder.changeFragment(DataUi_.builder().build());
         }
         if(drawerItem.getTextPrimary().equals(getString(R.string.sensor_catalogue_menu_title))){
-            FragmentBuilder.changeFragment(Catalogue_.builder().build());
+            FragmentBuilder.changeFragment(SensorUi_.builder().build());
             getSupportActionBar().setTitle(R.string.sensor_catalogue_menu_title);
         }
         if(drawerItem.getTextPrimary().equals(getString(R.string.settings_menu_title))){

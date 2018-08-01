@@ -21,7 +21,6 @@ import android.widget.ViewSwitcher;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.ramotion.cardslider.CardSliderLayoutManager;
-import com.ramotion.cardslider.CardSnapHelper;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
@@ -34,7 +33,7 @@ import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 
 @EFragment(R.layout.fragment_sensor_catalogue)
-public class Catalogue extends Fragment {
+public class SensorUi extends Fragment {
     private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
    // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
     private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
@@ -59,6 +58,7 @@ public class Catalogue extends Fragment {
     private long countryAnimDuration;
     private int currentPosition;
 
+    @ViewById(R.id.sensor_catalogue)
     RecyclerView sensorCatalogue;
     @ViewById(R.id.catalogue_description_icon)
     ImageView catalogueDescriptionIcon;
@@ -84,7 +84,6 @@ public class Catalogue extends Fragment {
         itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
         itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
 
-        sensorCatalogue = (RecyclerView) getActivity().findViewById(R.id.sensor_catalogue);
         sensorCatalogue.setAdapter(fastAdapter);
         sensorCatalogue.setHasFixedSize(true);
 
@@ -99,7 +98,7 @@ public class Catalogue extends Fragment {
 
         layoutManger = (CardSliderLayoutManager) sensorCatalogue.getLayoutManager();
 
-        new CardSnapHelper().attachToRecyclerView(sensorCatalogue);
+        //new CardSnapHelper().attachToRecyclerView(sensorCatalogue);
     }
 
     private void initSwitchers() {
