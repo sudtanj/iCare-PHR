@@ -40,6 +40,7 @@ import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
+import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Catalogue_;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Listener.FirebaseProfilePictureListener;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
@@ -146,6 +147,10 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     public void onClick(DrawerItem drawerItem, long l, int position) {
         if(drawerItem.getTextPrimary().equals(getString(R.string.Health_Data_Menu_Title))){
 
+        }
+        if(drawerItem.getTextPrimary().equals(getString(R.string.sensor_catalogue_menu_title))){
+            FragmentBuilder.changeFragment(Catalogue_.builder().build());
+            getSupportActionBar().setTitle(R.string.sensor_catalogue_menu_title);
         }
         if(drawerItem.getTextPrimary().equals(getString(R.string.settings_menu_title))){
             //SettingsFragment settingsFragment=new SettingsFragment_();

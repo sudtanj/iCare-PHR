@@ -20,7 +20,7 @@ android {
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'  // butterknife
     }
-    dexOptions{
+    dexOptions {
         javaMaxHeapSize "4g"
     }
 }
@@ -58,6 +58,7 @@ dependencies {
     implementation 'me.riddhimanadib.form-master:form-master:1.1.0'
     compileOnly 'org.projectlombok:lombok:1.18.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    implementation 'com.ramotion.cardslider:card-slider:0.3.0'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

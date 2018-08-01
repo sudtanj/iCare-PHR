@@ -48,11 +48,8 @@ public class HealthData implements OnDataChanges {
     @Override
     public void onDataChanges(Object updatedObject) {
         HealthData newData=(HealthData)updatedObject;
-        System.out.println(newData);
         this.healthDataId=newData.healthDataId;
         this.timeStamp=newData.timeStamp;
-        System.out.println(this.healthDataId);
-        System.out.println(this.timeStamp);
     }
 
     @Override

@@ -45,13 +45,6 @@ public class HybridDatabase implements ValueEventListener{
         this.path=path;
         this.onDataChangesArrayList=new ArrayList<>();
         this.databaseReference=databaseReference;
-        /**
-        String[] pathTemp=path.split("/");
-        for(String temp:pathTemp){
-            this.databaseReference=this.databaseReference.child(temp);
-        }
-        pathTemp=null;
-         */
     }
 
     public HybridDatabase sync(){
@@ -69,6 +62,10 @@ public class HybridDatabase implements ValueEventListener{
         Paper.book().write(this.path,value);
         fireEventListener();
         return this;
+    }
+
+    public String getKey(){
+        return databaseReference.getKey();
     }
 
     public HybridDatabase addChild(Object value){
@@ -96,10 +93,6 @@ public class HybridDatabase implements ValueEventListener{
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        System.out.println("Changes trigger");
-        System.out.println(this.path);
-        System.out.println(this.path);
-        System.out.println(dataSnapshot.getValue(classCasting));
         Paper.book().write(this.path, dataSnapshot.getValue(classCasting));
         fireEventListener();
     }
