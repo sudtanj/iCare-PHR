@@ -107,7 +107,6 @@ public class LoginScreen extends AppCompatActivity implements OnCompleteListener
         if (currentUser != null) {
             finish();
             currentUser.reload();
-            System.out.println(currentUser.getPhotoUrl());
             Notification.notifySuccessful(getString(R.string.welcome_back_notification)+currentUser.getDisplayName());
             startMainActivity();
         }

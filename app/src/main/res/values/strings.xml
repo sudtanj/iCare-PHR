@@ -2,9 +2,10 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="hybriddatabase_sync_message">Synchronize offline data with central database</string>
     <string name="profile_changing_guide">Your profile is tied and sync to your sign in account. \n Please refer to your sign in account guidelines to change display name and photo </string>
-    <string name="sensor_catalogue_menu_title">Sensor Catalogue</string>
-    <string name="sensor_catalogue_menu_description">List about available sensors</string>
+    <string name="sensor_catalogue_menu_title">Monitoring Catalogue</string>
+    <string name="sensor_catalogue_menu_description">List about available monitoring that iCare can do</string>
     <string name="about_us_title">About us</string>
     <string name="about_us_description">This apps is a health data management for personal uses. It built on top of open sources libraries.</string>
     <string name="about_us_special1">This apps made for meet the requirement for banchelor degree at Pelita Harapan University.</string>

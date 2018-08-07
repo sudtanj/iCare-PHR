@@ -37,7 +37,7 @@ public class SensorUi extends Fragment {
     private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
    // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
     private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
-    private final String[] countries = {"Sensor A", "Sensor B", "Sensor C", "Sensor D", "Sensor E"};
+    private final String[] countries = {"Heart Rate", "Blood Pressure", "Sensor C", "Sensor D", "Sensor E"};
     private final String[] places = {"Description", "Description", "Description", "Description","Description"};
     private final String[] temperatures = {"Available", "Unavailable", "17°C", "23°C", "20°C"};
     private final String[] times = {"Jane Doe", "John Doe", "Jane Doe"};

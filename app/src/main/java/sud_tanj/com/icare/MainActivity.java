@@ -33,6 +33,8 @@ import org.androidannotations.annotations.WindowFeature;
 
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
+import sud_tanj.com.icare.Backend.Database.HealthData;
+import sud_tanj.com.icare.Backend.Database.HybridDatabase;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
@@ -77,9 +79,14 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         }
         //Init Notification
         Notification.init(getApplicationContext());
+        //Init Hybrid Database
+        HybridDatabase.init();
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
+        HealthData dataObject=new HealthData();
+        dataObject.addData(20.0);
+        dataObject.addData(200.0);
     }
 
     @AfterViews
