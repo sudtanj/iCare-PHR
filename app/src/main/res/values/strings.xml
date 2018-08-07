@@ -2,7 +2,6 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hybriddatabase_sync_message">Synchronize offline data with central database</string>
     <string name="profile_changing_guide">Your profile is tied and sync to your sign in account. \n Please refer to your sign in account guidelines to change display name and photo </string>
     <string name="sensor_catalogue_menu_title">Monitoring Catalogue</string>
     <string name="sensor_catalogue_menu_description">List about available monitoring that iCare can do</string>

@@ -55,7 +55,7 @@ public class HealthData implements OnDataChanges {
         }
         database.setValue(this);
     }
-
+    @Exclude
     public String getId(){
         return this.healthDataId;
     }
