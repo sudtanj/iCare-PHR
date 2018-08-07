@@ -10,6 +10,11 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
     }
     buildTypes {
         release {
@@ -67,6 +72,7 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
     implementation 'me.shaohui:bottomdialog:1.1.9'
     implementation 'com.nightonke:boommenu:2.1.1'
+    implementation 'com.malinskiy:superrecyclerview:1.1.4'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

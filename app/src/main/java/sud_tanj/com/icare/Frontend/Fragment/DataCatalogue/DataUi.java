@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
@@ -38,7 +39,7 @@ import sud_tanj.com.icare.R;
 @EFragment(R.layout.fragment_data_catalogue)
 public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBindViewHolderListener {
     @ViewById(R.id.data_recycler_view)
-    protected RecyclerView dataRecyclerView;
+    protected SuperRecyclerView dataRecyclerView;
     private FastAdapter fastAdapter;
     protected RecyclerView numberUnit;
 
@@ -58,7 +59,6 @@ public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBind
         itemAdapter.add(new CellCard(numberAdapter));
         dataRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dataRecyclerView.setAdapter(fastAdapter);
-        dataRecyclerView.setHasFixedSize(true);
         fastAdapter.withOnClickListener(this);
 
         fastAdapter.withOnBindViewHolderListener(this);
