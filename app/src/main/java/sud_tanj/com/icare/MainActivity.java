@@ -31,9 +31,14 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
+import java.util.ArrayList;
+
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
 import sud_tanj.com.icare.Backend.Database.HybridDatabase;
+import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringListener;
+import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
@@ -83,6 +88,24 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
+        MonitoringInformation monitoringInformation=new MonitoringInformation("-LJMNi7QI3CTO2595b7v");
+        monitoringInformation.setName("ab");
+        monitoringInformation.addListener(new MonitoringListener() {
+            @Override
+            public void onReady(MonitoringInformation monitoringInformation) {
+                ArrayList<Double> HealthDatas=new ArrayList<>();
+                HealthDatas.add(20.0);
+                HealthData healthData=new HealthData(HealthDatas);
+                healthData.sync();
+                monitoringInformation.getHealthDatas().add(healthData.getId());
+                monitoringInformation.sync();
+            }
+
+            @Override
+            public Boolean isRunOnlyOnce() {
+                return Boolean.TRUE;
+            }
+        });
     }
 
     @AfterViews

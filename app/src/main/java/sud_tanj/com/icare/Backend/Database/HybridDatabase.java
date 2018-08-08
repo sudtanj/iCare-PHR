@@ -67,6 +67,11 @@ public class HybridDatabase implements ValueEventListener, DatabaseReference.Com
         return this;
     }
 
+    public void unSync(){
+        databaseReference.removeEventListener(this);
+        this.onDataChangesArrayList=null;
+    }
+
     public String getKey() {
         return databaseReference.getKey();
     }
@@ -99,10 +104,12 @@ public class HybridDatabase implements ValueEventListener, DatabaseReference.Com
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        for (OnDataChanges temp : this.onDataChangesArrayList) {
-            temp.preLoad();
-            temp.onDataChanges(dataSnapshot);
-            temp.postLoad();
+        if(dataSnapshot.exists()) {
+            for (OnDataChanges temp : this.onDataChangesArrayList) {
+                temp.preLoad();
+                temp.onDataChanges(dataSnapshot);
+                temp.postLoad();
+            }
         }
     }
 

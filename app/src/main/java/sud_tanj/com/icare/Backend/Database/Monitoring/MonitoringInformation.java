@@ -2,17 +2,20 @@ package sud_tanj.com.icare.Backend.Database.Monitoring;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sud_tanj.com.icare.Backend.Database.HealthData;
+import lombok.Setter;
 import sud_tanj.com.icare.Backend.Database.HybridDatabase;
 import sud_tanj.com.icare.Backend.Database.OnDataChanges;
+import sud_tanj.com.icare.Backend.Database.SyncableObject;
 
 /**
  * This class is part of iCare Project
@@ -24,7 +27,7 @@ import sud_tanj.com.icare.Backend.Database.OnDataChanges;
  * This class last modified by User
  */
 @NoArgsConstructor
-public class MonitoringInformation implements OnDataChanges {
+public class MonitoringInformation extends SyncableObject implements OnDataChanges {
     public static final String SENSOR_DATA_CHILD_NAME = "https://icare-89c17.firebaseio.com/Sensor";
     @Getter
     private List<String> healthDatas = new ArrayList<>(),
@@ -33,14 +36,16 @@ public class MonitoringInformation implements OnDataChanges {
             analysisDatas=new ArrayList<>(),
             developer=new ArrayList<>(),
             graphLegend=new ArrayList<>();
-    @Exclude
-    private transient String identification = "";
-    @Getter
+    @Getter @Setter
     private Boolean monitoring;
-    @Getter
+    @Getter @Setter
     private String name,image;
     @Exclude
-    private transient HybridDatabase database=null;
+    private List<MonitoringListener> monitoringListeners=new ArrayList<>();
+
+    public void addListener(MonitoringListener listener){
+        this.monitoringListeners.add(listener);
+    }
 
     public MonitoringInformation(String identification){
         this.identification=identification;
@@ -50,51 +55,16 @@ public class MonitoringInformation implements OnDataChanges {
         database.onDataChanges(this);
     }
 
-    public void addHealthData(HealthData s) {
-        this.analysisDatas.add(s.getId());
-        sync();
-    }
-
-    public void addIndividualComments(String s){
-        this.analysisDatas.add(s);
-        sync();
-    }
-
-    public void addMedicalComments(String s){
-        this.analysisDatas.add(s);
-        sync();
-    }
-
-    public void addAnalysisData(String s){
-        this.analysisDatas.add(s);
-        sync();
-    }
-
-    public void addGraphLegend(String s){
-        this.graphLegend.add(s);
-        sync();
-    }
-
-    public void setName(String name) {
-        this.name = name;
-        sync();
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-        sync();
-    }
-
-    private void sync(){
+    public void sync(){
         if(database==null){
-            database=new HybridDatabase(FirebaseDatabase.getInstance()
-                    .getReferenceFromUrl(SENSOR_DATA_CHILD_NAME).child(FirebaseAuth.getInstance()
-                            .getCurrentUser().getUid())).addChild(this);
+            DatabaseReference databaseReference=FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl(SENSOR_DATA_CHILD_NAME).push();
+            this.identification=databaseReference.getKey();
+            database=new HybridDatabase(databaseReference);
             database.onDataChanges(this);
         }
-        database.setValue(this);
+        super.sync();
     }
-
 
     @Override
     public void preLoad() {
@@ -118,6 +88,12 @@ public class MonitoringInformation implements OnDataChanges {
 
     @Override
     public void postLoad() {
-
+        for (Iterator<MonitoringListener> iterator = this.monitoringListeners.iterator(); iterator.hasNext(); ){
+            MonitoringListener temp=iterator.next();
+            temp.onReady(this);
+            if(temp.isRunOnlyOnce()){
+                iterator.remove();
+            }
+        }
     }
 }
