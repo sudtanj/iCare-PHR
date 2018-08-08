@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
+import com.google.gson.JsonParser;
 import com.potterhsu.usblistener.UsbListener;
 import com.potterhsu.usblistener.UsbListener.OnUsbListener;
 
@@ -30,6 +31,7 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
     private CH34xUARTDriver ch34xUARTDriver;
     private UsbListener usbListener;
     private UsbDevice usbDevice;
+    private JsonParser jsonParser;
     private byte[] buffer=new byte[4096];
     private int bufferLength=0;
     private List<MicrocontrollerListener> microcontrollerListenerList;
@@ -52,6 +54,7 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
         UsbManager usbManager=(UsbManager) getContext().getSystemService(Context.USB_SERVICE);
         ch34xUARTDriver=new CH34xUARTDriver(usbManager,getContext(),CH340_USB_PERMISSION);
         microcontrollerListenerList=new ArrayList<>();
+        this.jsonParser=new JsonParser();
     }
 
     public void updateConfiguration(){
@@ -90,7 +93,7 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
         if(bufferLength>0){
             String recv = new String(buffer, 0, bufferLength, Charset.forName("US-ASCII"));
             for(MicrocontrollerListener microcontrollerListener:microcontrollerListenerList){
-                microcontrollerListener.onDataReceived(recv);
+                microcontrollerListener.onDataReceived(this.jsonParser.parse(recv).getAsJsonObject());
             }
         }
     }

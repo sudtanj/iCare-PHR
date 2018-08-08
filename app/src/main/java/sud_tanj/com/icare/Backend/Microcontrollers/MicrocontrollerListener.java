@@ -1,5 +1,7 @@
 package sud_tanj.com.icare.Backend.Microcontrollers;
 
+import com.google.gson.JsonObject;
+
 /**
  * This class is part of iCare Project
  * Any modified within this class without reading the
@@ -10,5 +12,5 @@ package sud_tanj.com.icare.Backend.Microcontrollers;
  * This class last modified by User
  */
 public interface MicrocontrollerListener {
-    void onDataReceived(String data);
+    void onDataReceived(JsonObject data);
 }
