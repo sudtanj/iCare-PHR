@@ -3,11 +3,9 @@ package sud_tanj.com.icare.Backend.Database.PersonalData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import sud_tanj.com.icare.Backend.Database.SyncableObject;
 
 /**
@@ -15,17 +13,23 @@ import sud_tanj.com.icare.Backend.Database.SyncableObject;
  * Any modified within this class without reading the
  * manual will cause problem!
  * <p>
- * Created by Sudono Tanjung on 15/07/2018 - 14:20.
+ * Created by Sudono Tanjung on 08/08/2018 - 11:03.
  * <p>
  * This class last modified by User
  */
 @NoArgsConstructor
-public class HealthData extends SyncableObject {
-    public static final String KEY="https://icare-89c17.firebaseio.com/Data/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
-    @Getter
-    private List<Double> dataList=new ArrayList<>();
+public class DataComment extends SyncableObject {
+    public static final String KEY="https://icare-89c17.firebaseio.com/DataComment/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
+    @Getter @Setter
+    private String message="";
+    @Getter @Setter
+    private CommentType commentType;
 
-    public HealthData(DatabaseReference databaseReference) {
+    public DataComment(DatabaseReference databaseReference) {
         super(databaseReference);
+    }
+
+    public enum CommentType{
+        DOCTOR,PERSONAL;
     }
 }

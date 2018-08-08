@@ -4,17 +4,18 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DatabaseReference.CompletionListener;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import io.paperdb.Paper;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 
 /**
@@ -22,26 +23,30 @@ import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
  * Any modified within this class without reading the
  * manual will cause problem!
  * <p>
- * Created by Sudono Tanjung on 19/07/2018 - 8:35.
+ * Created by Sudono Tanjung on 08/08/2018 - 14:38.
  * <p>
  * This class last modified by User
  */
 
-public class HybridDatabase implements ValueEventListener, DatabaseReference.CompletionListener {
-    //public static final String PAPER_OFFLINE_DATA_COLLECTION = "paperarray";
-    public static final String PAPER_OFFLINE_KEY_COLLECTION = "keycollection";
+@RequiredArgsConstructor
+public class HybridReference implements CompletionListener {
+    protected static final String PAPER_OFFLINE_KEY_COLLECTION = "keycollection";
+    @Getter @NonNull
     private DatabaseReference databaseReference;
-    private ArrayList<OnDataChanges> onDataChangesArrayList;
+    @Nullable
+    private CompletionListener completionListener;
 
-    public HybridDatabase(DatabaseReference databaseReference) {
-        this.onDataChangesArrayList = new ArrayList<>();
-        this.databaseReference = databaseReference;
+    @NonNull
+    public void setValue(@Nullable Object o) {
+        databaseReference.setValue(o,this);
+        cacheToFirebase();
+        cacheToPaper(databaseReference.toString(), o);
     }
 
     public static void init() {
         FirebaseDatabase.getInstance().setPersistenceEnabled(Boolean.TRUE);
         DatabaseReference syncReference;
-        HybridDatabase syncDatabase;
+        HybridReference syncDatabase;
         LoadingScreen.showLoadingScreen("Synchronize offline data with central database");
         List<String> syncObjects = Paper.book().read(PAPER_OFFLINE_KEY_COLLECTION
                 , new ArrayList<String>());
@@ -50,7 +55,7 @@ public class HybridDatabase implements ValueEventListener, DatabaseReference.Com
             Object value=Paper.book().read(target,null);
             if(value!=null) {
                 syncReference = FirebaseDatabase.getInstance().getReferenceFromUrl(Uri.decode(target));
-                syncDatabase = new HybridDatabase(syncReference);
+                syncDatabase = new HybridReference(syncReference);
                 syncDatabase.setValue(value);
             }
             else {
@@ -61,30 +66,13 @@ public class HybridDatabase implements ValueEventListener, DatabaseReference.Com
         LoadingScreen.hideLoadingScreen();
     }
 
-    public HybridDatabase setValue(Object value) {
-        cacheToFirebase(databaseReference, value);
-        cacheToPaper(databaseReference.toString(), value);
-        return this;
+    public void setValue(@Nullable Object o, @Nullable CompletionListener completionListener) {
+        databaseReference.setValue(o, this);
+        cacheToFirebase();
+        cacheToPaper(databaseReference.toString(), o);
     }
 
-    public void unSync(){
-        databaseReference.removeEventListener(this);
-        this.onDataChangesArrayList=null;
-    }
-
-    public String getKey() {
-        return databaseReference.getKey();
-    }
-
-    public HybridDatabase addChild(Object value) {
-        DatabaseReference temp = this.databaseReference.push();
-        cacheToFirebase(temp, value);
-        cacheToPaper(temp.toString(), value);
-        return new HybridDatabase(temp);
-    }
-
-    private void cacheToFirebase(DatabaseReference databaseReference, Object value) {
-        databaseReference.setValue(value, this);
+    private void cacheToFirebase() {
         databaseReference.keepSynced(Boolean.TRUE);
     }
 
@@ -94,28 +82,6 @@ public class HybridDatabase implements ValueEventListener, DatabaseReference.Com
         syncObject.add(link);
         Paper.book().write(link, value);
         Paper.book().write(PAPER_OFFLINE_KEY_COLLECTION,syncObject);
-    }
-
-    public HybridDatabase onDataChanges(OnDataChanges onDataChanges) {
-        this.onDataChangesArrayList.add(onDataChanges);
-        this.databaseReference.addValueEventListener(this);
-        return this;
-    }
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        if(dataSnapshot.exists()) {
-            for (OnDataChanges temp : this.onDataChangesArrayList) {
-                temp.preLoad();
-                temp.onDataChanges(dataSnapshot);
-                temp.postLoad();
-            }
-        }
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
     }
 
     @Override
@@ -132,5 +98,7 @@ public class HybridDatabase implements ValueEventListener, DatabaseReference.Com
                 }
             }
         }
+        if(completionListener!=null)
+            completionListener.onComplete(databaseError,databaseReference);
     }
 }

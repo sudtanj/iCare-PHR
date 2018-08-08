@@ -1,10 +1,12 @@
 package sud_tanj.com.icare.Backend.Database;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
 import java.util.Date;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * This class is part of iCare Project
@@ -15,19 +17,20 @@ import lombok.Getter;
  * <p>
  * This class last modified by User
  */
+@NoArgsConstructor
 public abstract class SyncableObject {
     @Exclude
     protected transient String identification = "";
     @Getter
     protected Long timeStamp = new Date().getTime();
-    @Exclude
-    protected transient HybridDatabase database=null;
-    public void sync(){
-        if(database!=null)
-            database.setValue(this);
+
+    public SyncableObject(DatabaseReference databaseReference){
+        this.identification=databaseReference.getKey();
     }
-    public void unSync() {
-        if(database!=null)
-            this.database.unSync();
+
+    @Override
+    public String toString() {
+        super.toString();
+        return this.identification;
     }
 }

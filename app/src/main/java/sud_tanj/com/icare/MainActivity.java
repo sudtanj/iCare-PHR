@@ -31,15 +31,13 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
-import java.util.ArrayList;
-
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
-import sud_tanj.com.icare.Backend.Database.HybridDatabase;
-import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
-import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringListener;
-import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
+import sud_tanj.com.icare.Backend.Database.HybridReference;
+import sud_tanj.com.icare.Backend.Microcontrollers.ArduinoUnoCH340;
+import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
+import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataUi_;
@@ -66,12 +64,23 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         super.attachBaseContext(new SharedFirebasePreferencesContextWrapper(newBase));
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Stop Arduino CH340
+        ArduinoUnoCH340.getInstance().onDispose();
+    }
+
     @AfterViews
     protected void initActivity(){
         //Init Offline Storage
         Paper.init(this);
         //Init Loading Screen
         LoadingScreen.init(this);
+        //Init builtin Sensor
+        BuiltInSensor.init(this);
+        //Init Microcontroller
+        BaseMicrocontroller.init(this);
         //Init Icon Builder
         IconBuilder.init(this);
         //init fragment manager
@@ -84,28 +93,11 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         //Init Notification
         Notification.init(getApplicationContext());
         //Init Hybrid Database
-        HybridDatabase.init();
+        HybridReference.init();
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
-        MonitoringInformation monitoringInformation=new MonitoringInformation("-LJMNi7QI3CTO2595b7v");
-        monitoringInformation.setName("ab");
-        monitoringInformation.addListener(new MonitoringListener() {
-            @Override
-            public void onReady(MonitoringInformation monitoringInformation) {
-                ArrayList<Double> HealthDatas=new ArrayList<>();
-                HealthDatas.add(20.0);
-                HealthData healthData=new HealthData(HealthDatas);
-                healthData.sync();
-                monitoringInformation.getHealthDatas().add(healthData.getId());
-                monitoringInformation.sync();
-            }
 
-            @Override
-            public Boolean isRunOnlyOnce() {
-                return Boolean.TRUE;
-            }
-        });
     }
 
     @AfterViews

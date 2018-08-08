@@ -73,6 +73,8 @@ dependencies {
     implementation 'me.shaohui:bottomdialog:1.1.9'
     implementation 'com.nightonke:boommenu:2.1.1'
     implementation 'com.malinskiy:superrecyclerview:1.1.4'
+    implementation files('libs/CH34xUARTDriver.jar')
+    implementation 'com.github.potterhsu:UsbListener:v0.9'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'
