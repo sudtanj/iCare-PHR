@@ -11,6 +11,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -34,8 +40,9 @@ import org.androidannotations.annotations.WindowFeature;
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
-import sud_tanj.com.icare.Backend.Microcontrollers.ArduinoUnoCH340;
+import sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller.ArduinoUnoCH340;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
+import sud_tanj.com.icare.Backend.Microcontrollers.MicrocontrollerBackgroundJob;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
@@ -58,6 +65,8 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     GoogleSignInOptions gso;
     private FragNavController.Builder builder;
     private DrawerProfile drawerProfile;
+    private FirebaseJobDispatcher backgroundDispatcher;
+    private Job microcontrollerJob;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -97,7 +106,34 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
+        //Init background job
+        backgroundDispatcher=new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
+        microcontrollerJob = backgroundDispatcher.newJobBuilder()
+                .setService(MicrocontrollerBackgroundJob.class) // the JobService that will be called
+                .setTag(BaseMicrocontroller.BACKGROUND_JOB_TAG)        // uniquely identifies the job
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow(0,60))
+                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
+                .setReplaceCurrent(true)
+                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
+                .build();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //run Background jobs
+        System.out.println("Jobs Scheduled");
+        //backgroundDispatcher.mustSchedule(microcontrollerJob);
+        backgroundDispatcher.schedule(microcontrollerJob);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //stop background jobs
+        System.out.println("Jobs dismissed");
+        backgroundDispatcher.cancel(BaseMicrocontroller.BACKGROUND_JOB_TAG);
     }
 
     @AfterViews

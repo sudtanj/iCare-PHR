@@ -20,16 +20,14 @@ import sud_tanj.com.icare.Backend.Database.SyncableObject;
 @NoArgsConstructor
 public class DataComment extends SyncableObject {
     public static final String KEY="https://icare-89c17.firebaseio.com/DataComment/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
+    public static final int COMMENT_BY_DOCTOR=0;
+    public static final int COMMENT_BY_INDIVIDUAL=1;
     @Getter @Setter
     private String message="";
     @Getter @Setter
-    private CommentType commentType;
+    private Integer commentType;
 
     public DataComment(DatabaseReference databaseReference) {
         super(databaseReference);
-    }
-
-    public enum CommentType{
-        DOCTOR,PERSONAL;
     }
 }

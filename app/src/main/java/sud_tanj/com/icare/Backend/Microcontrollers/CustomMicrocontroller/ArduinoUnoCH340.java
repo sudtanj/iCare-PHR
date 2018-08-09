@@ -1,4 +1,4 @@
-package sud_tanj.com.icare.Backend.Microcontrollers;
+package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
@@ -14,6 +14,8 @@ import java.util.List;
 
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 import lombok.Setter;
+import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
+import sud_tanj.com.icare.Backend.Microcontrollers.MicrocontrollerListener;
 
 /**
  * This class is part of iCare Project
@@ -44,11 +46,13 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
             flowControl = 0;
 
     public synchronized static ArduinoUnoCH340 getInstance(){
-        arduinoUnoCH340=new ArduinoUnoCH340();
+        if(arduinoUnoCH340==null)
+            arduinoUnoCH340=new ArduinoUnoCH340();
         return arduinoUnoCH340;
     }
 
     public ArduinoUnoCH340() {
+        super();
         usbListener = new UsbListener(getContext(), true,this);
 
         UsbManager usbManager=(UsbManager) getContext().getSystemService(Context.USB_SERVICE);
@@ -89,11 +93,13 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
 
     @Override
     public void run() {
-        bufferLength = ch34xUARTDriver.ReadData(buffer, 4096);
-        if(bufferLength>0){
-            String recv = new String(buffer, 0, bufferLength, Charset.forName("US-ASCII"));
-            for(MicrocontrollerListener microcontrollerListener:microcontrollerListenerList){
-                microcontrollerListener.onDataReceived(this.jsonParser.parse(recv).getAsJsonObject());
+        if(this.usbDevice!=null) {
+            bufferLength = ch34xUARTDriver.ReadData(buffer, 4096);
+            if (bufferLength > 0) {
+                String recv = new String(buffer, 0, bufferLength, Charset.forName("US-ASCII"));
+                for (MicrocontrollerListener microcontrollerListener : microcontrollerListenerList) {
+                    microcontrollerListener.onDataReceived(this.jsonParser.parse(recv).getAsJsonObject());
+                }
             }
         }
     }

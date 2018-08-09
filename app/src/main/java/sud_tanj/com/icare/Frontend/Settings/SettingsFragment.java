@@ -62,8 +62,10 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         for(BaseFormElement temp:formItems){
             if(temp.getTitle().equals(getString(R.string.age_settings_menu_title))){
-                temp.setValue(sharedPreferences.getString(s,null));
-                break;
+                if(!temp.getValue().equals(sharedPreferences.getString(s,""))) {
+                    temp.setValue(sharedPreferences.getString(s, null));
+                    break;
+                }
             }
         }
         settingsRecycler.getAdapter().notifyDataSetChanged();

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "sud_tanj.com.icare"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.malinskiy:superrecyclerview:1.1.4'
     implementation files('libs/CH34xUARTDriver.jar')
     implementation 'com.github.potterhsu:UsbListener:v0.9'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'
