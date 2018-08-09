@@ -10,7 +10,6 @@ import com.potterhsu.usblistener.UsbListener.OnUsbListener;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 import lombok.Setter;
@@ -36,7 +35,6 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
     private JsonParser jsonParser;
     private byte[] buffer=new byte[4096];
     private int bufferLength=0;
-    private List<MicrocontrollerListener> microcontrollerListenerList;
     @Setter
     private int baudRate = 9600;
     @Setter
@@ -88,7 +86,9 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
 
     @Override
     public void onDispose() {
+        super.onDispose();
         usbListener.dispose();
+        ArduinoUnoCH340.arduinoUnoCH340=null;
     }
 
     @Override

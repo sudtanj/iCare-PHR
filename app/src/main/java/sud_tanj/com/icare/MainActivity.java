@@ -7,16 +7,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.Window;
 
+import com.badoo.mobile.util.WeakHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
-import com.firebase.jobdispatcher.Trigger;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -28,6 +23,7 @@ import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile.OnProfi
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
+import com.nanotasks.Tasks;
 import com.ncapdevi.fragnav.FragNavController;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
@@ -37,12 +33,14 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
+import java.util.concurrent.TimeUnit;
+
 import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
+import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
-import sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller.ArduinoUnoCH340;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
-import sud_tanj.com.icare.Backend.Microcontrollers.MicrocontrollerBackgroundJob;
+import sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller.ArduinoUnoCH340;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
@@ -58,15 +56,15 @@ import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_ACTION_BAR)
-public class MainActivity extends BaseActivity implements OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
+public class MainActivity extends BaseActivity implements Runnable,OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
 
     private FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
     @Extra("googleSigninObject")
     GoogleSignInOptions gso;
     private FragNavController.Builder builder;
     private DrawerProfile drawerProfile;
-    private FirebaseJobDispatcher backgroundDispatcher;
-    private Job microcontrollerJob;
+    private BackgroundDataReceiver backgroundDataReceiver=new BackgroundDataReceiver();
+    private WeakHandler backgroundHandler;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -107,33 +105,8 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
         //Init background job
-        backgroundDispatcher=new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
-        microcontrollerJob = backgroundDispatcher.newJobBuilder()
-                .setService(MicrocontrollerBackgroundJob.class) // the JobService that will be called
-                .setTag(BaseMicrocontroller.BACKGROUND_JOB_TAG)        // uniquely identifies the job
-                .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(0,60))
-                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                .build();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //run Background jobs
-        System.out.println("Jobs Scheduled");
-        //backgroundDispatcher.mustSchedule(microcontrollerJob);
-        backgroundDispatcher.schedule(microcontrollerJob);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //stop background jobs
-        System.out.println("Jobs dismissed");
-        backgroundDispatcher.cancel(BaseMicrocontroller.BACKGROUND_JOB_TAG);
+        backgroundHandler=new WeakHandler();
+        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));
     }
 
     @AfterViews
@@ -246,5 +219,11 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     @Override
     public void onClick(DrawerProfile drawerProfile, long l) {
         Notification.notifyUser(getString(R.string.profile_changing_guide));
+    }
+
+    @Override
+    public void run() {
+        Tasks.executeInBackground(getApplicationContext(),backgroundDataReceiver,backgroundDataReceiver);
+        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));
     }
 }

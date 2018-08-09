@@ -1,4 +1,4 @@
-package sud_tanj.com.icare.Backend.Sensors;
+package sud_tanj.com.icare.Backend.Sensors.CustomSensor;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -7,10 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.Getter;
+import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
+import sud_tanj.com.icare.Backend.Sensors.SensorListener;
 
 /**
  * This class is part of iCare Project
@@ -22,8 +20,6 @@ import lombok.Getter;
  * This class last modified by User
  */
 public class Pedometer extends BuiltInSensor implements SensorEventListener {
-    @Getter
-    protected List<SensorEventListener> sensorEventListenerList=new ArrayList<>();
     protected static Pedometer pedometer=null;
 
     public static Pedometer getInstance(){
@@ -46,21 +42,25 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
     }
 
     @Override
-    String getUnitMeasurement() {
+    public String getUnitMeasurement() {
         return "Steps";
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        for(SensorEventListener temp:sensorEventListenerList){
-            temp.onSensorChanged(sensorEvent);
+        for(SensorListener temp:sensorListeners){
+            temp.onCalculationDone(sensorEvent.values[0]);
         }
     }
 
     @Override
+    public void onDispose() {
+        super.onDispose();
+        Pedometer.pedometer=null;
+    }
+
+    @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-        for(SensorEventListener temp:sensorEventListenerList){
-            temp.onAccuracyChanged(sensor,i);
-        }
+
     }
 }

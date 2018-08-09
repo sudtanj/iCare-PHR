@@ -20,4 +20,6 @@ public abstract class BuiltInSensor extends BaseSensor {
     public static void init(Context context){
         BuiltInSensor.context=context;
     }
+
+    public void run(){}
 }
