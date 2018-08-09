@@ -35,6 +35,12 @@ public abstract class BaseAnalysis implements Runnable{
         }
     }
 
+    public void fireEventListener(int personCondition, String message){
+        for(AnalysisListener analysisListener:analysisListeners){
+            analysisListener.onAnalysisDone(personCondition,message);
+        }
+    }
+
     public void onDispose(){
         if(BaseAnalysis.baseAnalysisList.indexOf(this)>-1) {
             BaseAnalysis.baseAnalysisList.remove(this);

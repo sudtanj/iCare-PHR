@@ -31,6 +31,11 @@ public abstract class BaseSensor implements Runnable{
             this.sensorListeners.remove(sensorListener);
         }
     }
+    public void fireEventListener(double value){
+        for(SensorListener sensorListener:sensorListeners){
+            sensorListener.onCalculationDone(value);
+        }
+    }
     public abstract String getUnitMeasurement();
 
     public void onDispose(){

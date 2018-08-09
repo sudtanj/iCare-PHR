@@ -2,6 +2,8 @@ package sud_tanj.com.icare.Backend.Microcontrollers;
 
 import android.content.Context;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,12 @@ public abstract class BaseMicrocontroller implements Runnable{
     public void removeMicrocontrollerListener(MicrocontrollerListener microcontrollerListener){
         if(microcontrollerListenerList.indexOf(microcontrollerListener)>-1){
             microcontrollerListenerList.remove(microcontrollerListener);
+        }
+    }
+
+    public void fireEventListener(JsonObject data){
+        for(MicrocontrollerListener microcontrollerListener:microcontrollerListenerList){
+            microcontrollerListener.onDataReceived(data);
         }
     }
 

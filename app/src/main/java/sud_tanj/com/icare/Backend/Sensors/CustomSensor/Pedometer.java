@@ -8,7 +8,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
-import sud_tanj.com.icare.Backend.Sensors.SensorListener;
 
 /**
  * This class is part of iCare Project
@@ -48,9 +47,7 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        for(SensorListener temp:sensorListeners){
-            temp.onCalculationDone(sensorEvent.values[0]);
-        }
+        fireEventListener(sensorEvent.values[0]);
     }
 
     @Override
