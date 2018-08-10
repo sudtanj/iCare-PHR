@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import sud_tanj.com.icare.Backend.BaseAbstractComponent;
 
 /**
  * This class is part of iCare Project
@@ -14,33 +15,20 @@ import lombok.Getter;
  * <p>
  * This class last modified by User
  */
-public abstract class BaseSensor implements Runnable{
+public abstract class BaseSensor extends BaseAbstractComponent<SensorListener,Double> {
     @Getter
     protected static List<BaseSensor> baseSensors=new ArrayList<>();
-    protected List<SensorListener> sensorListeners;
-    public BaseSensor(){
-        if(baseSensors.indexOf(this)==-1)
-            baseSensors.add(this);
-    }
-    public void addSensorListener(SensorListener sensorListener){
-        if(sensorListeners.indexOf(sensorListener)==-1)
-            this.sensorListeners.add(sensorListener);
-    }
-    public void removeSensorListener(SensorListener sensorListener){
-        if(sensorListeners.indexOf(sensorListener)>-1){
-            this.sensorListeners.remove(sensorListener);
+    protected BaseSensor(){
+        if(BaseSensor.baseSensors.indexOf(this)==-1) {
+            BaseSensor.baseSensors.add(this);
         }
     }
-    public void fireEventListener(double value){
-        for(SensorListener sensorListener:sensorListeners){
-            sensorListener.onCalculationDone(value);
-        }
+
+    @Override
+    protected void onEventListenerFired(SensorListener listener, Double... valuePassed) {
+        listener.onCalculationDone(valuePassed[0]);
     }
+
     public abstract String getUnitMeasurement();
 
-    public void onDispose(){
-        if(BaseSensor.baseSensors.indexOf(this)>-1)
-            BaseSensor.baseSensors.remove(this);
-        this.sensorListeners.clear();
-    }
 }

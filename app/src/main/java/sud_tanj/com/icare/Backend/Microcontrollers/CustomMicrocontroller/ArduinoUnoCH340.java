@@ -9,12 +9,10 @@ import com.potterhsu.usblistener.UsbListener;
 import com.potterhsu.usblistener.UsbListener.OnUsbListener;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 import lombok.Setter;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
-import sud_tanj.com.icare.Backend.Microcontrollers.MicrocontrollerListener;
 
 /**
  * This class is part of iCare Project
@@ -55,7 +53,6 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
 
         UsbManager usbManager=(UsbManager) getContext().getSystemService(Context.USB_SERVICE);
         ch34xUARTDriver=new CH34xUARTDriver(usbManager,getContext(),CH340_USB_PERMISSION);
-        microcontrollerListenerList=new ArrayList<>();
         this.jsonParser=new JsonParser();
     }
 
@@ -97,9 +94,7 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
             bufferLength = ch34xUARTDriver.ReadData(buffer, 4096);
             if (bufferLength > 0) {
                 String recv = new String(buffer, 0, bufferLength, Charset.forName("US-ASCII"));
-                for (MicrocontrollerListener microcontrollerListener : microcontrollerListenerList) {
-                    microcontrollerListener.onDataReceived(this.jsonParser.parse(recv).getAsJsonObject());
-                }
+                fireEventListener(this.jsonParser.parse(recv).getAsJsonObject());
             }
         }
     }

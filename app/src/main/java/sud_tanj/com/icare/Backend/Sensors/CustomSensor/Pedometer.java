@@ -7,6 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.orhanobut.logger.Logger;
+
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 
 /**
@@ -20,6 +22,7 @@ import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
  */
 public class Pedometer extends BuiltInSensor implements SensorEventListener {
     protected static Pedometer pedometer=null;
+    private double sensorValue=-1;
 
     public static Pedometer getInstance(){
         if(pedometer==null){
@@ -29,6 +32,7 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
     }
 
     protected Pedometer(){
+        super();
         if (getContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)){
             SensorManager sensorManager = (SensorManager) getContext()
@@ -47,17 +51,20 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        fireEventListener(sensorEvent.values[0]);
-    }
-
-    @Override
-    public void onDispose() {
-        super.onDispose();
-        Pedometer.pedometer=null;
+        sensorValue=sensorEvent.values[0];
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    @Override
+    public void run() {
+        Logger.i(this.toString(),"Pedometer listener running!");
+        if(this.sensorValue>-1) {
+            fireEventListener(this.sensorValue);
+        }
+        Logger.i(this.toString(),"Pedometer listener stopped!");
     }
 }

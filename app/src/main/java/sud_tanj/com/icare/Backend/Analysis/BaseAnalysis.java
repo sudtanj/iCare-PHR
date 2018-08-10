@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import sud_tanj.com.icare.Backend.BaseAbstractComponent;
 
 /**
  * This class is part of iCare Project
@@ -14,7 +16,8 @@ import lombok.Getter;
  * <p>
  * This class last modified by User
  */
-public abstract class BaseAnalysis implements Runnable{
+@NoArgsConstructor
+public abstract class BaseAnalysis extends BaseAbstractComponent<AnalysisListener,Object> {
     public static final int EXCELLENT_CONDITION=0;
     public static final int GOOD_CONDITION=1;
     public static final int BAD_CONDITION=2;
@@ -23,24 +26,12 @@ public abstract class BaseAnalysis implements Runnable{
     protected static List<BaseAnalysis> baseAnalysisList=new ArrayList<>();
     protected List<AnalysisListener> analysisListeners;
 
-    public void addanalysisListener(AnalysisListener analysisListener){
-        if(analysisListeners.indexOf(analysisListener)==-1){
-            analysisListeners.add(analysisListener);
-        }
+    @Override
+    protected void onEventListenerFired(AnalysisListener listener, Object... valuePassed) {
+        listener.onAnalysisDone((Integer)valuePassed[0],(String)valuePassed[1]);
     }
 
-    public void removeAnalysisListener(AnalysisListener analysisListener){
-        if(analysisListeners.indexOf(analysisListener)>-1){
-            analysisListeners.remove(analysisListener);
-        }
-    }
-
-    public void fireEventListener(int personCondition, String message){
-        for(AnalysisListener analysisListener:analysisListeners){
-            analysisListener.onAnalysisDone(personCondition,message);
-        }
-    }
-
+    @Override
     public void onDispose(){
         if(BaseAnalysis.baseAnalysisList.indexOf(this)>-1) {
             BaseAnalysis.baseAnalysisList.remove(this);

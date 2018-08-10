@@ -1,9 +1,11 @@
 package sud_tanj.com.icare.Backend.BackgroundJob;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.nanotasks.BackgroundWork;
 import com.nanotasks.Completion;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -29,26 +31,30 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
 
     @Override
     public Object doInBackground() throws Exception {
-        runnableMicrocontrollers = BaseMicrocontroller.getBaseMicrocontrollerList();
-        baseAnalyses=BaseAnalysis.getBaseAnalysisList();
-        baseSensors=BaseSensor.getBaseSensors();
+        Logger.i(this.toString(),"Started Background Job");
         basePlugins=BasePlugin.getBasePluginList();
-        BasePlugin.onStart();
+        Log.i(this.toString(),basePlugins.toString());
+        for(BasePlugin basePlugin:basePlugins){
+            basePlugin.run();
+        }
+        runnableMicrocontrollers = BaseMicrocontroller.getBaseMicrocontrollerList();
+        Logger.i(this.toString(),runnableMicrocontrollers.toString());
         for (BaseMicrocontroller runnableMicrocontroller : runnableMicrocontrollers) {
             runnableMicrocontroller.run();
-            runnableMicrocontroller.onDispose();
         }
+        baseSensors=BaseSensor.getBaseSensors();
+        Logger.i(this.toString(),baseSensors.toString());
         for(BaseSensor baseSensor:baseSensors){
             baseSensor.run();
             baseSensor.onDispose();
         }
+        baseAnalyses=BaseAnalysis.getBaseAnalysisList();
+        Logger.i(this.toString(),baseAnalyses.toString());
         for(BaseAnalysis baseAnalysis:baseAnalyses){
             baseAnalysis.run();
             baseAnalysis.onDispose();
         }
-        for(BasePlugin basePlugin:basePlugins){
-            basePlugin.onDispose();
-        }
+        Logger.i(this.toString(),"End Background Job");
         return null;
     }
 

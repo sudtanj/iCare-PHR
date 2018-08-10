@@ -77,6 +77,8 @@ dependencies {
     implementation 'com.github.potterhsu:UsbListener:v0.9'
     implementation 'com.fabiendevos:nanotasks:1.1.0'
     implementation 'com.badoo.mobile:android-weak-handler:1.1'
+    implementation 'com.github.100rabhkr:GetJSON:1.0'
+    implementation 'com.orhanobut:logger:2.2.0'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

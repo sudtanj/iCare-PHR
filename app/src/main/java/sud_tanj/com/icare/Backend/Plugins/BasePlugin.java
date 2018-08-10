@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import sud_tanj.com.icare.Backend.Plugins.CustomPlugins.StepsCounter;
 
 /**
  * This class is part of iCare Project
@@ -14,7 +15,7 @@ import lombok.Getter;
  * <p>
  * This class last modified by User
  */
-public class BasePlugin {
+public abstract class BasePlugin implements Runnable{
     @Getter
     private static List<BasePlugin> basePluginList=new ArrayList<>();
 
@@ -24,8 +25,9 @@ public class BasePlugin {
         }
     }
 
-    public static void onStart(){
+    public static void init(){
         //Put your [plugins_class_name].getInstance(); here
+        StepsCounter.getInstance();
     }
 
     public void onDispose(){

@@ -9,6 +9,7 @@ import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import sud_tanj.com.icare.Backend.BaseAbstractComponent;
 
 /**
  * This class is part of iCare Project
@@ -19,29 +20,11 @@ import lombok.Getter;
  * <p>
  * This class last modified by User
  */
-public abstract class BaseMicrocontroller implements Runnable{
+public abstract class BaseMicrocontroller extends BaseAbstractComponent<MicrocontrollerListener,JsonObject> {
     @Getter(AccessLevel.PROTECTED)
     private static Context context;
     @Getter
     private static List<BaseMicrocontroller> baseMicrocontrollerList=new ArrayList<>();
-    protected List<MicrocontrollerListener> microcontrollerListenerList;
-
-    public void addMicrocontrollerListener(MicrocontrollerListener microcontrollerListener){
-        if(microcontrollerListenerList.indexOf(microcontrollerListener)==-1)
-            microcontrollerListenerList.add(microcontrollerListener);
-    }
-
-    public void removeMicrocontrollerListener(MicrocontrollerListener microcontrollerListener){
-        if(microcontrollerListenerList.indexOf(microcontrollerListener)>-1){
-            microcontrollerListenerList.remove(microcontrollerListener);
-        }
-    }
-
-    public void fireEventListener(JsonObject data){
-        for(MicrocontrollerListener microcontrollerListener:microcontrollerListenerList){
-            microcontrollerListener.onDataReceived(data);
-        }
-    }
 
     public BaseMicrocontroller() {
         if(BaseMicrocontroller.getBaseMicrocontrollerList().indexOf(this)==-1)
@@ -51,9 +34,16 @@ public abstract class BaseMicrocontroller implements Runnable{
     public static void init(Context context){
         BaseMicrocontroller.context=context;
     }
+
+    @Override
+    protected void onEventListenerFired(MicrocontrollerListener listener, JsonObject... valuePassed) {
+        listener.onDataReceived(valuePassed[0]);
+    }
+
+    @Override
     public void onDispose(){
         if(BaseMicrocontroller.baseMicrocontrollerList.indexOf(this)>-1)
             BaseMicrocontroller.baseMicrocontrollerList.remove(this);
-        this.microcontrollerListenerList.clear();
+        this.listeners.clear();
     }
 }

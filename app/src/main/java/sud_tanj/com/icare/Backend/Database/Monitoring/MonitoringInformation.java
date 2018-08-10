@@ -21,7 +21,7 @@ import sud_tanj.com.icare.Backend.Database.SyncableObject;
  */
 @NoArgsConstructor
 public class MonitoringInformation extends SyncableObject {
-    public static final String SENSOR_DATA_CHILD_NAME = "https://icare-89c17.firebaseio.com/Sensor";
+    public static final String KEY = "https://icare-89c17.firebaseio.com/Sensor";
     @Getter
     private List<String> healthDatas = new ArrayList<>(),
             individualComments =new ArrayList<>(),

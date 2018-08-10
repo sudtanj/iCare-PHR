@@ -3,6 +3,7 @@ package sud_tanj.com.icare.Backend.Sensors;
 import android.content.Context;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * This class is part of iCare Project
@@ -13,6 +14,7 @@ import lombok.Getter;
  * <p>
  * This class last modified by User
  */
+@NoArgsConstructor
 public abstract class BuiltInSensor extends BaseSensor {
     @Getter
     private static Context context;
@@ -21,5 +23,5 @@ public abstract class BuiltInSensor extends BaseSensor {
         BuiltInSensor.context=context;
     }
 
-    public void run(){}
+    public void onDispose(){}
 }

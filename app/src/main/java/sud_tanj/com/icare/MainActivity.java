@@ -25,6 +25,8 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import com.nanotasks.Tasks;
 import com.ncapdevi.fragnav.FragNavController;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
@@ -40,6 +42,7 @@ import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWr
 import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
+import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
@@ -70,8 +73,21 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         super.attachBaseContext(new SharedFirebasePreferencesContextWrapper(newBase));
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        for(BaseMicrocontroller baseMicrocontroller:BaseMicrocontroller.getBaseMicrocontrollerList()){
+            baseMicrocontroller.onDispose();
+        }
+        for(BasePlugin basePlugin:BasePlugin.getBasePluginList()){
+            basePlugin.onDispose();
+        }
+    }
+
     @AfterViews
     protected void initActivity(){
+        //Init logger
+        Logger.addLogAdapter(new AndroidLogAdapter());
         //Init Offline Storage
         Paper.init(this);
         //Init Loading Screen
@@ -96,6 +112,8 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
+        //Init all plugins
+        BasePlugin.init();
         //Init background job
         backgroundHandler=new WeakHandler();
         backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));

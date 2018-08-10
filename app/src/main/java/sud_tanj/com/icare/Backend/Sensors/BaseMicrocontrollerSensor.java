@@ -13,4 +13,10 @@ public abstract class BaseMicrocontrollerSensor extends BaseSensor{
 
     abstract Double calculateResult();
 
+    public void onDispose(){
+        if(BaseSensor.baseSensors.indexOf(this)>-1)
+            BaseSensor.baseSensors.remove(this);
+        this.listeners.clear();
+    }
+
 }
