@@ -26,7 +26,7 @@
 
 
         <TextView
-            android:id="@+id/data_ui_counter"
+            android:id="@+id/counter_title"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="#FFFFFF"

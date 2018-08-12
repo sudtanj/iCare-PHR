@@ -65,72 +65,72 @@ public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBind
         //numberAdapter.withOnBindViewHolderListener(this);
         final BottomDialog bottomDialog=BottomDialog.create(getFragmentManager());
         bottomDialog.setViewListener(new ViewListener() {
+            @Override
+            public void bindView(View v) {
+                //RecyclerView commentRecyclerView=v.findViewById(R.id.comment_bottomsheet);
+                //commentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                //commentRecyclerView.setAdapter(fastAdapter);
+                BoomMenuButton bmb=v.findViewById(R.id.bmb);
+                bmb.setBoomEnum(BoomEnum.RANDOM);
+                bmb.setButtonEnum(ButtonEnum.Ham);
+                bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
+                bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
+                bmb.setOrderEnum(OrderEnum.DEFAULT);
+                bmb.setOnBoomListener(new OnBoomListener() {
                     @Override
-                    public void bindView(View v) {
-                        //RecyclerView commentRecyclerView=v.findViewById(R.id.comment_bottomsheet);
-                        //commentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        //commentRecyclerView.setAdapter(fastAdapter);
-                        BoomMenuButton bmb=v.findViewById(R.id.bmb);
-                        bmb.setBoomEnum(BoomEnum.RANDOM);
-                        bmb.setButtonEnum(ButtonEnum.Ham);
-                        bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
-                        bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
-                        bmb.setOrderEnum(OrderEnum.DEFAULT);
-                        bmb.setOnBoomListener(new OnBoomListener() {
+                    public void onClicked(int index, BoomButton boomButton) {
+
+                    }
+
+                    @Override
+                    public void onBackgroundClick() {
+                    }
+
+                    @Override
+                    public void onBoomWillHide() {
+
+                    }
+
+                    @Override
+                    public void onBoomDidHide() {
+
+                    }
+
+                    @Override
+                    public void onBoomWillShow() {
+
+                    }
+
+                    @Override
+                    public void onBoomDidShow() {
+                        System.out.println("Button Click");
+                        bottomDialog.dismiss();
+                    }
+                });
+                HamButton.Builder builder = new HamButton.Builder()
+                        .normalText("Post as Doctor")
+                        .subNormalText("We will tag this comment as from doctor!")
+                        .listener(new OnBMClickListener() {
                             @Override
-                            public void onClicked(int index, BoomButton boomButton) {
-
-                            }
-
-                            @Override
-                            public void onBackgroundClick() {
-                            }
-
-                            @Override
-                            public void onBoomWillHide() {
-
-                            }
-
-                            @Override
-                            public void onBoomDidHide() {
-
-                            }
-
-                            @Override
-                            public void onBoomWillShow() {
-
-                            }
-
-                            @Override
-                            public void onBoomDidShow() {
-                                System.out.println("Button Click");
-                                bottomDialog.dismiss();
+                            public void onBoomButtonClick(int index) {
+                                bottomDialog.show();
                             }
                         });
-                            HamButton.Builder builder = new HamButton.Builder()
-                                    .normalText("Post as Doctor")
-                                    .subNormalText("We will tag this comment as from doctor!")
-                                    .listener(new OnBMClickListener() {
-                                        @Override
-                                        public void onBoomButtonClick(int index) {
-                                            bottomDialog.show();
-                                        }
-                                    });
-                            HamButton.Builder builder2 = new HamButton.Builder()
-                                    .normalText("Post as User")
-                                    .subNormalText("We will tag this comment as from you!")
-                                    .listener(new OnBMClickListener() {
-                                        @Override
-                                        public void onBoomButtonClick(int index) {
-                                            bottomDialog.show();
-                                        }
-                                    });
-                            bmb.addBuilder(builder);
-                            bmb.addBuilder(builder2);
-                    }
-                })
+                HamButton.Builder builder2 = new HamButton.Builder()
+                        .normalText("Post as User")
+                        .subNormalText("We will tag this comment as from you!")
+                        .listener(new OnBMClickListener() {
+                            @Override
+                            public void onBoomButtonClick(int index) {
+                                bottomDialog.show();
+                            }
+                        });
+                bmb.addBuilder(builder);
+                bmb.addBuilder(builder2);
+            }
+        })
                 .setLayoutRes(R.layout.layout_slider_cell_bottomsheet_comment)      // dialog layout
-                ;
+        ;
         bottomDialog.show();
     }
 
@@ -143,20 +143,20 @@ public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBind
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position, List<Object> payloads) {
         /**
-        if(position==0) {
-            TapTargetView.showFor((Activity)((CellCard.ViewHolder)viewHolder).itemView.getContext(),                 // `this` is an Activity
-                    TapTarget.forView(((CellCard.ViewHolder)viewHolder).getNumberUnit(), "Slide Here!", "Slide to the left or right on the circle mark position to view data")
-                            // All options below are optional
-                            .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                            .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                            .descriptionTextSize(10)            // Specify the size (in sp) of the description text
-                            .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                            .tintTarget(true)                   // Whether to tint the target view's color
-                            .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
-                            // Specify a custom drawable to draw as the target
-                            .targetRadius(60));
-        }
+         if(position==0) {
+         TapTargetView.showFor((Activity)((CellCard.ViewHolder)viewHolder).itemView.getContext(),                 // `this` is an Activity
+         TapTarget.forView(((CellCard.ViewHolder)viewHolder).getNumberUnit(), "Slide Here!", "Slide to the left or right on the circle mark position to view data")
+         // All options below are optional
+         .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+         .titleTextSize(20)                  // Specify the size (in sp) of the title text
+         .descriptionTextSize(10)            // Specify the size (in sp) of the description text
+         .drawShadow(true)                   // Whether to draw a drop shadow or not
+         .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+         .tintTarget(true)                   // Whether to tint the target view's color
+         .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+         // Specify a custom drawable to draw as the target
+         .targetRadius(60));
+         }
          */
     }
 

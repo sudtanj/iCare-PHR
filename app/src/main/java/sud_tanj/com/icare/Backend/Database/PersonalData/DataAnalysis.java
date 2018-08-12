@@ -21,6 +21,8 @@ import sud_tanj.com.icare.Backend.Database.SyncableObject;
 public class DataAnalysis extends SyncableObject {
     public static final String KEY="https://icare-89c17.firebaseio.com/DataAnalysis/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
     @Getter @Setter
+    private int condition;
+    @Getter @Setter
     private String analysisMessage;
     public DataAnalysis(DatabaseReference databaseReference) {
         super(databaseReference);

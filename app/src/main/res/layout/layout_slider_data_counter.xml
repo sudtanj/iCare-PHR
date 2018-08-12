@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_weight="0"
-            android:gravity="left"
+            android:gravity="center_horizontal"
             android:text="TextView"
             android:textColor="@color/temperature_text"
             android:textSize="40sp" />
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="0"
-            android:gravity="left"
+            android:gravity="center_horizontal"
             android:text="TextView"
             android:textColor="@color/temperature_text"
             android:textSize="30sp" />

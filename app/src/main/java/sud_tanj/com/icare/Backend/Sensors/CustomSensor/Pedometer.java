@@ -23,6 +23,7 @@ import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 public class Pedometer extends BuiltInSensor implements SensorEventListener {
     protected static Pedometer pedometer=null;
     private double sensorValue=-1;
+    private Boolean newData=false;
 
     public static Pedometer getInstance(){
         if(pedometer==null){
@@ -52,6 +53,7 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         sensorValue=sensorEvent.values[0];
+        newData=true;
     }
 
     @Override
@@ -62,8 +64,10 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
     @Override
     public void run() {
         Logger.i(this.toString(),"Pedometer listener running!");
-        if(this.sensorValue>-1) {
+        Logger.i(newData.toString(),"Pedometer has new data is "+newData);
+        if(newData) {
             fireEventListener(this.sensorValue);
+            newData=false;
         }
         Logger.i(this.toString(),"Pedometer listener stopped!");
     }

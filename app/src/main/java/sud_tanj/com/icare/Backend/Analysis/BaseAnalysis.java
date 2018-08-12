@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import sud_tanj.com.icare.Backend.BaseAbstractComponent;
 
 /**
@@ -16,7 +15,6 @@ import sud_tanj.com.icare.Backend.BaseAbstractComponent;
  * <p>
  * This class last modified by User
  */
-@NoArgsConstructor
 public abstract class BaseAnalysis extends BaseAbstractComponent<AnalysisListener,Object> {
     public static final int EXCELLENT_CONDITION=0;
     public static final int GOOD_CONDITION=1;
@@ -26,6 +24,11 @@ public abstract class BaseAnalysis extends BaseAbstractComponent<AnalysisListene
     protected static List<BaseAnalysis> baseAnalysisList=new ArrayList<>();
     protected List<AnalysisListener> analysisListeners;
 
+    public BaseAnalysis(){
+        if(BaseAnalysis.baseAnalysisList.indexOf(this)==-1){
+            BaseAnalysis.baseAnalysisList.add(this);
+        }
+    }
     @Override
     protected void onEventListenerFired(AnalysisListener listener, Object... valuePassed) {
         listener.onAnalysisDone((Integer)valuePassed[0],(String)valuePassed[1]);

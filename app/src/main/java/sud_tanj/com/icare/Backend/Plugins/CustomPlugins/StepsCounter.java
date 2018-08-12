@@ -9,8 +9,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import lombok.NoArgsConstructor;
+import sud_tanj.com.icare.Backend.Analysis.AnalysisListener;
+import sud_tanj.com.icare.Backend.Analysis.CustomAnalysis.StepsAnalysis;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Backend.Database.PersonalData.DataAnalysis;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
 import sud_tanj.com.icare.Backend.Sensors.CustomSensor.Pedometer;
@@ -26,10 +29,12 @@ import sud_tanj.com.icare.Backend.Sensors.SensorListener;
  * This class last modified by User
  */
 @NoArgsConstructor
-public class StepsCounter extends BasePlugin implements ValueEventListener,SensorListener{
+public class StepsCounter extends BasePlugin implements ValueEventListener,SensorListener, AnalysisListener {
     public static final String IDENTIFICATION="-LJXvUiu95PkUihaMlmn";
     private static StepsCounter stepsCounter=null;
     private double valueResult=-1;
+    private int personCondition=-1;
+    private String message;
     public static StepsCounter getInstance(){
         if(stepsCounter==null)
             stepsCounter=new StepsCounter();
@@ -45,12 +50,9 @@ public class StepsCounter extends BasePlugin implements ValueEventListener,Senso
     public void onCalculationDone(double value) {
         //store the value in the current class [StepsCounter] for firebase to be able to handle
         this.valueResult=value;
-        //Get Monitoring Information object
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(MonitoringInformation.KEY)
-                .child(IDENTIFICATION);
-        //Listen for query result from firebase
-        databaseReference.addListenerForSingleValueEvent(this);
+        StepsAnalysis stepsAnalysis=new StepsAnalysis();
+        stepsAnalysis.setSteps(this.valueResult);
+        stepsAnalysis.addListener(this);
     }
 
     @Override
@@ -64,6 +66,12 @@ public class StepsCounter extends BasePlugin implements ValueEventListener,Senso
         HealthData healthData=new HealthData(databaseReference);
         //Record value to the health data instance
         healthData.getDataList().add(this.valueResult);
+        //Record analysis value
+        DataAnalysis dataAnalysis=new DataAnalysis();
+        dataAnalysis.setCondition(this.personCondition);
+        dataAnalysis.setAnalysisMessage(this.message);
+        //Add to monitoring data
+        monitoringInformation.getAnalysisDatas().add(dataAnalysis.toString());
         //A special class that wrap firebase class to handle offline transaction limitation
         HybridReference hybridReference =new HybridReference(databaseReference);
         //Tell the firebase to upload newly created healthData to the cloud
@@ -71,11 +79,29 @@ public class StepsCounter extends BasePlugin implements ValueEventListener,Senso
         //tell the monitoringinformation to link the health data
         monitoringInformation.getHealthDatas().add(healthData.toString());
         //sync the monitoring information in the cloud with the local copy
-        dataSnapshot.getRef().setValue(monitoringInformation);
+        hybridReference =new HybridReference(dataSnapshot.getRef());
+        hybridReference.setValue(monitoringInformation);
+        //sync analysis data to the cloud
+        databaseReference=FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(DataAnalysis.KEY).push();
+        hybridReference=new HybridReference(databaseReference);
+        hybridReference.setValue(dataAnalysis);
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+    }
+
+    @Override
+    public void onAnalysisDone(int personCondition, String message) {
+        this.personCondition=personCondition;
+        this.message=message;
+        //Get Monitoring Information object
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(MonitoringInformation.KEY)
+                .child(IDENTIFICATION);
+        //Listen for query result from firebase
+        databaseReference.addListenerForSingleValueEvent(this);
     }
 }

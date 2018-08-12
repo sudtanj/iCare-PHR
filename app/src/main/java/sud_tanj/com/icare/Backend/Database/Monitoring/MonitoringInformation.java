@@ -32,7 +32,7 @@ public class MonitoringInformation extends SyncableObject {
     @Getter @Setter
     private Boolean monitoring;
     @Getter @Setter
-    private String name,image;
+    private String name,image,description;
 
     public MonitoringInformation(DatabaseReference databaseReference) {
         super(databaseReference);

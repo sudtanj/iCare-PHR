@@ -2,24 +2,20 @@ package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.ramotion.cardslider.CardSliderLayoutManager;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
@@ -28,31 +24,35 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Cards.SliderCard;
+import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 
 @EFragment(R.layout.fragment_sensor_catalogue)
 public class SensorUi extends Fragment {
     private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
-   // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
+    // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
     private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
     private final String[] countries = {"Heart Rate", "Blood Pressure", "Sensor C", "Sensor D", "Sensor E"};
     private final String[] places = {"Description", "Description", "Description", "Description","Description"};
     private final String[] temperatures = {"Available", "Unavailable", "17°C", "23°C", "20°C"};
     private final String[] times = {"Jane Doe", "John Doe", "Jane Doe"};
 
-   // private final SliderAdapter sliderAdapter = new SliderAdapter(pics, 20, new OnCardClickListener());
-    private FastAdapter fastAdapter;
+    // private final SliderAdapter sliderAdapter = new SliderAdapter(pics, 20, new OnCardClickListener());
+    //private FastAdapter fastAdapter;
+    private FirebaseMonitoringAdapter firebaseMonitoringAdapter;
 
     private CardSliderLayoutManager layoutManger;
     private TextSwitcher temperatureSwitcher;
     private TextSwitcher placeSwitcher;
     private TextSwitcher clockSwitcher;
-    private TextSwitcher descriptionsSwitcher;
+    @ViewById(R.id.ts_description)
+    protected TextSwitcher descriptionsSwitcher;
 
-    private TextView country1TextView;
-    private TextView country2TextView;
+    @ViewById(R.id.monitor_name)
+    protected TextView monitoringTitle;
+    @ViewById(R.id.tv_country_2)
+    protected TextView monitoringTitleHelper;
     private int countryOffset1;
     private int countryOffset2;
     private long countryAnimDuration;
@@ -70,21 +70,31 @@ public class SensorUi extends Fragment {
         catalogueDescriptionIcon.setImageDrawable(IconBuilder.get(IconValue.CLIPBOARD_TEXT));
         sensorAuthorIcon.setImageDrawable(IconBuilder.get(IconValue.ARTIST));
         initRecyclerView();
-        initCountryText();
         initSwitchers();
     }
 
 
-    private void initRecyclerView() {
-        ItemAdapter itemAdapter = new ItemAdapter();
-        fastAdapter=FastAdapter.with(itemAdapter);
-        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
-        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
-        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
-        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
-        itemAdapter.add(new SliderCard(getResources().getDrawable(R.drawable.ic_arduino)));
+    @Override
+    public void onStop() {
+        super.onStop();
+        firebaseMonitoringAdapter.stopListening();
+    }
 
-        sensorCatalogue.setAdapter(fastAdapter);
+    private void initRecyclerView() {
+        Query query = FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(MonitoringInformation.KEY)
+                .limitToLast(10);
+
+        FirebaseRecyclerOptions<MonitoringInformation> options =
+                new FirebaseRecyclerOptions.Builder<MonitoringInformation>()
+                        .setQuery(query, MonitoringInformation.class)
+                        .build();
+
+        firebaseMonitoringAdapter=new FirebaseMonitoringAdapter(options,this);
+        firebaseMonitoringAdapter.startListening();
+
+
+        sensorCatalogue.setAdapter(firebaseMonitoringAdapter);
         sensorCatalogue.setHasFixedSize(true);
 
         sensorCatalogue.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -113,37 +123,36 @@ public class SensorUi extends Fragment {
         clockSwitcher = (TextSwitcher) getActivity().findViewById(R.id.ts_clock);
         clockSwitcher.setFactory(new TextViewFactory(R.style.ClockTextView, false));
         clockSwitcher.setCurrentText(times[0]);
-
-        descriptionsSwitcher = (TextSwitcher) getActivity().findViewById(R.id.ts_description);
-        descriptionsSwitcher.setInAnimation(getContext(), android.R.anim.fade_in);
-        descriptionsSwitcher.setOutAnimation(getContext(), android.R.anim.fade_out);
-        descriptionsSwitcher.setFactory(new TextViewFactory(R.style.DescriptionTextView, false));
-        descriptionsSwitcher.setCurrentText(getString(descriptions[0]));
     }
 
-    private void initCountryText() {
+    public void initMonitorTitle(String text) {
         countryAnimDuration = getResources().getInteger(R.integer.labels_animation_duration);
         countryOffset1 = getResources().getDimensionPixelSize(R.dimen.left_offset);
         countryOffset2 = getResources().getDimensionPixelSize(R.dimen.card_width);
-        country1TextView = (TextView) getActivity().findViewById(R.id.tv_country_1);
-        country2TextView = (TextView) getActivity().findViewById(R.id.tv_country_2);
 
-        country1TextView.setX(countryOffset1);
-        country2TextView.setX(countryOffset2);
-        country1TextView.setText(countries[0]);
-        country2TextView.setAlpha(0f);
-
+        monitoringTitle.setX(countryOffset1);
+        monitoringTitleHelper.setX(countryOffset2);
+        //country1TextView.setText(countries[0]);
+        monitoringTitle.setText(text);
+        monitoringTitleHelper.setAlpha(0f);
     }
 
-    private void setCountryText(String text, boolean left2right) {
+    public void initMonitorDescription(String text){
+        descriptionsSwitcher.setInAnimation(getContext(), android.R.anim.fade_in);
+        descriptionsSwitcher.setOutAnimation(getContext(), android.R.anim.fade_out);
+        descriptionsSwitcher.setFactory(new TextViewFactory(R.style.DescriptionTextView, false));
+        descriptionsSwitcher.setCurrentText(text);
+    }
+
+    public void setCountryText(String text, boolean left2right) {
         final TextView invisibleText;
         final TextView visibleText;
-        if (country1TextView.getAlpha() > country2TextView.getAlpha()) {
-            visibleText = country1TextView;
-            invisibleText = country2TextView;
+        if (monitoringTitle.getAlpha() > monitoringTitleHelper.getAlpha()) {
+            visibleText = monitoringTitle;
+            invisibleText = monitoringTitleHelper;
         } else {
-            visibleText = country2TextView;
-            invisibleText = country1TextView;
+            visibleText = monitoringTitleHelper;
+            invisibleText = monitoringTitle;
         }
 
         final int vOffset;
@@ -190,7 +199,10 @@ public class SensorUi extends Fragment {
             animV[1] = R.anim.slide_out_top;
         }
 
-        setCountryText(countries[pos % countries.length], left2right);
+        //setCountryText(countries[pos % countries.length], left2right);
+        setCountryText(firebaseMonitoringAdapter
+                .getItem(pos % firebaseMonitoringAdapter.getItemCount()).getName()
+                ,left2right);
 
         temperatureSwitcher.setInAnimation(getContext(), animH[0]);
         temperatureSwitcher.setOutAnimation(getContext(), animH[1]);
@@ -204,8 +216,10 @@ public class SensorUi extends Fragment {
         clockSwitcher.setOutAnimation(getContext(), animV[1]);
         clockSwitcher.setText(times[pos % times.length]);
 
-        descriptionsSwitcher.setText(getString(descriptions[pos % descriptions.length]));
-
+        //descriptionsSwitcher.setText(getString(descriptions[pos % descriptions.length]));
+        descriptionsSwitcher.setText(firebaseMonitoringAdapter
+                        .getItem(pos % firebaseMonitoringAdapter.getItemCount()).getDescription()
+                );
         currentPosition = pos;
     }
 
@@ -237,53 +251,5 @@ public class SensorUi extends Fragment {
             return textView;
         }
 
-    }
-
-    private class ImageViewFactory implements ViewSwitcher.ViewFactory {
-        @Override
-        public View makeView() {
-            final ImageView imageView = new ImageView(getContext());
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-            final LayoutParams lp = new ImageSwitcher.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-            imageView.setLayoutParams(lp);
-
-            return imageView;
-        }
-    }
-
-    private class OnCardClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            final CardSliderLayoutManager lm =  (CardSliderLayoutManager) sensorCatalogue.getLayoutManager();
-
-            if (lm.isSmoothScrolling()) {
-                return;
-            }
-
-            final int activeCardPosition = lm.getActiveCardPosition();
-            if (activeCardPosition == RecyclerView.NO_POSITION) {
-                return;
-            }
-
-            final int clickedPosition = sensorCatalogue.getChildAdapterPosition(view);
-            if (clickedPosition == activeCardPosition) {
-                final Intent intent = new Intent(getContext(), DetailsActivity.class);
-                intent.putExtra(DetailsActivity.BUNDLE_IMAGE_ID, pics[activeCardPosition % pics.length]);
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    //startActivity(intent);
-                } else {
-                    final CardView cardView = (CardView) view;
-                    final View sharedView = cardView.getChildAt(cardView.getChildCount() - 1);
-                    final ActivityOptions options = ActivityOptions
-                            .makeSceneTransitionAnimation(getActivity(), sharedView, "shared");
-                    //startActivity(intent, options.toBundle());
-                }
-            } else if (clickedPosition > activeCardPosition) {
-                sensorCatalogue.smoothScrollToPosition(clickedPosition);
-                onActiveCardChange(clickedPosition);
-            }
-        }
     }
 }

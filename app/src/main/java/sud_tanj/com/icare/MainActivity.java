@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         BasePlugin.init();
         //Init background job
         backgroundHandler=new WeakHandler();
-        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));
+        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
     }
 
     @AfterViews
@@ -234,6 +234,6 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
     @Override
     public void run() {
         Tasks.executeInBackground(getApplicationContext(),backgroundDataReceiver,backgroundDataReceiver);
-        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));
+        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
     }
 }

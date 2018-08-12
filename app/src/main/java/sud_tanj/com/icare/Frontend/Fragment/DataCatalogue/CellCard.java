@@ -57,7 +57,7 @@ public class CellCard extends AbstractItem<CellCard, CellCard.ViewHolder> {
         //TODO: Declare your UI widgets here
         public ViewHolder(View itemView) {
             super(itemView);
-            textView=itemView.findViewById(R.id.data_ui_counter);
+            textView=itemView.findViewById(R.id.counter_title);
             numberUnit=(RecyclerView)itemView.findViewById(R.id.number_unit_data_catalogue);
             foldingCell=itemView.findViewById(R.id.folding_cell);
             //imageView=(ImageView) itemView.findViewById(R.id.image);
