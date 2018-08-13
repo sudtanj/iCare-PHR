@@ -1,5 +1,6 @@
 package sud_tanj.com.icare.Backend.Database;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ public class HybridReference implements CompletionListener {
     private DatabaseReference databaseReference;
     @Nullable
     private CompletionListener completionListener;
+    private static boolean isPersistenceSet=false;
 
     @NonNull
     public void setValue(@Nullable Object o) {
@@ -43,8 +45,13 @@ public class HybridReference implements CompletionListener {
         cacheToPaper(databaseReference.toString(), o);
     }
 
-    public static void init() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(Boolean.TRUE);
+    public static void init(Context context) {
+        //Init Offline Storage
+        Paper.init(context);
+        if(!isPersistenceSet) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(Boolean.TRUE);
+            isPersistenceSet=true;
+        }
         DatabaseReference syncReference;
         HybridReference syncDatabase;
         LoadingScreen.showLoadingScreen("Synchronize offline data with central database");

@@ -1,6 +1,5 @@
 package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue;
 
-import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,22 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
-import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnBindViewHolderListener;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
-import com.nightonke.boommenu.Animation.BoomEnum;
-import com.nightonke.boommenu.Animation.OrderEnum;
-import com.nightonke.boommenu.BoomButtons.BoomButton;
-import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
-import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.ButtonEnum;
-import com.nightonke.boommenu.OnBoomListener;
-import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.ramotion.foldingcell.FoldingCell;
 
 import org.androidannotations.annotations.AfterViews;
@@ -32,8 +23,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import me.shaohui.bottomdialog.BottomDialog;
-import me.shaohui.bottomdialog.BottomDialog.ViewListener;
+import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.R;
 
 @EFragment(R.layout.fragment_data_catalogue)
@@ -42,9 +32,11 @@ public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBind
     protected SuperRecyclerView dataRecyclerView;
     private FastAdapter fastAdapter;
     protected RecyclerView numberUnit;
+    private FirebaseDataAdapter firebaseDataAdapter;
 
     @AfterViews
     public void init(){
+        /**
         numberUnit=(RecyclerView)((Activity)dataRecyclerView.getContext()).findViewById(R.id.number_unit_data_catalogue);
         //numberUnit.setHasFixedSize(true);
         ItemAdapter itemAdapterNumberunit=new ItemAdapter();
@@ -132,6 +124,19 @@ public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBind
                 .setLayoutRes(R.layout.layout_slider_cell_bottomsheet_comment)      // dialog layout
         ;
         bottomDialog.show();
+         */
+        Query query = FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(MonitoringInformation.KEY)
+                .limitToLast(10);
+
+        FirebaseRecyclerOptions<MonitoringInformation> options =
+                new FirebaseRecyclerOptions.Builder<MonitoringInformation>()
+                        .setQuery(query, MonitoringInformation.class)
+                        .setLifecycleOwner(this)
+                        .build();
+        firebaseDataAdapter=new FirebaseDataAdapter(options,this);
+        dataRecyclerView.setAdapter(firebaseDataAdapter);
+        dataRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override

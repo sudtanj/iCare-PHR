@@ -5,21 +5,20 @@
     android:id="@+id/folding_cell"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/folded_round_corner"
-
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical"
+    android:paddingBottom="10dp"
     tools:context=".MainActivity">
 
     <include
         layout="@layout/layout_slider_cell_content_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <include
         layout="@layout/layout_slider_cell_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 </com.ramotion.foldingcell.FoldingCell>

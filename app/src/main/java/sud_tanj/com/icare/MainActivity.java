@@ -3,7 +3,6 @@ package sud_tanj.com.icare;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.Window;
 
@@ -37,7 +36,6 @@ import org.androidannotations.annotations.WindowFeature;
 
 import java.util.concurrent.TimeUnit;
 
-import io.paperdb.Paper;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
 import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
@@ -86,10 +84,10 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
 
     @AfterViews
     protected void initActivity(){
+        //Init Hybrid Database
+        HybridReference.init(this);
         //Init logger
         Logger.addLogAdapter(new AndroidLogAdapter());
-        //Init Offline Storage
-        Paper.init(this);
         //Init Loading Screen
         LoadingScreen.init(this);
         //Init builtin Sensor
@@ -107,8 +105,6 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         }
         //Init Notification
         Notification.init(getApplicationContext());
-        //Init Hybrid Database
-        HybridReference.init();
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
@@ -123,7 +119,8 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
     protected void initNavigationDrawer(){
         drawerProfile=new DrawerProfile()
                 .setAvatar(IconBuilder.get(IconValue.CLOUD_OFF_OUTLINE))
-                .setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
+                .setBackground(IconBuilder.get(IconValue.HEART_PULSE))
+                //.setBackground((BitmapDrawable)getResources().getDrawable(R.drawable.nav_bar_background))
                 .setName(firebaseUser.getDisplayName())
                 .setDescription(HybridPreferences.getFirebaseInstance().getString(SettingsFragment.AGE_SETTINGS,"")+getString(R.string.profile_age_drawer))
                 .setOnProfileClickListener(this);

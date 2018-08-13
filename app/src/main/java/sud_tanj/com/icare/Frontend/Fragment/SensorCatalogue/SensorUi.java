@@ -73,13 +73,6 @@ public class SensorUi extends Fragment {
         initSwitchers();
     }
 
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        firebaseMonitoringAdapter.stopListening();
-    }
-
     private void initRecyclerView() {
         Query query = FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(MonitoringInformation.KEY)
@@ -88,6 +81,7 @@ public class SensorUi extends Fragment {
         FirebaseRecyclerOptions<MonitoringInformation> options =
                 new FirebaseRecyclerOptions.Builder<MonitoringInformation>()
                         .setQuery(query, MonitoringInformation.class)
+                        .setLifecycleOwner(this)
                         .build();
 
         firebaseMonitoringAdapter=new FirebaseMonitoringAdapter(options,this);
