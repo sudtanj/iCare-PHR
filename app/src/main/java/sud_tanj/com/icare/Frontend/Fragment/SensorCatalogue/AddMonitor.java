@@ -1,0 +1,74 @@
+package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
+
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
+import me.riddhimanadib.formmaster.model.BaseFormElement;
+import me.riddhimanadib.formmaster.model.FormHeader;
+import sud_tanj.com.icare.Backend.Database.HybridReference;
+import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
+import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
+import sud_tanj.com.icare.Frontend.Notification.Notification;
+import sud_tanj.com.icare.R;
+
+/**
+ * This class is part of iCare Project
+ * Any modified within this class without reading the
+ * manual will cause problem!
+ * <p>
+ * Created by Sudono Tanjung on 20/08/2018 - 10:05.
+ * <p>
+ * This class last modified by User
+ */
+@EFragment(R.layout.activity_add_modify_monitor)
+public class AddMonitor extends AddModifyMonitor {
+    @ViewById(R.id.addormodify_recycler_view)
+    RecyclerView superRecyclerView;
+    @ViewById(R.id.save_buton_floating)
+    FloatingActionButton saveButton;
+
+    @AfterViews
+    protected void init(){
+        this.initUI();
+        saveButton.setImageDrawable(IconBuilder.get(IconValue.CONTENT_SAVE,R.color.temperature_text));
+    }
+    @Override
+    public RecyclerView getRecyclerView() {
+        return superRecyclerView;
+    }
+
+    @Override
+    public void formValueChanged(BaseFormElement baseFormElement) {
+
+    }
+
+    @Override
+    public FormHeader getFormHeader() {
+        return FormHeader.createInstance(getString(R.string.new_monitor_header));
+    }
+
+    @Click(R.id.save_buton_floating)
+    protected void saveButtonClicked(){
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReferenceFromUrl(MonitoringInformation.KEY).push();
+        HybridReference hybridReference=new HybridReference(reference);
+        MonitoringInformation monitoringInformation=new MonitoringInformation();
+        monitoringInformation.setDescription(mFormBuilder.getFormElement(ELEMENT_DESCRIPTION).getValue());
+        monitoringInformation.setMonitoring(Boolean.valueOf(mFormBuilder.getFormElement(ELEMENT_STATUS).getValue()));
+        monitoringInformation.setImage(mFormBuilder.getFormElement(ELEMENT_IMAGE).getValue());
+        monitoringInformation.setName(mFormBuilder.getFormElement(ELEMENT_NAME).getValue());
+        hybridReference.setValue(monitoringInformation);
+        Notification.notifySuccessful("Your data is successfuly recorded! \n here is your id :"+reference.getKey()+"\n you can also see this id when you modify your monitoring information");
+        FragmentBuilder.changeFragment(SensorUi_.builder().build());
+    }
+}

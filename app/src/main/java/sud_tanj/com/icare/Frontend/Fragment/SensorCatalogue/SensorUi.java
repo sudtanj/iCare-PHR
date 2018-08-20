@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Build;
 import android.support.annotation.StyleRes;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -21,10 +22,12 @@ import com.ramotion.cardslider.CardSliderLayoutManager;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 
@@ -64,13 +67,25 @@ public class SensorUi extends Fragment {
     ImageView catalogueDescriptionIcon;
     @ViewById(R.id.sensor_author)
     ImageView sensorAuthorIcon;
+    @ViewById(R.id.adding_button)
+    FloatingActionButton addingButton;
 
     @AfterViews
     protected void init(){
         catalogueDescriptionIcon.setImageDrawable(IconBuilder.get(IconValue.CLIPBOARD_TEXT));
         sensorAuthorIcon.setImageDrawable(IconBuilder.get(IconValue.ARTIST));
+        initFAB();
         initRecyclerView();
         initSwitchers();
+    }
+
+    private void initFAB(){
+        addingButton.setImageDrawable(IconBuilder.get(IconValue.PLUS,R.color.temperature_text));
+    }
+
+    @Click(R.id.adding_button)
+    protected void addingButtonClicked(){
+        FragmentBuilder.changeFragment(AddMonitor_.builder().build());
     }
 
     private void initRecyclerView() {

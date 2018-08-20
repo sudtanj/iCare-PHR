@@ -2,6 +2,17 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="new_monitor_header">Create New Monitoring</string>
+    <string name="graphLegend_monitor_title">Graph Legend</string>
+    <string name="graphLegend_monitor_hint">put your legend / unit for your number with line break</string>
+    <string name="image_monitor_title">Image Link</string>
+    <string name="image_monitor_hint">put your own direct link to your images here</string>
+    <string name="status_monitor_title">Status</string>
+    <string name="status_monitor_hint">Turn it off/on if you want to do some maintenance</string>
+    <string name="description_monitor_title">Description</string>
+    <string name="description_monitor_hint">Tell me a little bit more about it</string>
+    <string name="name_monitor_title">Name</string>
+    <string name="name_monitor_hint">What do you want it to be called?</string>
     <string name="profile_changing_guide">Your profile is tied and sync to your sign in account. \n Please refer to your sign in account guidelines to change display name and photo </string>
     <string name="sensor_catalogue_menu_title">Monitoring Catalogue</string>
     <string name="sensor_catalogue_menu_description">List about available monitoring that iCare can do</string>
