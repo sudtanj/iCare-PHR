@@ -47,17 +47,19 @@ public class FirebaseDataAdapter extends FirebaseRecyclerAdapter<MonitoringInfor
 
     @Override
     protected void onBindViewHolder(@NonNull final DataHolder holder, int position, @NonNull MonitoringInformation model) {
-        Query query = FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(HealthData.KEY)
-                .child(model.getHealthDatas().get(model.getHealthDatas().size()-1)).child("dataList");
-        FirebaseRecyclerOptions<Integer> options =
-                new FirebaseRecyclerOptions.Builder<Integer>()
-                        .setQuery(query, Integer.class)
-                        .setLifecycleOwner(this.dataUi)
-                        .build();
-        firebaseCounterAdapter=new FirebaseCounterAdapter(options,model.getGraphLegend(),holder.itemView);
-        holder.getCounterRecyclerView().setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-        holder.getCounterRecyclerView().setAdapter(firebaseCounterAdapter);
+        if(!model.getHealthDatas().isEmpty()) {
+            Query query = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl(HealthData.KEY)
+                    .child(model.getHealthDatas().get(model.getHealthDatas().size() - 1)).child("dataList");
+            FirebaseRecyclerOptions<Integer> options =
+                    new FirebaseRecyclerOptions.Builder<Integer>()
+                            .setQuery(query, Integer.class)
+                            .setLifecycleOwner(this.dataUi)
+                            .build();
+            firebaseCounterAdapter = new FirebaseCounterAdapter(options, model.getGraphLegend(), holder.itemView);
+            holder.getCounterRecyclerView().setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+            holder.getCounterRecyclerView().setAdapter(firebaseCounterAdapter);
+        }
         holder.titleView.setText(model.getName());
     }
 

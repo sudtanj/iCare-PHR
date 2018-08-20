@@ -64,11 +64,14 @@ public class AddMonitor extends AddModifyMonitor {
         HybridReference hybridReference=new HybridReference(reference);
         MonitoringInformation monitoringInformation=new MonitoringInformation();
         monitoringInformation.setDescription(mFormBuilder.getFormElement(ELEMENT_DESCRIPTION).getValue());
-        monitoringInformation.setMonitoring(Boolean.valueOf(mFormBuilder.getFormElement(ELEMENT_STATUS).getValue()));
+        if(mFormBuilder.getFormElement(ELEMENT_STATUS).getValue().equals(STATUS_ON))
+            monitoringInformation.setMonitoring(true);
+        else
+            monitoringInformation.setMonitoring(false);
         monitoringInformation.setImage(mFormBuilder.getFormElement(ELEMENT_IMAGE).getValue());
         monitoringInformation.setName(mFormBuilder.getFormElement(ELEMENT_NAME).getValue());
         hybridReference.setValue(monitoringInformation);
-        Notification.notifySuccessful("Your data is successfuly recorded! \n here is your id :"+reference.getKey()+"\n you can also see this id when you modify your monitoring information");
+        Notification.notifySuccessful("Your data is successfuly recorded! \n please take screenshot of your id and keep it secret \n here is your id :"+reference.getKey()+"\n you can also see this id when you modify your monitoring information");
         FragmentBuilder.changeFragment(SensorUi_.builder().build());
     }
 }

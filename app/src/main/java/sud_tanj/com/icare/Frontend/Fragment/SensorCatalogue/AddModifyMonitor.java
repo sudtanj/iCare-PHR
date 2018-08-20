@@ -23,6 +23,9 @@ public abstract class AddModifyMonitor extends Fragment implements OnFormElement
     public static final int ELEMENT_GRAPHLEGEND=3;
     public static final int ELEMENT_STATUS=4;
 
+    public static final String STATUS_ON="On";
+    public static final String STATUS_OFF="Off";
+
     protected FormBuilder mFormBuilder;
     protected List<BaseFormElement> formItems;
     public void initUI(){
@@ -58,6 +61,7 @@ public abstract class AddModifyMonitor extends Fragment implements OnFormElement
         FormElementSwitch statusElement= FormElementSwitch
                 .createInstance()
                 .setTag(ELEMENT_STATUS)
+                .setSwitchTexts(STATUS_ON, STATUS_OFF)
                 .setTitle(getString(R.string.status_monitor_title))
                 .setHint(getString(R.string.status_monitor_hint))
                 .setRequired(true);
