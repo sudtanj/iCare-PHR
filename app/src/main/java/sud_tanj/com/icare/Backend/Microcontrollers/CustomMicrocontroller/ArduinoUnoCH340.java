@@ -65,11 +65,8 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
 
     @Override
     public void onAttached(UsbDevice usbDevice) {
-        System.out.println("USbAttach");
         if(!ch34xUARTDriver.isConnected()){
-            System.out.println("ch340 connnected");
             if(ch34xUARTDriver.ResumeUsbList()==0){
-                System.out.println("UsbList Fopund");
                 this.usbDevice=ch34xUARTDriver.EnumerateDevice();
                 usbAttached=true;
                 updateConfiguration();

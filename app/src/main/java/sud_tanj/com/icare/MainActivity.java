@@ -40,7 +40,6 @@ import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWr
 import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
-import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
@@ -105,8 +104,6 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
-        //Init all plugins
-        BasePlugin.init();
         //Init background job
         backgroundHandler=new WeakHandler();
         backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));

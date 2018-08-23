@@ -56,6 +56,12 @@ public class StepsCounter extends BasePlugin implements ValueEventListener,Senso
     }
 
     @Override
+    public void onDispose() {
+        super.onDispose();
+        StepsCounter.stepsCounter=null;
+    }
+
+    @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         //Firebase creating the monitoring object according data from cloud
         MonitoringInformation monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);

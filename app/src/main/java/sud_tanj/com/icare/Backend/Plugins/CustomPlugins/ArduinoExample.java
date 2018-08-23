@@ -50,6 +50,12 @@ public class ArduinoExample extends BasePlugin implements MicrocontrollerListene
     }
 
     @Override
+    public void onDispose() {
+        super.onDispose();
+        ArduinoExample.arduinoExample=null;
+    }
+
+    @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         MonitoringInformation monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
         HealthData healthData=new HealthData();

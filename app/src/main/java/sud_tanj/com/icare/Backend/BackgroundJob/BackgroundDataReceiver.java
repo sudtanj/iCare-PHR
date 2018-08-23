@@ -32,6 +32,7 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
     @Override
     public Object doInBackground() throws Exception {
         Logger.i(this.toString(),"Started Background Job");
+        BasePlugin.init();
         basePlugins=BasePlugin.getBasePluginList();
         Log.i(this.toString(),basePlugins.toString());
         for(BasePlugin basePlugin:basePlugins){
@@ -54,6 +55,9 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
         for(BaseAnalysis baseAnalysis:baseAnalyses){
             baseAnalysis.run();
             baseAnalysis.onDispose();
+        }
+        for(BasePlugin basePlugin:basePlugins){
+            basePlugin.onDispose();
         }
         Logger.i(this.toString(),"End Background Job");
         return null;
