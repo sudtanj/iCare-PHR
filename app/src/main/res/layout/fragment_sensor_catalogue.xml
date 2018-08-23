@@ -31,7 +31,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="18dp">
 
-            <TextView
+            <sumimakito.android.advtextswitcher.AdvTextSwitcher
                 android:id="@+id/monitor_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <sumimakito.android.advtextswitcher.AdvTextSwitcher
                 android:id="@+id/tv_country_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/frameLayout">
 
-            <TextSwitcher
+            <sumimakito.android.advtextswitcher.AdvTextSwitcher
                 android:id="@+id/ts_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/star" />
 
-        <TextSwitcher
+        <sumimakito.android.advtextswitcher.AdvTextSwitcher
             android:id="@+id/ts_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
             android:background="@drawable/gradient_map"
             android:layout_below="@+id/gradient_top"/>
 
-        <TextSwitcher
+        <sumimakito.android.advtextswitcher.AdvTextSwitcher
             android:id="@+id/ts_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/clock" />
 
-            <TextSwitcher
+            <sumimakito.android.advtextswitcher.AdvTextSwitcher
                 android:id="@+id/ts_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package sud_tanj.com.icare.Backend.Database.Monitoring;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import lombok.Getter;
@@ -28,11 +29,12 @@ public class MonitoringInformation extends SyncableObject {
             analysisDatas=new ArrayList<>(),
             developer=new ArrayList<>(),
             graphLegend=new ArrayList<>();
+    @Getter
+    private HashMap<String,Boolean> muteStatus=new HashMap<>();
     @Getter @Setter
-    private Boolean monitoring;
+    private Boolean monitoring=false;
     @Getter @Setter
-    private String name,image,description;
-
+    private String name="",image="",description="";
     public MonitoringInformation(DatabaseReference databaseReference) {
         super(databaseReference);
     }

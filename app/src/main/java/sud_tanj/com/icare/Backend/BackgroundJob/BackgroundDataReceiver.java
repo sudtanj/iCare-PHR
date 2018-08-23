@@ -36,6 +36,7 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
         Log.i(this.toString(),basePlugins.toString());
         for(BasePlugin basePlugin:basePlugins){
             basePlugin.run();
+            basePlugin.fireEventListener(null);
         }
         runnableMicrocontrollers = BaseMicrocontroller.getBaseMicrocontrollerList();
         Logger.i(this.toString(),runnableMicrocontrollers.toString());

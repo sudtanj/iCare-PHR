@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -30,6 +29,7 @@ import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
+import sumimakito.android.advtextswitcher.AdvTextSwitcher;
 
 @EFragment(R.layout.fragment_sensor_catalogue)
 public class SensorUi extends Fragment {
@@ -37,7 +37,6 @@ public class SensorUi extends Fragment {
     // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
     private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
     private final String[] countries = {"Heart Rate", "Blood Pressure", "Sensor C", "Sensor D", "Sensor E"};
-    private final String[] places = {"Description", "Description", "Description", "Description","Description"};
     private final String[] temperatures = {"Available", "Unavailable", "17°C", "23°C", "20°C"};
     private final String[] times = {"Jane Doe", "John Doe", "Jane Doe"};
 
@@ -46,16 +45,19 @@ public class SensorUi extends Fragment {
     private FirebaseMonitoringAdapter firebaseMonitoringAdapter;
 
     private CardSliderLayoutManager layoutManger;
-    private TextSwitcher temperatureSwitcher;
-    private TextSwitcher placeSwitcher;
-    private TextSwitcher clockSwitcher;
+    @ViewById(R.id.ts_temperature)
+    protected AdvTextSwitcher temperatureSwitcher;
+    @ViewById(R.id.ts_place)
+    protected AdvTextSwitcher placeSwitcher;
+    @ViewById(R.id.ts_clock)
+    protected AdvTextSwitcher clockSwitcher;
     @ViewById(R.id.ts_description)
-    protected TextSwitcher descriptionsSwitcher;
+    protected AdvTextSwitcher descriptionsSwitcher;
 
     @ViewById(R.id.monitor_name)
-    protected TextView monitoringTitle;
+    protected AdvTextSwitcher monitoringTitle;
     @ViewById(R.id.tv_country_2)
-    protected TextView monitoringTitleHelper;
+    protected AdvTextSwitcher monitoringTitleHelper;
     private int countryOffset1;
     private int countryOffset2;
     private long countryAnimDuration;
@@ -86,6 +88,7 @@ public class SensorUi extends Fragment {
     @Click(R.id.adding_button)
     protected void addingButtonClicked(){
         FragmentBuilder.changeFragment(AddMonitor_.builder().build());
+        this.onStop();
     }
 
     private void initRecyclerView() {
@@ -100,7 +103,6 @@ public class SensorUi extends Fragment {
                         .build();
 
         firebaseMonitoringAdapter=new FirebaseMonitoringAdapter(options,this);
-        firebaseMonitoringAdapter.startListening();
 
 
         sensorCatalogue.setAdapter(firebaseMonitoringAdapter);
@@ -121,17 +123,9 @@ public class SensorUi extends Fragment {
     }
 
     private void initSwitchers() {
-        temperatureSwitcher = (TextSwitcher) getActivity().findViewById(R.id.ts_temperature);
-        temperatureSwitcher.setFactory(new TextViewFactory(R.style.TemperatureTextView, true));
-        temperatureSwitcher.setCurrentText(temperatures[0]);
-
-        placeSwitcher = (TextSwitcher) getActivity().findViewById(R.id.ts_place);
-        placeSwitcher.setFactory(new TextViewFactory(R.style.PlaceTextView, false));
-        placeSwitcher.setCurrentText(places[0]);
-
-        clockSwitcher = (TextSwitcher) getActivity().findViewById(R.id.ts_clock);
-        clockSwitcher.setFactory(new TextViewFactory(R.style.ClockTextView, false));
-        clockSwitcher.setCurrentText(times[0]);
+        temperatureSwitcher.setTexts(temperatures);
+        placeSwitcher.setCurrentText(getString(R.string.monitoring_Descirption_subtitle));
+        clockSwitcher.setTexts(times);
     }
 
     public void initMonitorTitle(String text) {
@@ -142,20 +136,19 @@ public class SensorUi extends Fragment {
         monitoringTitle.setX(countryOffset1);
         monitoringTitleHelper.setX(countryOffset2);
         //country1TextView.setText(countries[0]);
-        monitoringTitle.setText(text);
+        monitoringTitle.setCurrentText(text);
         monitoringTitleHelper.setAlpha(0f);
     }
 
     public void initMonitorDescription(String text){
         descriptionsSwitcher.setInAnimation(getContext(), android.R.anim.fade_in);
         descriptionsSwitcher.setOutAnimation(getContext(), android.R.anim.fade_out);
-        descriptionsSwitcher.setFactory(new TextViewFactory(R.style.DescriptionTextView, false));
         descriptionsSwitcher.setCurrentText(text);
     }
 
     public void setCountryText(String text, boolean left2right) {
-        final TextView invisibleText;
-        final TextView visibleText;
+        final AdvTextSwitcher invisibleText;
+        final AdvTextSwitcher visibleText;
         if (monitoringTitle.getAlpha() > monitoringTitleHelper.getAlpha()) {
             visibleText = monitoringTitle;
             invisibleText = monitoringTitleHelper;
@@ -219,7 +212,7 @@ public class SensorUi extends Fragment {
 
         placeSwitcher.setInAnimation(getContext(), animV[0]);
         placeSwitcher.setOutAnimation(getContext(), animV[1]);
-        placeSwitcher.setText(places[pos % places.length]);
+        //placeSwitcher.setText(places[pos % places.length]);
 
         clockSwitcher.setInAnimation(getContext(), animV[0]);
         clockSwitcher.setOutAnimation(getContext(), animV[1]);

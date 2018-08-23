@@ -9,15 +9,35 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/addormodify_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/save_buton_floating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:backgroundTint="@color/colorPrimary"
-        android:clickable="true"
-        android:focusable="auto"
-        android:src="@android:drawable/ic_menu_save" />
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|right"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/delete_button_floating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            app:backgroundTint="@color/colorPrimary"
+            android:src="@android:drawable/ic_menu_delete" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save_buton_floating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="auto"
+            android:src="@android:drawable/ic_menu_save"
+            app:backgroundTint="@color/colorPrimary" />
+    </LinearLayout>
+
 </FrameLayout>

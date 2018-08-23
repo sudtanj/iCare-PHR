@@ -13,6 +13,7 @@ import me.riddhimanadib.formmaster.model.FormElementSwitch;
 import me.riddhimanadib.formmaster.model.FormElementTextMultiLine;
 import me.riddhimanadib.formmaster.model.FormElementTextSingleLine;
 import me.riddhimanadib.formmaster.model.FormHeader;
+import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.R;
 
 public abstract class AddModifyMonitor extends Fragment implements OnFormElementValueChangedListener {
@@ -22,9 +23,16 @@ public abstract class AddModifyMonitor extends Fragment implements OnFormElement
     public static final int ELEMENT_DESCRIPTION=2;
     public static final int ELEMENT_GRAPHLEGEND=3;
     public static final int ELEMENT_STATUS=4;
+    public static final int ELEMENT_HEADER=5;
 
     public static final String STATUS_ON="On";
     public static final String STATUS_OFF="Off";
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        FragmentBuilder.changeFragment(SensorUi_.builder().build());
+    }
 
     protected FormBuilder mFormBuilder;
     protected List<BaseFormElement> formItems;
@@ -81,11 +89,11 @@ public abstract class AddModifyMonitor extends Fragment implements OnFormElement
         mFormBuilder.addFormElements(formItems);
     }
 
-    public abstract RecyclerView getRecyclerView();
+    protected abstract RecyclerView getRecyclerView();
 
-    public abstract void formValueChanged(BaseFormElement baseFormElement);
+    protected abstract void formValueChanged(BaseFormElement baseFormElement);
 
-    public abstract FormHeader getFormHeader();
+    protected abstract FormHeader getFormHeader();
 
     @Override
     public void onValueChanged(BaseFormElement baseFormElement) {

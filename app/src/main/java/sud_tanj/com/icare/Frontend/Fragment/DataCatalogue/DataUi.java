@@ -1,6 +1,5 @@
 package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.listeners.OnBindViewHolderListener;
-import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.nightonke.boommenu.Animation.BoomEnum;
 import com.nightonke.boommenu.Animation.OrderEnum;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
@@ -25,7 +22,6 @@ import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.OnBoomListener;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
-import com.ramotion.foldingcell.FoldingCell;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -45,7 +41,7 @@ import sud_tanj.com.icare.Backend.Database.PersonalData.DataComment;
 import sud_tanj.com.icare.R;
 
 @EFragment(R.layout.fragment_data_catalogue)
-public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBindViewHolderListener {
+public class DataUi extends Fragment implements OnBindViewHolderListener {
     @ViewById(R.id.data_recycler_view)
     protected SuperRecyclerView dataRecyclerView;
     private FastAdapter fastAdapter;
@@ -185,12 +181,6 @@ public class DataUi extends Fragment implements OnClickListener<CellCard>,OnBind
         firebaseDataAdapter=new FirebaseDataAdapter(options,this);
         dataRecyclerView.setAdapter(firebaseDataAdapter);
         dataRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    @Override
-    public boolean onClick(@Nullable View v, IAdapter<CellCard> adapter, CellCard item, int position) {
-        ((FoldingCell)v).toggle(false);
-        return true;
     }
 
     @Override

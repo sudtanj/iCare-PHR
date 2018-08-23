@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Frontend.Fragment.SensorCatalogue.AddModifyMonitor_"></activity>
+        <activity android:name=".Frontend.Fragment.SensorCatalogue.AddModifyMonitor_" />
+        <activity android:name=".Frontend.Fragment.DataCatalogue.DataDetails_"></activity>
     </application>
 
 </manifest>

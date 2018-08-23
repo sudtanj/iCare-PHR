@@ -2,6 +2,12 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="monitoring_Descirption_subtitle">Description</string>
+    <string name="modify_successful_notification">Modification successful!</string>
+    <string name="header_modify_monitor">Your id is %1$s</string>
+    <string name="modify_monitor_loading_messages">Collecting monitoring information from database</string>
+    <string name="Modify_Monitor_Failed">Sorry, you\'re not allowed to modified this item. \n please contact person in charge for permission!</string>
+    <string name="add_new_monitor_successful_notification">Your data is successfuly recorded! \n please take screenshot of your id and keep it secret \n here is your id : %1$s \n you can also see this id when you modify your monitoring information</string>
     <string name="new_monitor_header">Create New Monitoring</string>
     <string name="graphLegend_monitor_title">Graph Legend</string>
     <string name="graphLegend_monitor_hint">put your legend / unit for your number with line break</string>

@@ -1,5 +1,6 @@
 package sud_tanj.com.icare.Backend.Analysis.CustomAnalysis;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sud_tanj.com.icare.Backend.Analysis.BaseAnalysis;
@@ -15,7 +16,7 @@ import sud_tanj.com.icare.Backend.Analysis.BaseAnalysis;
  */
 @NoArgsConstructor
 public class StepsAnalysis extends BaseAnalysis {
-    @Setter
+    @Setter @Getter
     private double steps=-1;
 
     protected int getAnalysisResult(){

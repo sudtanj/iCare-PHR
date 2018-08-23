@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -17,6 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import lombok.Getter;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.FirebaseMonitoringAdapter.MonitoringHolder;
 import sud_tanj.com.icare.R;
 
@@ -44,7 +46,13 @@ public class FirebaseMonitoringAdapter extends FirebaseRecyclerAdapter<Monitorin
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MonitoringHolder holder, int position, @NonNull MonitoringInformation model) {
+    protected void onBindViewHolder(@NonNull final MonitoringHolder holder, final int position, @NonNull final MonitoringInformation model) {
+        holder.itemView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentBuilder.changeFragment(ModifyMonitor_.builder().arg("MonitorID",getRef(position).getKey()).build());
+            }
+        });
         Glide.with(holder.itemView).asBitmap()
                 .load(model.getImage())
                 .apply(new RequestOptions()

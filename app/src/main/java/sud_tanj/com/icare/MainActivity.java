@@ -55,7 +55,7 @@ import sud_tanj.com.icare.Frontend.Settings.SettingsFragment;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
-@WindowFeature(Window.FEATURE_ACTION_BAR)
+@WindowFeature(Window.FEATURE_NO_TITLE)
 public class MainActivity extends BaseActivity implements Runnable,OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
 
     private FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
@@ -76,9 +76,6 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         super.onStop();
         for(BaseMicrocontroller baseMicrocontroller:BaseMicrocontroller.getBaseMicrocontrollerList()){
             baseMicrocontroller.onDispose();
-        }
-        for(BasePlugin basePlugin:BasePlugin.getBasePluginList()){
-            basePlugin.onDispose();
         }
     }
 

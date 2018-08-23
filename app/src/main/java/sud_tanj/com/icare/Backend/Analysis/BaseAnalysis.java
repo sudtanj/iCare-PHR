@@ -22,7 +22,7 @@ public abstract class BaseAnalysis extends BaseAbstractComponent<AnalysisListene
     public static final int WORSE_CONDITION=3;
     @Getter
     protected static List<BaseAnalysis> baseAnalysisList=new ArrayList<>();
-    protected List<AnalysisListener> analysisListeners;
+    protected List<AnalysisListener> analysisListeners=new ArrayList<>();
 
     public BaseAnalysis(){
         if(BaseAnalysis.baseAnalysisList.indexOf(this)==-1){

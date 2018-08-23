@@ -37,24 +37,27 @@ public class AddMonitor extends AddModifyMonitor {
     RecyclerView superRecyclerView;
     @ViewById(R.id.save_buton_floating)
     FloatingActionButton saveButton;
+    @ViewById(R.id.delete_button_floating)
+    protected FloatingActionButton deleteButton;
 
     @AfterViews
     protected void init(){
         this.initUI();
         saveButton.setImageDrawable(IconBuilder.get(IconValue.CONTENT_SAVE,R.color.temperature_text));
+        deleteButton.setImageDrawable(IconBuilder.get(IconValue.DELETE,R.color.temperature_text));
     }
     @Override
-    public RecyclerView getRecyclerView() {
+    protected RecyclerView getRecyclerView() {
         return superRecyclerView;
     }
 
     @Override
-    public void formValueChanged(BaseFormElement baseFormElement) {
+    protected void formValueChanged(BaseFormElement baseFormElement) {
 
     }
 
     @Override
-    public FormHeader getFormHeader() {
+    protected FormHeader getFormHeader() {
         return FormHeader.createInstance(getString(R.string.new_monitor_header));
     }
 
@@ -71,7 +74,12 @@ public class AddMonitor extends AddModifyMonitor {
         monitoringInformation.setImage(mFormBuilder.getFormElement(ELEMENT_IMAGE).getValue());
         monitoringInformation.setName(mFormBuilder.getFormElement(ELEMENT_NAME).getValue());
         hybridReference.setValue(monitoringInformation);
-        Notification.notifySuccessful("Your data is successfuly recorded! \n please take screenshot of your id and keep it secret \n here is your id :"+reference.getKey()+"\n you can also see this id when you modify your monitoring information");
+        Notification.notifySuccessful(getString(R.string.add_new_monitor_successful_notification,reference.getKey()));
         FragmentBuilder.changeFragment(SensorUi_.builder().build());
+    }
+
+    @Click(R.id.delete_button_floating)
+    protected void deleteButtonClicked(){
+        this.onStop();
     }
 }

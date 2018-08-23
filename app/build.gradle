@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.kaopiz:kprogresshud:1.1.0'
     implementation "com.mikepenz:aboutlibraries:6.1.0"
     implementation 'com.github.crysxd:shared-firebase-preferences:1.0.1'
-    implementation 'me.riddhimanadib.form-master:form-master:1.1.0'
+    implementation 'com.github.sudtanj:FormMaster:d4287bad95'
     compileOnly 'org.projectlombok:lombok:1.18.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     implementation 'com.ramotion.cardslider:card-slider:0.3.0'
@@ -80,6 +80,7 @@ dependencies {
     implementation 'com.github.100rabhkr:GetJSON:1.0'
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.github.timigod:android-chat-ui:v0.1.4'
+    implementation 'com.github.SumiMakito:AdvancedTextSwitcher:0.3'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

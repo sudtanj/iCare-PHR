@@ -5,6 +5,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
 import com.google.gson.JsonParser;
+import com.orhanobut.logger.Logger;
 import com.potterhsu.usblistener.UsbListener;
 import com.potterhsu.usblistener.UsbListener.OnUsbListener;
 
@@ -31,6 +32,7 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
     private UsbListener usbListener;
     private UsbDevice usbDevice;
     private JsonParser jsonParser;
+    private Boolean usbAttached=false;
     private byte[] buffer=new byte[4096];
     private int bufferLength=0;
     @Setter
@@ -63,9 +65,13 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
 
     @Override
     public void onAttached(UsbDevice usbDevice) {
-        if(ch34xUARTDriver.isConnected()){
+        System.out.println("USbAttach");
+        if(!ch34xUARTDriver.isConnected()){
+            System.out.println("ch340 connnected");
             if(ch34xUARTDriver.ResumeUsbList()==0){
+                System.out.println("UsbList Fopund");
                 this.usbDevice=ch34xUARTDriver.EnumerateDevice();
+                usbAttached=true;
                 updateConfiguration();
             }
         }
@@ -76,6 +82,7 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
         if(ch34xUARTDriver.isConnected()){
             if(ch34xUARTDriver.ResumeUsbList()==-1){
                 this.usbDevice=null;
+                usbAttached=false;
                 ch34xUARTDriver.CloseDevice();
             }
         }
@@ -90,11 +97,14 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
 
     @Override
     public void run() {
-        if(this.usbDevice!=null) {
+        if(usbAttached) {
             bufferLength = ch34xUARTDriver.ReadData(buffer, 4096);
             if (bufferLength > 0) {
                 String recv = new String(buffer, 0, bufferLength, Charset.forName("US-ASCII"));
-                fireEventListener(this.jsonParser.parse(recv).getAsJsonObject());
+                Logger.i(this.toString(),recv);
+                try {
+                    fireEventListener(this.jsonParser.parse(recv).getAsJsonObject());
+                } catch (Exception e){}
             }
         }
     }

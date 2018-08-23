@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 public abstract class SyncableObject {
-    @Exclude
+    @Exclude @Getter
     protected transient String identification = "";
     @Getter
     protected Long timeStamp = new Date().getTime();

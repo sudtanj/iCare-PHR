@@ -1,9 +1,10 @@
 package sud_tanj.com.icare.Frontend.AuthiCare;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,6 +26,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.WindowFeature;
 
 import spencerstudios.com.bungeelib.Bungee;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
@@ -34,7 +36,8 @@ import sud_tanj.com.icare.R;
 
 @Fullscreen
 @EActivity(R.layout.activity_login_screen)
-public class LoginScreen extends AppCompatActivity implements OnCompleteListener<AuthResult> {
+@WindowFeature(Window.FEATURE_NO_TITLE)
+public class LoginScreen extends Activity implements OnCompleteListener<AuthResult> {
     private static final int RC_SIGN_IN = 9001;
     @ViewById(R.id.logo_description)
     DisplayTextView displayTextView;
