@@ -2,6 +2,9 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="data_status_button">Data Flow Status Status : Off</string>
+    <string name="mute_button_title">Pause Data Flow</string>
+    <string name="data_default_title">Unknown Monitoring</string>
     <string name="monitoring_Descirption_subtitle">Description</string>
     <string name="modify_successful_notification">Modification successful!</string>
     <string name="header_modify_monitor">Your id is %1$s</string>

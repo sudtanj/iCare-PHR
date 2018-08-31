@@ -35,29 +35,29 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
         BasePlugin.init();
         basePlugins=BasePlugin.getBasePluginList();
         Log.i(this.toString(),basePlugins.toString());
-        for(BasePlugin basePlugin:basePlugins){
-            basePlugin.run();
-            basePlugin.fireEventListener(null);
+        for(int i=0;i<basePlugins.size();i++){
+            basePlugins.get(i).run();
+            basePlugins.get(i).fireEventListener(null);
         }
         runnableMicrocontrollers = BaseMicrocontroller.getBaseMicrocontrollerList();
         Logger.i(this.toString(),runnableMicrocontrollers.toString());
-        for (BaseMicrocontroller runnableMicrocontroller : runnableMicrocontrollers) {
-            runnableMicrocontroller.run();
+        for(int i=0;i<runnableMicrocontrollers.size();i++){
+            runnableMicrocontrollers.get(i).run();
         }
         baseSensors=BaseSensor.getBaseSensors();
         Logger.i(this.toString(),baseSensors.toString());
-        for(BaseSensor baseSensor:baseSensors){
-            baseSensor.run();
-            baseSensor.onDispose();
+        for(int i=0;i<baseSensors.size();i++){
+            baseSensors.get(i).run();
+            baseSensors.get(i).onDispose();
         }
         baseAnalyses=BaseAnalysis.getBaseAnalysisList();
         Logger.i(this.toString(),baseAnalyses.toString());
-        for(BaseAnalysis baseAnalysis:baseAnalyses){
-            baseAnalysis.run();
-            baseAnalysis.onDispose();
+        for(int i=0;i<baseAnalyses.size();i++){
+            baseAnalyses.get(i).run();
+            baseAnalyses.get(i).onDispose();
         }
-        for(BasePlugin basePlugin:basePlugins){
-            basePlugin.onDispose();
+        for(int i=0;i<basePlugins.size();i++){
+            basePlugins.get(i).onDispose();
         }
         Logger.i(this.toString(),"End Background Job");
         return null;

@@ -14,6 +14,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import lombok.Getter;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail.DataDetails_;
 import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.FirebaseDataAdapter.DataHolder;
 import sud_tanj.com.icare.R;
 
