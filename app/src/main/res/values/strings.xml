@@ -2,6 +2,7 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="details_information_title">%1$s Detailed Informations</string>
     <string name="data_status_button">Data Flow Status Status : Off</string>
     <string name="mute_button_title">Pause Data Flow</string>
     <string name="data_default_title">Unknown Monitoring</string>
