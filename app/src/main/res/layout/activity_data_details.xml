@@ -26,13 +26,12 @@
 
             </com.github.mikephil.charting.charts.LineChart>
 
-            <Spinner
-                android:id="@+id/spinner"
+            <com.isapanah.awesomespinner.AwesomeSpinner
+                android:id="@+id/show_by_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:spinnerMode="dialog"
-                />
+                app:spinnerDirection="ltr"
+                app:spinnerHint="Show graph by" />
 
         </LinearLayout>
 

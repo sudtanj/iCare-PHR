@@ -81,6 +81,7 @@ dependencies {
     implementation 'com.github.timigod:android-chat-ui:v0.1.4'
     implementation 'com.github.SumiMakito:AdvancedTextSwitcher:0.3'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.amlashi-sadra:AwesomeSpinner:1.0.7'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

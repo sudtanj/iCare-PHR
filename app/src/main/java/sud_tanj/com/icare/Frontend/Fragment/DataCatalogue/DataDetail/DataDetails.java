@@ -3,17 +3,17 @@ package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.widget.ArrayAdapter;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.isapanah.awesomespinner.AwesomeSpinner;
+import com.isapanah.awesomespinner.AwesomeSpinner.onSpinnerItemClickListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import org.androidannotations.annotations.AfterExtras;
@@ -33,8 +33,12 @@ import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.R;
 
 @EActivity(R.layout.activity_data_details)
-public class DataDetails extends AppCompatActivity implements ValueEventListener {
+public class DataDetails extends AppCompatActivity implements ValueEventListener,onSpinnerItemClickListener<String> {
 
+    public static final String REALTIME="Realtime";
+    public static final String DAY="Day";
+    public static final String MONTH="Month";
+    public static final String YEAR="Year";
     @Extra("MonitorId")
     protected String id;
     protected CurrentDataAdapter currentDataAdapter;
@@ -42,6 +46,11 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     protected SuperRecyclerView firstRecyclerView;
     @ViewById(R.id.data_line_chart)
     protected LineChart lineChartView;
+    @ViewById(R.id.show_by_spinner)
+    protected AwesomeSpinner spinner;
+    private MonitoringInformation monitoringInformation;
+    private GraphEventListener graphEventListener=null;
+    private Query firebaseQuery=null;
 
     @AfterExtras
     protected void initActionBar(){
@@ -55,7 +64,23 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
                 .addValueEventListener(this);
     }
 
-    protected void initCurrentData(String healthId,List<String> units){
+    @AfterViews
+    protected void initSpinner(){
+        List<String> spinnerList=new ArrayList<>();
+        spinnerList.add(REALTIME);
+        spinnerList.add(DAY);
+        spinnerList.add(MONTH);
+        spinnerList.add(YEAR);
+
+        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(this
+                , android.R.layout.simple_spinner_item, spinnerList);
+
+        spinner.setAdapter(categoriesAdapter);
+        spinner.setOnSpinnerItemClickListener(this);
+        spinner.setSelection(REALTIME);
+    }
+
+    private void initCurrentData(String healthId,List<String> units){
         LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         firstRecyclerView.setLayoutManager(firstManager);
         Query query = FirebaseDatabase.getInstance()
@@ -72,43 +97,41 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
         firstRecyclerView.setAdapter(currentDataAdapter);
     }
 
-    private void initGraph(final MonitoringInformation monitoringInformation){
-        lineChartView.getAxisLeft().setDrawGridLines(false);
-        lineChartView.getXAxis().setDrawGridLines(false);
-        lineChartView.getAxisRight().setDrawGridLines(false);
-        //one month ago milliseconds
+    private void setGraphViewByRealtime(){
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        c.set(Calendar.HOUR_OF_DAY,0);
+        long result = c.getTimeInMillis();
+        firebaseQuery=FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
+                .orderByChild("timeStamp").startAt(result)
+                .endAt(Calendar.getInstance().getTimeInMillis()).limitToLast(100);
+        firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
+    }
+
+    private void setGraphViewByMonth(){
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         c.add(Calendar.MONTH, -1);
         long result = c.getTimeInMillis();
-        FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
+        firebaseQuery=FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
                 .orderByChild("timeStamp").startAt(result)
-                .endAt(Calendar.getInstance().getTimeInMillis()).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        List<Entry> entries = new ArrayList<Entry>();
-                        int j=0;
-                        for(DataSnapshot temp:dataSnapshot.getChildren()){
-                            if(monitoringInformation.getHealthDatas().indexOf(temp.getKey())>-1){
-                                HealthData healthData=temp.getValue(HealthData.class);
-                                for(int i=0;i<healthData.getDataList().size();i++) {
-                                    entries.add(new Entry(j,healthData.getDataList().get(i).floatValue()));
-                                }
-                                j++;
-                            }
-                        }
-                        LineDataSet dataSet = new LineDataSet(entries, "Steps");
-                        LineData lineData = new LineData(dataSet);
-                        lineChartView.setData(lineData);
-                        lineChartView.invalidate();
-                     }
+                .endAt(Calendar.getInstance().getTimeInMillis());
+        firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
+    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+    private void initGraph(){
+        lineChartView.getAxisLeft().setDrawGridLines(false);
+        lineChartView.getXAxis().setDrawGridLines(false);
+        lineChartView.getAxisRight().setDrawGridLines(false);
+        if(graphEventListener==null){
+            graphEventListener=new GraphEventListener(monitoringInformation,lineChartView);
+        }
+    }
 
-                    }
-                }
-        );
+    private void updateView(){
+        if(firebaseQuery==null){
+            setGraphViewByRealtime();
+        } else {
+            firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
+        }
     }
 
     @OptionsItem(android.R.id.home)
@@ -119,18 +142,35 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        MonitoringInformation monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
+        monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
         setTitle(getString(R.string.details_information_title,monitoringInformation.getName()));
         if(!monitoringInformation.getHealthDatas().isEmpty()) {
             initCurrentData(monitoringInformation.getHealthDatas().get(
                     monitoringInformation.getHealthDatas().size()-1)
                     , monitoringInformation.getGraphLegend());
-            initGraph(monitoringInformation);
+            initGraph();
+            updateView();
         }
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+    }
+
+    @Override
+    public void onItemSelected(int i, String s) {
+        if(s.equals(REALTIME)){
+            setGraphViewByRealtime();
+        }
+        if(s.equals(DAY)){
+
+        }
+        if(s.equals(MONTH)){
+            setGraphViewByMonth();
+        }
+        if(s.equals(YEAR)){
+
+        }
     }
 }
