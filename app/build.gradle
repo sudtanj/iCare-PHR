@@ -82,6 +82,7 @@ dependencies {
     implementation 'com.github.SumiMakito:AdvancedTextSwitcher:0.3'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.amlashi-sadra:AwesomeSpinner:1.0.7'
+    implementation 'com.borax12.materialdaterangepicker:library:1.9'
     //end
     //Firebase
     implementation 'com.android.support:support-v4:27.1.1'

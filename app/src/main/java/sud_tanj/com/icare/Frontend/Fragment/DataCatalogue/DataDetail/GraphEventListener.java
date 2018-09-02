@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -40,8 +41,10 @@ public class GraphEventListener implements ValueEventListener {
             for (DataSnapshot temp : dataSnapshot.getChildren()) {
                 if (monitoringInformation.getHealthDatas().indexOf(temp.getKey()) > -1) {
                     HealthData healthData = temp.getValue(HealthData.class);
+                    Calendar calendar= Calendar.getInstance();
+                    calendar.setTimeInMillis(healthData.getTimeStamp());
                     for (int i = 0; i < healthData.getDataList().size(); i++) {
-                        entries.add(new Entry(j, healthData.getDataList().get(i).floatValue()));
+                        entries.add(new Entry(calendar.getTimeInMillis(), healthData.getDataList().get(i).floatValue()));
                     }
                     j++;
                 }

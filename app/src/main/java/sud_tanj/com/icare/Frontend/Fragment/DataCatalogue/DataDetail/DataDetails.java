@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.ArrayAdapter;
 
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.borax12.materialdaterangepicker.date.DatePickerDialog.OnDateSetListener;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.database.DataSnapshot;
@@ -30,15 +32,14 @@ import java.util.TimeZone;
 
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
+import sud_tanj.com.icare.Frontend.Notification.Notification;
 import sud_tanj.com.icare.R;
 
 @EActivity(R.layout.activity_data_details)
-public class DataDetails extends AppCompatActivity implements ValueEventListener,onSpinnerItemClickListener<String> {
+public class DataDetails extends AppCompatActivity implements ValueEventListener,onSpinnerItemClickListener<String>, OnDateSetListener {
 
     public static final String REALTIME="Realtime";
-    public static final String DAY="Day";
-    public static final String MONTH="Month";
-    public static final String YEAR="Year";
+    public static final String FROM_TO="Show data from -> to";
     @Extra("MonitorId")
     protected String id;
     protected CurrentDataAdapter currentDataAdapter;
@@ -51,6 +52,7 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     private MonitoringInformation monitoringInformation;
     private GraphEventListener graphEventListener=null;
     private Query firebaseQuery=null;
+    private DatePickerDialog dpd=null;
 
     @AfterExtras
     protected void initActionBar(){
@@ -68,9 +70,7 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     protected void initSpinner(){
         List<String> spinnerList=new ArrayList<>();
         spinnerList.add(REALTIME);
-        spinnerList.add(DAY);
-        spinnerList.add(MONTH);
-        spinnerList.add(YEAR);
+        spinnerList.add(FROM_TO);
 
         ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(this
                 , android.R.layout.simple_spinner_item, spinnerList);
@@ -107,13 +107,10 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
         firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
     }
 
-    private void setGraphViewByMonth(){
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        c.add(Calendar.MONTH, -1);
-        long result = c.getTimeInMillis();
+    private void setGraphViewBy(Calendar from,Calendar to){
         firebaseQuery=FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
-                .orderByChild("timeStamp").startAt(result)
-                .endAt(Calendar.getInstance().getTimeInMillis());
+                .orderByChild("timeStamp").startAt(from.getTimeInMillis())
+                .endAt(to.getTimeInMillis());
         firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
     }
 
@@ -121,6 +118,7 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
         lineChartView.getAxisLeft().setDrawGridLines(false);
         lineChartView.getXAxis().setDrawGridLines(false);
         lineChartView.getAxisRight().setDrawGridLines(false);
+        lineChartView.getXAxis().setValueFormatter(new DayAxisValueFormatter(lineChartView));
         if(graphEventListener==null){
             graphEventListener=new GraphEventListener(monitoringInformation,lineChartView);
         }
@@ -163,14 +161,34 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
         if(s.equals(REALTIME)){
             setGraphViewByRealtime();
         }
-        if(s.equals(DAY)){
-
+        if(s.equals(FROM_TO)){
+            if(dpd==null) {
+                Calendar fromToChoice = Calendar.getInstance();
+                dpd = DatePickerDialog.newInstance(
+                        this,
+                        fromToChoice.get(Calendar.YEAR),
+                        fromToChoice.get(Calendar.MONTH),
+                        fromToChoice.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.setMaxDate(Calendar.getInstance());
+            }
+            dpd.show(getFragmentManager(), "Datepickerdialog");
         }
-        if(s.equals(MONTH)){
-            setGraphViewByMonth();
-        }
-        if(s.equals(YEAR)){
+    }
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if(year==yearEnd) {
+            Calendar from = Calendar.getInstance(), to = Calendar.getInstance();
+            from.set(Calendar.YEAR, year);
+            from.set(Calendar.MONTH, monthOfYear);
+            from.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            to.set(Calendar.YEAR, yearEnd);
+            to.set(Calendar.MONTH, monthOfYearEnd);
+            to.set(Calendar.DAY_OF_MONTH, dayOfMonthEnd);
+            setGraphViewBy(from, to);
+        } else {
+            Notification.notifyFailure(getString(R.string.date_range_selection_fail));
         }
     }
 }
