@@ -24,10 +24,7 @@ import sud_tanj.com.icare.Backend.Database.SyncableObject;
 public class MonitoringInformation extends SyncableObject {
     public static final String KEY = "https://icare-89c17.firebaseio.com/Sensor";
     @Getter
-    private List<String> healthDatas = new ArrayList<>(),
-            comments =new ArrayList<>(),
-            analysisDatas=new ArrayList<>(),
-            developer=new ArrayList<>(),
+    private List<String> developer=new ArrayList<>(),
             graphLegend=new ArrayList<>();
     @Getter
     private HashMap<String,Boolean> muteStatus=new HashMap<>();

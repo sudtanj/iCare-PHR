@@ -1,18 +1,12 @@
 package sud_tanj.com.icare.Backend.Plugins.CustomPlugins;
 
-import android.support.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import lombok.NoArgsConstructor;
 import sud_tanj.com.icare.Backend.Analysis.AnalysisListener;
 import sud_tanj.com.icare.Backend.Analysis.CustomAnalysis.StepsAnalysis;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
-import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Backend.Database.PersonalData.DataAnalysis;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
@@ -29,7 +23,7 @@ import sud_tanj.com.icare.Backend.Sensors.SensorListener;
  * This class last modified by User
  */
 @NoArgsConstructor
-public class StepsCounter extends BasePlugin implements ValueEventListener,SensorListener, AnalysisListener {
+public class StepsCounter extends BasePlugin implements SensorListener, AnalysisListener {
     public static final String IDENTIFICATION="-LJXvUiu95PkUihaMlmn";
     private static StepsCounter stepsCounter=null;
     private double valueResult=-1;
@@ -62,52 +56,27 @@ public class StepsCounter extends BasePlugin implements ValueEventListener,Senso
     }
 
     @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        //Firebase creating the monitoring object according data from cloud
-        MonitoringInformation monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
-        //Create new empty places in cloud for new health data
-        DatabaseReference databaseReference=FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(HealthData.KEY).push();
-        //create new HealthData object locally
-        HealthData healthData=new HealthData(databaseReference);
-        //Record value to the health data instance
-        healthData.getDataList().add(this.valueResult);
-        //Record analysis value
-        DataAnalysis dataAnalysis=new DataAnalysis();
-        dataAnalysis.setCondition(this.personCondition);
-        dataAnalysis.setAnalysisMessage(this.message);
-        //Add to monitoring data
-        monitoringInformation.getAnalysisDatas().add(dataAnalysis.toString());
-        //A special class that wrap firebase class to handle offline transaction limitation
-        HybridReference hybridReference =new HybridReference(databaseReference);
-        //Tell the firebase to upload newly created healthData to the cloud
-        hybridReference.setValue(healthData);
-        //tell the monitoringinformation to link the health data
-        monitoringInformation.getHealthDatas().add(healthData.toString());
-        //sync the monitoring information in the cloud with the local copy
-        hybridReference =new HybridReference(dataSnapshot.getRef());
-        hybridReference.setValue(monitoringInformation);
-        //sync analysis data to the cloud
-        databaseReference=FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(DataAnalysis.KEY).push();
-        hybridReference=new HybridReference(databaseReference);
-        hybridReference.setValue(dataAnalysis);
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-    }
-
-    @Override
     public void onAnalysisDone(int personCondition, String message) {
         this.personCondition=personCondition;
         this.message=message;
         //Get Monitoring Information object
         DatabaseReference databaseReference= FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(MonitoringInformation.KEY)
-                .child(IDENTIFICATION);
-        //Listen for query result from firebase
-        databaseReference.addListenerForSingleValueEvent(this);
+                .getReferenceFromUrl(HealthData.KEY)
+                .child(IDENTIFICATION).push();
+        HybridReference hybridReference=new HybridReference(databaseReference);
+        //create new HealthData object locally
+        HealthData healthData=new HealthData(databaseReference);
+        //Record value to the health data instance
+        healthData.getDataList().add(this.valueResult);
+        hybridReference.setValue(healthData);
+        hybridReference=new HybridReference(
+                FirebaseDatabase.getInstance().getReferenceFromUrl(DataAnalysis.KEY)
+                .child(IDENTIFICATION).push()
+        );
+        DataAnalysis dataAnalysis=new DataAnalysis();
+        dataAnalysis.setCondition(this.personCondition);
+        dataAnalysis.setAnalysisMessage(this.message);
+        hybridReference.setValue(dataAnalysis);
+
     }
 }

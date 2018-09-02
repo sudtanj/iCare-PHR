@@ -167,7 +167,7 @@ public class DataUi extends Fragment implements OnBindViewHolderListener {
         })
                 .setLayoutRes(R.layout.layout_slider_cell_bottomsheet_comment)      // dialog layout
         ;
-        bottomDialog.show();
+       // bottomDialog.show();
 
         Query query = FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(MonitoringInformation.KEY)

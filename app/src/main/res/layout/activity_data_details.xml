@@ -70,6 +70,24 @@
         android:layout_height="0dp"
         android:layout_weight="0.3">
 
+        <co.intentservice.chatui.ChatView
+            xmlns:chatview="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/comment_chat_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            chatview:inputHint="@string/comment_box_hint"
+            >
+
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/bmb"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+        </co.intentservice.chatui.ChatView>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

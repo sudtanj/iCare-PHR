@@ -2,6 +2,8 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="comment_box_hint">Type your comment here!</string>
+    <string name="graph_loading_message">Fetching data from database</string>
     <string name="date_range_selection_fail">Sorry, you\'re selecting range above the limit.</string>
     <string name="details_information_title">%1$s Detailed Informations</string>
     <string name="data_status_button">Data Flow Status Status : Off</string>

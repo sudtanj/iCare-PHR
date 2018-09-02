@@ -11,12 +11,21 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.isapanah.awesomespinner.AwesomeSpinner;
 import com.isapanah.awesomespinner.AwesomeSpinner.onSpinnerItemClickListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.nightonke.boommenu.Animation.BoomEnum;
+import com.nightonke.boommenu.Animation.OrderEnum;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.HamButton.Builder;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
@@ -28,15 +37,20 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
+import co.intentservice.chatui.ChatView;
+import co.intentservice.chatui.ChatView.OnSentMessageListener;
+import co.intentservice.chatui.models.ChatMessage;
+import co.intentservice.chatui.models.ChatMessage.Type;
+import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Backend.Database.PersonalData.DataComment;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 import sud_tanj.com.icare.R;
 
 @EActivity(R.layout.activity_data_details)
-public class DataDetails extends AppCompatActivity implements ValueEventListener,onSpinnerItemClickListener<String>, OnDateSetListener {
+public class DataDetails extends AppCompatActivity implements OnBMClickListener,OnSentMessageListener,ValueEventListener,onSpinnerItemClickListener<String>, OnDateSetListener {
 
     public static final String REALTIME="Realtime";
     public static final String FROM_TO="Show data from -> to";
@@ -49,10 +63,17 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     protected LineChart lineChartView;
     @ViewById(R.id.show_by_spinner)
     protected AwesomeSpinner spinner;
-    private MonitoringInformation monitoringInformation;
+    @ViewById(R.id.comment_chat_view)
+    protected ChatView commentView;
+    @ViewById(R.id.bmb)
+    protected BoomMenuButton boomButton;
     private GraphEventListener graphEventListener=null;
     private Query firebaseQuery=null;
+    private CommentEventListener commentEventListener=null;
+    private Query firebaseCommentQuery=null;
     private DatePickerDialog dpd=null;
+    private ChatMessage chatMessage=null;
+    private MonitoringInformation monitoringInformation;
 
     @AfterExtras
     protected void initActionBar(){
@@ -64,6 +85,20 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     protected void initUI(){
         FirebaseDatabase.getInstance().getReferenceFromUrl(MonitoringInformation.KEY).child(id)
                 .addValueEventListener(this);
+    }
+
+    @AfterViews
+    protected void initGraph(){
+        lineChartView.getAxisLeft().setDrawGridLines(false);
+        lineChartView.getXAxis().setDrawGridLines(false);
+        lineChartView.getAxisRight().setDrawGridLines(false);
+        lineChartView.getXAxis().setValueFormatter(new DayAxisValueFormatter(lineChartView));
+        if(graphEventListener==null){
+            graphEventListener=new GraphEventListener(monitoringInformation,lineChartView);
+        }
+        if(firebaseQuery==null){
+            setGraphViewBy(null,null);
+        }
     }
 
     @AfterViews
@@ -79,56 +114,84 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
         spinner.setOnSpinnerItemClickListener(this);
         spinner.setSelection(REALTIME);
     }
+    @AfterViews
+    protected void initCommentView(){
+        commentView.setOnSentMessageListener(this);
+        boomButton.setBoomEnum(BoomEnum.RANDOM);
+        boomButton.setButtonEnum(ButtonEnum.Ham);
+        boomButton.setPiecePlaceEnum(PiecePlaceEnum.HAM_2);
+        boomButton.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
+        boomButton.setOrderEnum(OrderEnum.DEFAULT);
+        Builder doctorButtonBuilder = new Builder()
+                .normalText("Post as Doctor")
+                .subNormalText("We will tag this comment as from doctor!")
+                .listener(this);
+        doctorButtonBuilder.index(DataComment.COMMENT_BY_DOCTOR);
+        Builder userButtonBuilder = new Builder()
+                .normalText("Post as User")
+                .subNormalText("We will tag this comment as from you!")
+                .listener(this);
+        userButtonBuilder.index(DataComment.COMMENT_BY_INDIVIDUAL);
+        boomButton.addBuilder(doctorButtonBuilder);
+        boomButton.addBuilder(userButtonBuilder);
+        commentEventListener=new CommentEventListener(commentView);
+        setCommentBy(null,null);
+    }
 
-    private void initCurrentData(String healthId,List<String> units){
+    private void setCommentBy(Calendar from,Calendar to){
+        if(firebaseCommentQuery!=null){
+            firebaseCommentQuery.removeEventListener(commentEventListener);
+        }
+        firebaseCommentQuery=FirebaseDatabase.getInstance().getReferenceFromUrl(DataComment.KEY)
+                .child(id);
+        if(from == null && to ==null){
+            firebaseCommentQuery.orderByKey().limitToLast(50).addValueEventListener(commentEventListener);
+        } else {
+            firebaseCommentQuery.orderByChild("timeStamp").startAt(from.getTimeInMillis())
+                    .endAt(to.getTimeInMillis()).addValueEventListener(commentEventListener);
+        }
+    }
+
+    private void initLatestData(){
         LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         firstRecyclerView.setLayoutManager(firstManager);
         Query query = FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(HealthData.KEY)
-                .child(healthId)
-                .child("dataList");
+                .child(id)
+                .orderByKey().limitToLast(1);
 
-        FirebaseRecyclerOptions<Double> options =
-                new FirebaseRecyclerOptions.Builder<Double>()
-                        .setQuery(query, Double.class)
+        FirebaseRecyclerOptions<HealthData> options =
+                new FirebaseRecyclerOptions.Builder<HealthData>()
+                        .setQuery(query, HealthData.class)
                         .setLifecycleOwner(this)
                         .build();
-        currentDataAdapter=new CurrentDataAdapter(options,units);
+        currentDataAdapter=new CurrentDataAdapter(options,monitoringInformation.getGraphLegend());
         firstRecyclerView.setAdapter(currentDataAdapter);
     }
 
-    private void setGraphViewByRealtime(){
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        c.set(Calendar.HOUR_OF_DAY,0);
-        long result = c.getTimeInMillis();
-        firebaseQuery=FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
-                .orderByChild("timeStamp").startAt(result)
-                .endAt(Calendar.getInstance().getTimeInMillis()).limitToLast(100);
-        firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
-    }
-
     private void setGraphViewBy(Calendar from,Calendar to){
+        if(firebaseQuery!=null){
+            firebaseQuery.removeEventListener(graphEventListener);
+        }
         firebaseQuery=FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
-                .orderByChild("timeStamp").startAt(from.getTimeInMillis())
-                .endAt(to.getTimeInMillis());
-        firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
-    }
-
-    private void initGraph(){
-        lineChartView.getAxisLeft().setDrawGridLines(false);
-        lineChartView.getXAxis().setDrawGridLines(false);
-        lineChartView.getAxisRight().setDrawGridLines(false);
-        lineChartView.getXAxis().setValueFormatter(new DayAxisValueFormatter(lineChartView));
-        if(graphEventListener==null){
-            graphEventListener=new GraphEventListener(monitoringInformation,lineChartView);
+                .child(id);
+        if(from==null && to==null){
+            firebaseQuery.orderByKey().limitToLast(80).addValueEventListener(graphEventListener);
+        }
+        else {
+            firebaseQuery.orderByChild("timeStamp")
+                    .startAt(from.getTimeInMillis())
+                    .endAt(to.getTimeInMillis()).addValueEventListener(graphEventListener);
         }
     }
 
-    private void updateView(){
-        if(firebaseQuery==null){
-            setGraphViewByRealtime();
-        } else {
-            firebaseQuery.addListenerForSingleValueEvent(graphEventListener);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(firebaseQuery!=null)
+            firebaseQuery.removeEventListener(graphEventListener);
+        if(firebaseCommentQuery!=null){
+            firebaseCommentQuery.removeEventListener(commentEventListener);
         }
     }
 
@@ -142,13 +205,7 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
         setTitle(getString(R.string.details_information_title,monitoringInformation.getName()));
-        if(!monitoringInformation.getHealthDatas().isEmpty()) {
-            initCurrentData(monitoringInformation.getHealthDatas().get(
-                    monitoringInformation.getHealthDatas().size()-1)
-                    , monitoringInformation.getGraphLegend());
-            initGraph();
-            updateView();
-        }
+        initLatestData();
     }
 
     @Override
@@ -159,7 +216,8 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
     @Override
     public void onItemSelected(int i, String s) {
         if(s.equals(REALTIME)){
-            setGraphViewByRealtime();
+            setGraphViewBy(null,null);
+            setCommentBy(null,null);
         }
         if(s.equals(FROM_TO)){
             if(dpd==null) {
@@ -187,8 +245,35 @@ public class DataDetails extends AppCompatActivity implements ValueEventListener
             to.set(Calendar.MONTH, monthOfYearEnd);
             to.set(Calendar.DAY_OF_MONTH, dayOfMonthEnd);
             setGraphViewBy(from, to);
+            setCommentBy(from,to);
         } else {
             Notification.notifyFailure(getString(R.string.date_range_selection_fail));
+        }
+    }
+
+    @Override
+    public boolean sendMessage(ChatMessage chatMessage) {
+        boomButton.boom();
+        this.chatMessage=chatMessage;
+        return true;
+    }
+
+    @Override
+    public void onBoomButtonClick(int index) {
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReferenceFromUrl(DataComment.KEY)
+                .child(id).push();
+        HybridReference hybridReference=new HybridReference(databaseReference);
+        DataComment dataComment=new DataComment();
+        dataComment.setCommentType(index);
+        dataComment.setMessage(chatMessage.getMessage());
+        hybridReference.setValue(dataComment);
+        if(index==DataComment.COMMENT_BY_DOCTOR){
+            chatMessage.setSender("Doctor");
+            chatMessage.setType(Type.RECEIVED);
+        }
+        else {
+            chatMessage.setSender("Individual");
+            chatMessage.setType(Type.SENT);
         }
     }
 }

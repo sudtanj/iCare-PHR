@@ -34,7 +34,6 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
         Calendar calendar= Calendar.getInstance();
         calendar.setTimeInMillis((long)value);
 
-        int days = (int) calendar.get(Calendar.DAY_OF_MONTH);
         int year= calendar.get(Calendar.YEAR);
         //int year = determineYear(days);
         int month=calendar.get(Calendar.MONTH);
@@ -44,10 +43,10 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
 
         if (chart.getVisibleXRange() > 30 * 6) {
 
-            return monthName + " " + yearName;
+            return calendar.get(Calendar.DAY_OF_MONTH)+" "+monthName;
         } else {
 
-            int dayOfMonth = determineDayOfMonth(days, month + 12 * (year - 2016));
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
             String appendix = "th";
 

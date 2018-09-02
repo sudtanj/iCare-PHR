@@ -11,12 +11,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
+import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 
 /**
  * This class is part of iCare Project
@@ -34,26 +34,37 @@ public class GraphEventListener implements ValueEventListener {
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        LoadingScreen.showLoadingScreen("Fetching data from database");
         lineChartView.clear();
         if (dataSnapshot.getChildrenCount() > 0) {
-            List<Entry> entries = new ArrayList<Entry>();
-            int j = 0;
+            LineData lineData = new LineData();
+            List< List<Entry> > entries=new ArrayList<>();
+            //List<Entry> entries = new ArrayList<Entry>();
+            for(String temp:monitoringInformation.getGraphLegend()){
+                entries.add(new ArrayList<Entry>());
+            }
             for (DataSnapshot temp : dataSnapshot.getChildren()) {
-                if (monitoringInformation.getHealthDatas().indexOf(temp.getKey()) > -1) {
                     HealthData healthData = temp.getValue(HealthData.class);
-                    Calendar calendar= Calendar.getInstance();
-                    calendar.setTimeInMillis(healthData.getTimeStamp());
                     for (int i = 0; i < healthData.getDataList().size(); i++) {
-                        entries.add(new Entry(calendar.getTimeInMillis(), healthData.getDataList().get(i).floatValue()));
+                        entries.get(i).add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
+                        //entries.add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
                     }
-                    j++;
+            }
+            int i=0;
+            for(String temp:monitoringInformation.getGraphLegend()){
+                if(!entries.get(i).isEmpty()) {
+                    LineDataSet lineDataSet = new LineDataSet(entries.get(i), temp);
+                    lineDataSet.setDrawValues(false);
+                    lineData.addDataSet(lineDataSet);
+                    i++;
                 }
             }
-            LineDataSet dataSet = new LineDataSet(entries, "Steps");
-            LineData lineData = new LineData(dataSet);
+            //LineDataSet dataSet = new LineDataSet(entries, "Steps");
+            //dataSet.setDrawValues(false);
             lineChartView.setData(lineData);
             lineChartView.invalidate();
         }
+        LoadingScreen.hideLoadingScreen();
     }
 
     @Override
