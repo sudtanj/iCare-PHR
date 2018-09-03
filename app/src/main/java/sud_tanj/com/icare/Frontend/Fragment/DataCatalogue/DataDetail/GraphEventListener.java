@@ -29,8 +29,8 @@ import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
  */
 @AllArgsConstructor
 public class GraphEventListener implements ValueEventListener {
-    private MonitoringInformation monitoringInformation;
-    private LineChart lineChartView;
+    private MonitoringInformation monitoringInformation=null;
+    private LineChart lineChartView=null;
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -40,29 +40,35 @@ public class GraphEventListener implements ValueEventListener {
             LineData lineData = new LineData();
             List< List<Entry> > entries=new ArrayList<>();
             //List<Entry> entries = new ArrayList<Entry>();
-            for(String temp:monitoringInformation.getGraphLegend()){
-                entries.add(new ArrayList<Entry>());
-            }
-            for (DataSnapshot temp : dataSnapshot.getChildren()) {
-                    HealthData healthData = temp.getValue(HealthData.class);
-                    for (int i = 0; i < healthData.getDataList().size(); i++) {
-                        entries.get(i).add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
-                        //entries.add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
+            if(monitoringInformation!=null) {
+                if(monitoringInformation.getGraphLegend()!=null) {
+                    if (!monitoringInformation.getGraphLegend().isEmpty()) {
+                        for (String temp : monitoringInformation.getGraphLegend()) {
+                            entries.add(new ArrayList<Entry>());
+                        }
+                        for (DataSnapshot temp : dataSnapshot.getChildren()) {
+                            HealthData healthData = temp.getValue(HealthData.class);
+                            for (int i = 0; i < healthData.getDataList().size(); i++) {
+                                entries.get(i).add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
+                                //entries.add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
+                            }
+                        }
+                        int i = 0;
+                        for (String temp : monitoringInformation.getGraphLegend()) {
+                            if (!entries.get(i).isEmpty()) {
+                                LineDataSet lineDataSet = new LineDataSet(entries.get(i), temp);
+                                lineDataSet.setDrawValues(false);
+                                lineData.addDataSet(lineDataSet);
+                                i++;
+                            }
+                        }
+                        //LineDataSet dataSet = new LineDataSet(entries, "Steps");
+                        //dataSet.setDrawValues(false);
+                        lineChartView.setData(lineData);
+                        lineChartView.invalidate();
                     }
-            }
-            int i=0;
-            for(String temp:monitoringInformation.getGraphLegend()){
-                if(!entries.get(i).isEmpty()) {
-                    LineDataSet lineDataSet = new LineDataSet(entries.get(i), temp);
-                    lineDataSet.setDrawValues(false);
-                    lineData.addDataSet(lineDataSet);
-                    i++;
                 }
             }
-            //LineDataSet dataSet = new LineDataSet(entries, "Steps");
-            //dataSet.setDrawValues(false);
-            lineChartView.setData(lineData);
-            lineChartView.invalidate();
         }
         LoadingScreen.hideLoadingScreen();
     }

@@ -62,7 +62,15 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="0.15" />
+            android:layout_weight="0.15" >
+
+            <com.malinskiy.superrecyclerview.SuperRecyclerView
+                android:id="@+id/analysis_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:recyclerClipToPadding="true"
+                app:recyclerPadding="16dp"/>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 
     <android.support.v7.widget.CardView

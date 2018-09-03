@@ -44,6 +44,7 @@ import co.intentservice.chatui.models.ChatMessage;
 import co.intentservice.chatui.models.ChatMessage.Type;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Backend.Database.PersonalData.DataAnalysis;
 import sud_tanj.com.icare.Backend.Database.PersonalData.DataComment;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
@@ -67,13 +68,15 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
     protected ChatView commentView;
     @ViewById(R.id.bmb)
     protected BoomMenuButton boomButton;
+    @ViewById(R.id.analysis_recycler)
+    protected SuperRecyclerView analysisRecycler;
     private GraphEventListener graphEventListener=null;
     private Query firebaseQuery=null;
     private CommentEventListener commentEventListener=null;
     private Query firebaseCommentQuery=null;
     private DatePickerDialog dpd=null;
     private ChatMessage chatMessage=null;
-    private MonitoringInformation monitoringInformation;
+    private MonitoringInformation monitoringInformation=null;
 
     @AfterExtras
     protected void initActionBar(){
@@ -86,9 +89,25 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
         FirebaseDatabase.getInstance().getReferenceFromUrl(MonitoringInformation.KEY).child(id)
                 .addValueEventListener(this);
     }
-
     @AfterViews
-    protected void initGraph(){
+    protected void initAnalysis(){
+        LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        analysisRecycler.setLayoutManager(firstManager);
+        Query query = FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(DataAnalysis.KEY)
+                .child(id)
+                .orderByKey().limitToLast(5);
+
+        FirebaseRecyclerOptions<DataAnalysis> options =
+                new FirebaseRecyclerOptions.Builder<DataAnalysis>()
+                        .setQuery(query, DataAnalysis.class)
+                        .setLifecycleOwner(this)
+                        .build();
+        AnalysisAdapter analysisAdapter=new AnalysisAdapter(options);
+        analysisRecycler.setAdapter(analysisAdapter);
+    }
+
+    private void initGraph(){
         lineChartView.getAxisLeft().setDrawGridLines(false);
         lineChartView.getXAxis().setDrawGridLines(false);
         lineChartView.getAxisRight().setDrawGridLines(false);
@@ -112,7 +131,6 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
 
         spinner.setAdapter(categoriesAdapter);
         spinner.setOnSpinnerItemClickListener(this);
-        spinner.setSelection(REALTIME);
     }
     @AfterViews
     protected void initCommentView(){
@@ -204,8 +222,11 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
+        System.out.println(monitoringInformation.getGraphLegend());
         setTitle(getString(R.string.details_information_title,monitoringInformation.getName()));
         initLatestData();
+        initGraph();
+        spinner.setSelection(REALTIME);
     }
 
     @Override
