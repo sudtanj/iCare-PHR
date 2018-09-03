@@ -1,7 +1,15 @@
 package sud_tanj.com.icare.Backend.Plugins.CustomPlugins;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import lombok.NoArgsConstructor;
 import sud_tanj.com.icare.Backend.Analysis.AnalysisListener;
@@ -56,27 +64,63 @@ public class StepsCounter extends BasePlugin implements SensorListener, Analysis
     }
 
     @Override
-    public void onAnalysisDone(int personCondition, String message) {
+    public void onAnalysisDone(final int personCondition, final String message) {
         this.personCondition=personCondition;
         this.message=message;
         //Get Monitoring Information object
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance()
+        final DatabaseReference databaseReference= FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(HealthData.KEY)
                 .child(IDENTIFICATION).push();
-        HybridReference hybridReference=new HybridReference(databaseReference);
+        final HybridReference hybridReference=new HybridReference(databaseReference);
         //create new HealthData object locally
         HealthData healthData=new HealthData(databaseReference);
         //Record value to the health data instance
         healthData.getDataList().add(this.valueResult);
         hybridReference.setValue(healthData);
-        hybridReference=new HybridReference(
-                FirebaseDatabase.getInstance().getReferenceFromUrl(DataAnalysis.KEY)
-                .child(IDENTIFICATION).push()
-        );
-        DataAnalysis dataAnalysis=new DataAnalysis();
-        dataAnalysis.setCondition(this.personCondition);
-        dataAnalysis.setAnalysisMessage(this.message);
-        hybridReference.setValue(dataAnalysis);
+        FirebaseDatabase.getInstance().getReferenceFromUrl(DataAnalysis.KEY)
+                .child(IDENTIFICATION).orderByKey().limitToLast(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getChildrenCount()==0){
+                            HybridReference hybridReference=new HybridReference(
+                                    FirebaseDatabase.getInstance().getReferenceFromUrl(DataAnalysis.KEY)
+                                            .child(IDENTIFICATION).push()
+                            );
+                            DataAnalysis dataAnalysis = new DataAnalysis();
+                            dataAnalysis.setCondition(personCondition);
+                            dataAnalysis.setAnalysisMessage(message);
+                            hybridReference.setValue(dataAnalysis);
+                        }
+                        for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                            DataAnalysis dataAnalysis=dataSnapshot1.getValue(DataAnalysis.class);
+                            Calendar c= Calendar.getInstance();
+                            c.setTimeInMillis(dataAnalysis.getTimeStamp());
+                            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd/MM/yyyy");
+                            if(!simpleDateFormat.format(c.getTime()).equals(simpleDateFormat.format(Calendar.getInstance().getTime()))){
+                                HybridReference hybridReference=new HybridReference(
+                                        FirebaseDatabase.getInstance().getReferenceFromUrl(DataAnalysis.KEY)
+                                                .child(IDENTIFICATION).push()
+                                );
+                                dataAnalysis = new DataAnalysis();
+                                dataAnalysis.setCondition(personCondition);
+                                dataAnalysis.setAnalysisMessage(message);
+                                hybridReference.setValue(dataAnalysis);
+                            } else {
+                                HybridReference hybridReference=new HybridReference(
+                                        dataSnapshot1.getRef());
+                                dataAnalysis.setAnalysisMessage(message);
+                                dataAnalysis.setCondition(personCondition);
+                                hybridReference.setValue(dataAnalysis);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
     }
 }

@@ -96,7 +96,7 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
         Query query = FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(DataAnalysis.KEY)
                 .child(id)
-                .orderByKey().limitToLast(5);
+                .orderByKey().limitToLast(1);
 
         FirebaseRecyclerOptions<DataAnalysis> options =
                 new FirebaseRecyclerOptions.Builder<DataAnalysis>()
