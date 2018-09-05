@@ -1,6 +1,6 @@
 package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
 
-import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -13,10 +13,9 @@ import me.riddhimanadib.formmaster.model.FormElementSwitch;
 import me.riddhimanadib.formmaster.model.FormElementTextMultiLine;
 import me.riddhimanadib.formmaster.model.FormElementTextSingleLine;
 import me.riddhimanadib.formmaster.model.FormHeader;
-import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.R;
 
-public abstract class AddModifyMonitor extends Fragment implements OnFormElementValueChangedListener {
+public abstract class AddModifyMonitor extends Activity implements OnFormElementValueChangedListener {
 
     public static final int ELEMENT_IMAGE=0;
     public static final int ELEMENT_NAME=1;
@@ -31,14 +30,15 @@ public abstract class AddModifyMonitor extends Fragment implements OnFormElement
     @Override
     public void onStop() {
         super.onStop();
-        FragmentBuilder.changeFragment(SensorUi_.builder().build());
+        finish();
     }
 
     protected FormBuilder mFormBuilder;
     protected List<BaseFormElement> formItems;
+
     public void initUI(){
         //init Form
-        mFormBuilder = new FormBuilder(getContext(), getRecyclerView(),this);
+        mFormBuilder = new FormBuilder(this, getRecyclerView(),this);
         // declare form elements
         //FormHeader header = FormHeader.createInstance(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+getString(R.string.settings_personal_information_headings));
         // age number input

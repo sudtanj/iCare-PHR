@@ -80,6 +80,8 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
 
     @AfterExtras
     protected void initActionBar(){
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
     }
@@ -93,10 +95,24 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
     protected void initAnalysis(){
         LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         analysisRecycler.setLayoutManager(firstManager);
-        Query query = FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(DataAnalysis.KEY)
-                .child(id)
-                .orderByKey().limitToLast(1);
+        setAnalysisBy(null,null);
+    }
+
+    private void setAnalysisBy(Calendar from,Calendar to){
+        Query query;
+        if(from==null && to==null){
+            query = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl(DataAnalysis.KEY)
+                    .child(id)
+                    .orderByKey().limitToLast(1);
+        }
+        else {
+            query = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl(DataAnalysis.KEY)
+                    .child(id).orderByChild("timeStamp")
+                    .startAt(from.getTimeInMillis())
+                    .endAt(to.getTimeInMillis());
+        }
 
         FirebaseRecyclerOptions<DataAnalysis> options =
                 new FirebaseRecyclerOptions.Builder<DataAnalysis>()
@@ -120,7 +136,6 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
         }
     }
 
-    @AfterViews
     protected void initSpinner(){
         List<String> spinnerList=new ArrayList<>();
         spinnerList.add(REALTIME);
@@ -222,11 +237,11 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
-        System.out.println(monitoringInformation.getGraphLegend());
         setTitle(getString(R.string.details_information_title,monitoringInformation.getName()));
         initLatestData();
         initGraph();
-        spinner.setSelection(REALTIME);
+        initSpinner();
+        spinner.setSelection(0);
     }
 
     @Override
@@ -267,6 +282,7 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
             to.set(Calendar.DAY_OF_MONTH, dayOfMonthEnd);
             setGraphViewBy(from, to);
             setCommentBy(from,to);
+            setAnalysisBy(from,to);
         } else {
             Notification.notifyFailure(getString(R.string.date_range_selection_fail));
         }

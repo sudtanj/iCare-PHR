@@ -26,17 +26,16 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
-import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 import sumimakito.android.advtextswitcher.AdvTextSwitcher;
 
 @EFragment(R.layout.fragment_sensor_catalogue)
 public class SensorUi extends Fragment {
-    private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
+    //private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
     // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
-    private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
-    private final String[] countries = {"Heart Rate", "Blood Pressure", "Sensor C", "Sensor D", "Sensor E"};
+    //private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
+    //private final String[] countries = {"Heart Rate", "Blood Pressure", "Sensor C", "Sensor D", "Sensor E"};
     private final String[] temperatures = {"Available", "Unavailable", "17°C", "23°C", "20°C"};
     private final String[] times = {"Jane Doe", "John Doe", "Jane Doe"};
 
@@ -72,6 +71,8 @@ public class SensorUi extends Fragment {
     @ViewById(R.id.adding_button)
     FloatingActionButton addingButton;
 
+    private Query query=null;
+
     @AfterViews
     protected void init(){
         catalogueDescriptionIcon.setImageDrawable(IconBuilder.get(IconValue.CLIPBOARD_TEXT));
@@ -87,45 +88,49 @@ public class SensorUi extends Fragment {
 
     @Click(R.id.adding_button)
     protected void addingButtonClicked(){
-        FragmentBuilder.changeFragment(AddMonitor_.builder().build());
-        this.onStop();
+        AddMonitor_.intent(this.getContext()).start();
+        // /FragmentBuilder.changeFragment(AddMonitor_.builder().build());
     }
 
     private void initRecyclerView() {
-        Query query = FirebaseDatabase.getInstance()
-                .getReferenceFromUrl(MonitoringInformation.KEY)
-                .limitToLast(10);
+            query = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl(MonitoringInformation.KEY)
+                    .limitToLast(10);
 
-        FirebaseRecyclerOptions<MonitoringInformation> options =
-                new FirebaseRecyclerOptions.Builder<MonitoringInformation>()
-                        .setQuery(query, MonitoringInformation.class)
-                        .setLifecycleOwner(this)
-                        .build();
+            FirebaseRecyclerOptions<MonitoringInformation> options =
+                    new FirebaseRecyclerOptions.Builder<MonitoringInformation>()
+                            .setQuery(query, MonitoringInformation.class)
+                            .setLifecycleOwner(this)
+                            .build();
 
-        firebaseMonitoringAdapter=new FirebaseMonitoringAdapter(options,this);
+            firebaseMonitoringAdapter = new FirebaseMonitoringAdapter(options, this);
 
 
-        sensorCatalogue.setAdapter(firebaseMonitoringAdapter);
-        sensorCatalogue.setHasFixedSize(true);
+            sensorCatalogue.setAdapter(firebaseMonitoringAdapter);
+            sensorCatalogue.setHasFixedSize(true);
 
-        sensorCatalogue.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    onActiveCardChange();
+            sensorCatalogue.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        onActiveCardChange();
+                    }
                 }
-            }
-        });
+            });
 
-        layoutManger = (CardSliderLayoutManager) sensorCatalogue.getLayoutManager();
-
+            layoutManger = (CardSliderLayoutManager) sensorCatalogue.getLayoutManager();
         //new CardSnapHelper().attachToRecyclerView(sensorCatalogue);
     }
 
     private void initSwitchers() {
-        temperatureSwitcher.setTexts(temperatures);
+        //temperatureSwitcher.setTexts(temperatures);
         placeSwitcher.setCurrentText(getString(R.string.monitoring_Descirption_subtitle));
         clockSwitcher.setTexts(times);
+    }
+
+    public void initSwitcher(String text){
+        temperatureSwitcher.setText(text);
+        ((TextView)temperatureSwitcher.getCurrentView()).setTextColor(getResources().getColor(R.color.temperature_text));
     }
 
     public void initMonitorTitle(String text) {
@@ -208,7 +213,9 @@ public class SensorUi extends Fragment {
 
         temperatureSwitcher.setInAnimation(getContext(), animH[0]);
         temperatureSwitcher.setOutAnimation(getContext(), animH[1]);
-        temperatureSwitcher.setText(temperatures[pos % temperatures.length]);
+        initSwitcher(firebaseMonitoringAdapter
+                .getItem(pos % firebaseMonitoringAdapter.getItemCount()).getMonitoring()?
+                "Available" : "Unavailable");
 
         placeSwitcher.setInAnimation(getContext(), animV[0]);
         placeSwitcher.setOutAnimation(getContext(), animV[1]);

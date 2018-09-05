@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class MonitoringInformation extends SyncableObject {
     private List<String> developer=new ArrayList<>(),
             graphLegend=new ArrayList<>();
     @Getter
-    private HashMap<String,Boolean> muteStatus=new HashMap<>();
+    private Map<String,Boolean> muteStatus=new HashMap<>();
     @Getter @Setter
     private Boolean monitoring=false;
     @Getter @Setter

@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
         //Init background job
         backgroundHandler=new WeakHandler();
-        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(10));
+        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));
     }
 
     @AfterViews

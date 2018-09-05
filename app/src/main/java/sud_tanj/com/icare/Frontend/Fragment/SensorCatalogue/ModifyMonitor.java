@@ -13,8 +13,8 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import me.riddhimanadib.formmaster.model.BaseFormElement;
@@ -35,7 +35,7 @@ import sud_tanj.com.icare.R;
  * <p>
  * This class last modified by User
  */
-@EFragment(R.layout.activity_add_modify_monitor)
+@EActivity(R.layout.activity_add_modify_monitor)
 public class ModifyMonitor extends AddModifyMonitor implements ValueEventListener {
     @ViewById(R.id.addormodify_recycler_view)
     protected RecyclerView superRecyclerView;
@@ -43,7 +43,7 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
     protected FloatingActionButton saveButton;
     @ViewById(R.id.delete_button_floating)
     protected FloatingActionButton deleteButton;
-    @FragmentArg("MonitorID")
+    @Extra("MonitorID")
     protected String id;
     private MonitoringInformation monitoringInformation;
 

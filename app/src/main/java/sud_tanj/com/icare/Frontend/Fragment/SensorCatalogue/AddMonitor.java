@@ -10,14 +10,13 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import me.riddhimanadib.formmaster.model.BaseFormElement;
 import me.riddhimanadib.formmaster.model.FormHeader;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
-import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 import sud_tanj.com.icare.R;
@@ -31,7 +30,7 @@ import sud_tanj.com.icare.R;
  * <p>
  * This class last modified by User
  */
-@EFragment(R.layout.activity_add_modify_monitor)
+@EActivity(R.layout.activity_add_modify_monitor)
 public class AddMonitor extends AddModifyMonitor {
     @ViewById(R.id.addormodify_recycler_view)
     RecyclerView superRecyclerView;
@@ -61,6 +60,7 @@ public class AddMonitor extends AddModifyMonitor {
         return FormHeader.createInstance(getString(R.string.new_monitor_header));
     }
 
+
     @Click(R.id.save_buton_floating)
     protected void saveButtonClicked(){
         DatabaseReference reference= FirebaseDatabase.getInstance().getReferenceFromUrl(MonitoringInformation.KEY).push();
@@ -75,7 +75,7 @@ public class AddMonitor extends AddModifyMonitor {
         monitoringInformation.setName(mFormBuilder.getFormElement(ELEMENT_NAME).getValue());
         hybridReference.setValue(monitoringInformation);
         Notification.notifySuccessful(getString(R.string.add_new_monitor_successful_notification,reference.getKey()));
-        FragmentBuilder.changeFragment(SensorUi_.builder().build());
+        this.onStop();
     }
 
     @Click(R.id.delete_button_floating)

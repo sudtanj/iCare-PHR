@@ -16,10 +16,12 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
+
 import lombok.Getter;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
-import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.FirebaseMonitoringAdapter.MonitoringHolder;
+import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 
 /**
@@ -50,18 +52,27 @@ public class FirebaseMonitoringAdapter extends FirebaseRecyclerAdapter<Monitorin
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentBuilder.changeFragment(ModifyMonitor_.builder().arg("MonitorID",getRef(position).getKey()).build());
+                ModifyMonitor_.intent(holder.itemView.getContext()).id(getRef(position).getKey()).start();
+                //FragmentBuilder.changeFragment(ModifyMonitor_.builder().arg("MonitorID",getRef(position).getKey()).build());
             }
         });
-        Glide.with(holder.itemView).asBitmap()
-                .load(model.getImage())
-                .apply(new RequestOptions()
-                        .signature(new ObjectKey(System.currentTimeMillis()))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                ).into(holder.imageView);
+        if(model.getImage().isEmpty()) {
+            holder.imageView.setImageDrawable(IconBuilder.get(IconValue.IMAGE_OFF, R.color.colorPrimary));
+        } else {
+            Glide.with(holder.itemView).asBitmap()
+                    .load(model.getImage())
+                    .apply(new RequestOptions()
+                            .placeholder(IconBuilder.get(IconValue.IMAGE_OFF))
+                            .fallback(IconBuilder.get(IconValue.IMAGE_OFF))
+                            .signature(new ObjectKey(System.currentTimeMillis()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    ).into(holder.imageView);
+
+        }
         if(position==0){
             this.sensorUi.initMonitorTitle(model.getName());
             this.sensorUi.initMonitorDescription(model.getDescription());
+            this.sensorUi.initSwitcher(model.getMonitoring()?"Available":"Unavailable");
         }
     }
 

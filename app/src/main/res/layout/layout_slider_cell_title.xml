@@ -66,6 +66,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
+                android:enabled="false"
                 android:text="@string/data_status_button" />
 
             <Button
