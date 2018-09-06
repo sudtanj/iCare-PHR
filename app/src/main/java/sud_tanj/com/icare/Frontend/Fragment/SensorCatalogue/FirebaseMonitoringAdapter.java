@@ -1,6 +1,8 @@
 package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -10,8 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.signature.ObjectKey;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -61,6 +67,17 @@ public class FirebaseMonitoringAdapter extends FirebaseRecyclerAdapter<Monitorin
         } else {
             Glide.with(holder.itemView).asBitmap()
                     .load(model.getImage())
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            return true;
+                        }
+                    })
                     .apply(new RequestOptions()
                             .placeholder(IconBuilder.get(IconValue.IMAGE_OFF))
                             .fallback(IconBuilder.get(IconValue.IMAGE_OFF))

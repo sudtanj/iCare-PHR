@@ -3,16 +3,19 @@ package sud_tanj.com.icare.Backend.BackgroundJob;
 import android.content.Context;
 import android.util.Log;
 
+import com.badoo.mobile.util.WeakHandler;
 import com.nanotasks.BackgroundWork;
 import com.nanotasks.Completion;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import sud_tanj.com.icare.Backend.Analysis.BaseAnalysis;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
 import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
 import sud_tanj.com.icare.Backend.Sensors.BaseSensor;
+import sud_tanj.com.icare.Frontend.Notification.Notification;
 
 /**
  * This class is part of iCare Project
@@ -65,11 +68,14 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
 
     @Override
     public void onSuccess(Context context, Object result) {
-
+        WeakHandler weakHandler=new WeakHandler();
+        weakHandler.postDelayed(new BackgroundRunnable(context), TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
     }
 
     @Override
     public void onError(Context context, Exception e) {
-
+        Notification.notifyFailure("Something wrong in the background! App is trying to fix the problem...");
+        WeakHandler weakHandler=new WeakHandler();
+        weakHandler.postDelayed(new BackgroundRunnable(context),TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
     }
 }

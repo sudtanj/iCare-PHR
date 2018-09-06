@@ -8,6 +8,7 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import sud_tanj.com.icare.Backend.Database.SyncableObject;
 
 /**
@@ -24,6 +25,8 @@ public class HealthData extends SyncableObject {
     public static final String KEY="https://icare-89c17.firebaseio.com/Data/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
     @Getter
     private List<Double> dataList=new ArrayList<>();
+    @Getter @Setter
+    private String tag="";
 
     public HealthData(DatabaseReference databaseReference) {
         super(databaseReference);

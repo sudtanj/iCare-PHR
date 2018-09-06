@@ -7,7 +7,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.view.Window;
 
-import com.badoo.mobile.util.WeakHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -23,7 +22,6 @@ import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile.OnProfi
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
-import com.nanotasks.Tasks;
 import com.ncapdevi.fragnav.FragNavController;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -35,10 +33,8 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
-import java.util.concurrent.TimeUnit;
-
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
-import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
+import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundRunnable;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
@@ -56,15 +52,12 @@ import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_NO_TITLE)
-public class MainActivity extends BaseActivity implements Runnable,OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
-
+public class MainActivity extends BaseActivity implements OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
     private FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
     @Extra("googleSigninObject")
     GoogleSignInOptions gso;
     private FragNavController.Builder builder;
     private DrawerProfile drawerProfile;
-    private BackgroundDataReceiver backgroundDataReceiver=new BackgroundDataReceiver();
-    private WeakHandler backgroundHandler;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -112,8 +105,7 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
         //Init background job
-        backgroundHandler=new WeakHandler();
-        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(15));
+        new BackgroundRunnable(this).run();
     }
 
     @AfterViews
@@ -227,11 +219,5 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
     @Override
     public void onClick(DrawerProfile drawerProfile, long l) {
         Notification.notifyUser(getString(R.string.profile_changing_guide));
-    }
-
-    @Override
-    public void run() {
-        Tasks.executeInBackground(getApplicationContext(),backgroundDataReceiver,backgroundDataReceiver);
-        backgroundHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
     }
 }

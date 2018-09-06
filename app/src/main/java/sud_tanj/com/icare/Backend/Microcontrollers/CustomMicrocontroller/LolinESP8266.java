@@ -1,5 +1,8 @@
 package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
+
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -36,13 +39,16 @@ public class LolinESP8266 extends BaseMicrocontroller{
 
     @Override
     public void run() {
-        try {
-            String response = new GetJson()
-                    .AsString(LOLIN_URL);
-            JsonObject jsonObject= jsonParser.parse(response).getAsJsonObject();
-            fireEventListener(jsonObject);
-        } catch (Exception e) {
+        WifiManager wifi = (WifiManager)BaseMicrocontroller.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if(wifi.isWifiEnabled()) {
+            try {
+                String response = new GetJson()
+                        .AsString(LOLIN_URL);
+                JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
+                fireEventListener(jsonObject);
+            } catch (Exception e) {
 
+            }
         }
     }
 }

@@ -150,7 +150,8 @@ public class SensorUi extends Fragment {
         monitoringTitle.setX(countryOffset1);
         monitoringTitleHelper.setX(countryOffset2);
         //country1TextView.setText(countries[0]);
-        monitoringTitle.setCurrentText(text);
+        //monitoringTitle.setCurrentText(text);
+        setCountryText(text,true);
         monitoringTitleHelper.setAlpha(0f);
     }
 
@@ -181,6 +182,7 @@ public class SensorUi extends Fragment {
         }
 
         invisibleText.setText(text);
+        ((TextView)invisibleText.getCurrentView()).setTextSize(20);
 
         final ObjectAnimator iAlpha = ObjectAnimator.ofFloat(invisibleText, "alpha", 1f);
         final ObjectAnimator vAlpha = ObjectAnimator.ofFloat(visibleText, "alpha", 0f);

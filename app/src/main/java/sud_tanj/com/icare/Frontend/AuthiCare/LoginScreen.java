@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.altmail.displaytextview.DisplayTextView;
 import org.androidannotations.annotations.AfterViews;
@@ -28,7 +29,10 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.WindowFeature;
 
+import io.paperdb.Paper;
 import spencerstudios.com.bungeelib.Bungee;
+import sud_tanj.com.icare.Backend.Database.HybridReference;
+import sud_tanj.com.icare.Backend.Database.UserInformation;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 import sud_tanj.com.icare.MainActivity_;
@@ -75,6 +79,10 @@ public class LoginScreen extends Activity implements OnCompleteListener<AuthResu
         Notification.init(this);
         //Init Loading Screen
         LoadingScreen.init(this);
+        //Init Paper
+        Paper.init(this);
+        //Init hybridreferences
+        HybridReference.init(this);
     }
 
     @OnActivityResult(RC_SIGN_IN)
@@ -110,9 +118,20 @@ public class LoginScreen extends Activity implements OnCompleteListener<AuthResu
         if (currentUser != null) {
             finish();
             currentUser.reload();
+            syncUserInformation(currentUser);
             Notification.notifySuccessful(getString(R.string.welcome_back_notification)+currentUser.getDisplayName());
             startMainActivity();
         }
+    }
+
+    public void syncUserInformation(FirebaseUser currentUser){
+        UserInformation userInformation = new UserInformation();
+        userInformation.setName(currentUser.getDisplayName());
+        userInformation.setEmail(currentUser.getEmail());
+        HybridReference hybridReference=new HybridReference(FirebaseDatabase
+                .getInstance().getReferenceFromUrl(UserInformation.KEY)
+                .child(currentUser.getUid()));
+        hybridReference.setValue(userInformation);
     }
 
     //if google auth return result
@@ -121,10 +140,11 @@ public class LoginScreen extends Activity implements OnCompleteListener<AuthResu
         LoadingScreen.hideLoadingScreen();
         if (task.isSuccessful()) {
             // Sign in success, update UI with the signed-in user's information
+            FirebaseUser currentUser=mAuth.getCurrentUser();
+            syncUserInformation(currentUser);
             finish();
             Notification.notifySuccessful(getString(R.string.login_successful_google));
             startMainActivity();
-            FirebaseUser currentUser=mAuth.getCurrentUser();
             //Message the user
             Notification.notifyUser("Hello "+currentUser.getDisplayName());
         } else {
