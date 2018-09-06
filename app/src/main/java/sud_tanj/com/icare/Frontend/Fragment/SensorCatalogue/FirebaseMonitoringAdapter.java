@@ -52,7 +52,7 @@ public class FirebaseMonitoringAdapter extends FirebaseRecyclerAdapter<Monitorin
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                ModifyMonitor_.intent(holder.itemView.getContext()).id(getRef(position).getKey()).start();
+                ModifyMonitor_.intent(holder.itemView.getContext()).id(getRef(position).getKey()).startForResult(SensorUi.ACTIVITY_ADDING_MODIFY);
                 //FragmentBuilder.changeFragment(ModifyMonitor_.builder().arg("MonitorID",getRef(position).getKey()).build());
             }
         });

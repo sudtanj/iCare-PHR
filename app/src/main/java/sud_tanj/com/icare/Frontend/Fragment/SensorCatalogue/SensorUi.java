@@ -2,6 +2,7 @@ package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.FloatingActionButton;
@@ -23,15 +24,18 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 import sumimakito.android.advtextswitcher.AdvTextSwitcher;
 
 @EFragment(R.layout.fragment_sensor_catalogue)
 public class SensorUi extends Fragment {
+    public static final int ACTIVITY_ADDING_MODIFY=365;
     //private final int[] pics = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5};
     // private final int[] maps = {R.drawable.map_paris, R.drawable.map_seoul, R.drawable.map_london, R.drawable.map_beijing, R.drawable.map_greece};
     //private final int[] descriptions = {R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5};
@@ -63,13 +67,13 @@ public class SensorUi extends Fragment {
     private int currentPosition;
 
     @ViewById(R.id.sensor_catalogue)
-    RecyclerView sensorCatalogue;
+    protected RecyclerView sensorCatalogue;
     @ViewById(R.id.catalogue_description_icon)
-    ImageView catalogueDescriptionIcon;
+    protected ImageView catalogueDescriptionIcon;
     @ViewById(R.id.sensor_author)
-    ImageView sensorAuthorIcon;
+    protected ImageView sensorAuthorIcon;
     @ViewById(R.id.adding_button)
-    FloatingActionButton addingButton;
+    protected FloatingActionButton addingButton;
 
     private Query query=null;
 
@@ -88,8 +92,13 @@ public class SensorUi extends Fragment {
 
     @Click(R.id.adding_button)
     protected void addingButtonClicked(){
-        AddMonitor_.intent(this.getContext()).start();
+        AddMonitor_.intent(this.getContext()).startForResult(ACTIVITY_ADDING_MODIFY);
         // /FragmentBuilder.changeFragment(AddMonitor_.builder().build());
+    }
+
+    @OnActivityResult(ACTIVITY_ADDING_MODIFY)
+    protected void onResult(Integer resultCode, Intent data) {
+        FragmentBuilder.changeFragment(SensorUi_.builder().build());
     }
 
     private void initRecyclerView() {

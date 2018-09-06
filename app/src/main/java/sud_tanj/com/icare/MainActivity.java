@@ -1,6 +1,7 @@
 package sud_tanj.com.icare;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
@@ -68,6 +69,12 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(new SharedFirebasePreferencesContextWrapper(newBase));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        FragmentBuilder.getLastFragment().onActivityResult(requestCode,resultCode,data);
     }
 
     @Override

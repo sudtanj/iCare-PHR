@@ -73,6 +73,12 @@ public class AddMonitor extends AddModifyMonitor {
             monitoringInformation.setMonitoring(false);
         monitoringInformation.setImage(mFormBuilder.getFormElement(ELEMENT_IMAGE).getValue());
         monitoringInformation.setName(mFormBuilder.getFormElement(ELEMENT_NAME).getValue());
+        String result=mFormBuilder.getFormElement(ELEMENT_GRAPHLEGEND).getValue();
+        String[] spliter=result.split("\n");
+        monitoringInformation.getGraphLegend().clear();
+        for(String temp:spliter){
+            monitoringInformation.getGraphLegend().add(temp);
+        }
         hybridReference.setValue(monitoringInformation);
         Notification.notifySuccessful(getString(R.string.add_new_monitor_successful_notification,reference.getKey()));
         this.onStop();

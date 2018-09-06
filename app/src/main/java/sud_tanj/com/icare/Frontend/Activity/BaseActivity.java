@@ -1,5 +1,6 @@
 package sud_tanj.com.icare.Frontend.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.evernote.android.state.StateSaver;
@@ -22,9 +23,15 @@ public class BaseActivity extends DrawerActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     @Override // This is optional, only when we want to keep arguments changes in case of rotation etc.
     protected void onSaveInstanceState(Bundle outState) {
         StateSaver.saveInstanceState(this, outState);
         super.onSaveInstanceState(outState);
     }
+
 }

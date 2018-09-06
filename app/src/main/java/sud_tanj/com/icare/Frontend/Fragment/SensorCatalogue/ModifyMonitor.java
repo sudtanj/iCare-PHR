@@ -3,6 +3,7 @@ package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,6 +80,14 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
                 case ELEMENT_NAME:
                     monitoringInformation.setName(baseFormElement.getValue());
                     break;
+                case ELEMENT_GRAPHLEGEND:
+                    String result=baseFormElement.getValue();
+                    String[] spliter=result.split("\n");
+                    monitoringInformation.getGraphLegend().clear();
+                    for(String temp:spliter){
+                        monitoringInformation.getGraphLegend().add(temp);
+                    }
+                    break;
                 case ELEMENT_STATUS:
                     if (baseFormElement.getValue().equals(STATUS_ON)) {
                         monitoringInformation.setMonitoring(true);
@@ -112,7 +121,8 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
             this.mFormBuilder.getFormElement(ELEMENT_STATUS).setValue(STATUS_ON);
         else
             this.mFormBuilder.getFormElement(ELEMENT_STATUS).setValue(STATUS_OFF);
-        this.mFormBuilder.getFormElement(ELEMENT_GRAPHLEGEND).setValue(monitoringInformation.getGraphLegend().toString());
+        String graphLegend=TextUtils.join("\n",monitoringInformation.getGraphLegend());
+        this.mFormBuilder.getFormElement(ELEMENT_GRAPHLEGEND).setValue(graphLegend);
         superRecyclerView.getAdapter().notifyDataSetChanged();
         LoadingScreen.hideLoadingScreen();
     }
