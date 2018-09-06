@@ -73,8 +73,8 @@ public class MainActivity extends BaseActivity implements Runnable,OnProfileClic
     @Override
     protected void onStop() {
         super.onStop();
-        for(BaseMicrocontroller baseMicrocontroller:BaseMicrocontroller.getBaseMicrocontrollerList()){
-            baseMicrocontroller.onDispose();
+        for(int i=0;i<BaseMicrocontroller.getBaseMicrocontrollerList().size();i++){
+            BaseMicrocontroller.getBaseMicrocontrollerList().get(i).onDispose();
         }
     }
 
