@@ -22,6 +22,7 @@ import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile.OnProfi
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
+import com.nanotasks.Tasks;
 import com.ncapdevi.fragnav.FragNavController;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -34,11 +35,12 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
-import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundRunnable;
+import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
+import sud_tanj.com.icare.Backend.Utility.SystemStatus;
 import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataUi_;
@@ -58,6 +60,7 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     GoogleSignInOptions gso;
     private FragNavController.Builder builder;
     private DrawerProfile drawerProfile;
+    private BackgroundDataReceiver backgroundDataReceiver=new BackgroundDataReceiver();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -71,11 +74,13 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         for(int i=0;i<BaseMicrocontroller.getBaseMicrocontrollerList().size();i++){
             BaseMicrocontroller.getBaseMicrocontrollerList().get(i).onDispose();
         }
+        SystemStatus.setBackgroundJobCancel(true);
+        System.out.println("App done cleanup remaining process! bye!");
     }
 
     @AfterViews
@@ -105,7 +110,8 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
         //Init background job
-        new BackgroundRunnable(this).run();
+        //new BackgroundRunnable(this).run();
+        Tasks.executeInBackground(this,backgroundDataReceiver,backgroundDataReceiver);
     }
 
     @AfterViews

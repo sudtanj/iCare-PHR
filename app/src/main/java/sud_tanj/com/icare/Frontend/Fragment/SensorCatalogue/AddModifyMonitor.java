@@ -23,6 +23,7 @@ public abstract class AddModifyMonitor extends Activity implements OnFormElement
     public static final int ELEMENT_GRAPHLEGEND=3;
     public static final int ELEMENT_STATUS=4;
     public static final int ELEMENT_HEADER=5;
+    public static final int ELEMENT_DEVELOPER=6;
 
     public static final String STATUS_ON="On";
     public static final String STATUS_OFF="Off";
@@ -85,7 +86,6 @@ public abstract class AddModifyMonitor extends Activity implements OnFormElement
         formItems.add(descriptionElement);
         formItems.add(statusElement);
         formItems.add(graphLegendElement);
-
         mFormBuilder.addFormElements(formItems);
     }
 

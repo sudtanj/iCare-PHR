@@ -5,6 +5,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -40,10 +42,17 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
                 .setHint(getString(R.string.age_settings_menu_hint))
                 .setRequired(Boolean.TRUE)
                 .setValue(HybridPreferences.getFirebaseInstance().getString(AGE_SETTINGS,""));
+        FormElementTextNumber uidElement = FormElementTextNumber
+                .createInstance()
+                .setTitle(getString(R.string.uid_settings_menu_title))
+                .setHint(getString(R.string.uid_settings_menu_hint))
+                .setRequired(Boolean.TRUE)
+                .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
         //Load to form
         formItems = new ArrayList<>();
         //formItems.add(header);
         formItems.add(ageElement);
+        formItems.add(uidElement);
 
         mFormBuilder.addFormElements(formItems);
 

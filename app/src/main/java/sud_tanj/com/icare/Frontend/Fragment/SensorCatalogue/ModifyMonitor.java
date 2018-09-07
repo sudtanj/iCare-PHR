@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,6 +20,7 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import me.riddhimanadib.formmaster.model.BaseFormElement;
+import me.riddhimanadib.formmaster.model.FormElementTextMultiLine;
 import me.riddhimanadib.formmaster.model.FormHeader;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
@@ -51,6 +53,13 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
     @AfterViews
     protected void init() {
         this.initUI();
+        FormElementTextMultiLine developerElement= FormElementTextMultiLine
+                .createInstance()
+                .setTag(ELEMENT_DEVELOPER)
+                .setTitle(getString(R.string.developer_monitor_title))
+                .setHint(getString(R.string.developer_monitor_hint));
+        formItems.add(developerElement);
+        mFormBuilder.addFormElements(formItems);
         LoadingScreen.showLoadingScreen(getString(R.string.modify_monitor_loading_messages));
         FirebaseDatabase.getInstance().getReferenceFromUrl(MonitoringInformation.KEY)
                 .child(id).addListenerForSingleValueEvent(this);
@@ -70,6 +79,8 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
                     FirebaseDatabase.getInstance().getReferenceFromUrl(MonitoringInformation.KEY)
                             .child(id)
             );
+            String result=null;
+            String[] spliter=null;
             switch (baseFormElement.getTag()) {
                 case ELEMENT_DESCRIPTION:
                     monitoringInformation.setDescription(baseFormElement.getValue());
@@ -81,11 +92,26 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
                     monitoringInformation.setName(baseFormElement.getValue());
                     break;
                 case ELEMENT_GRAPHLEGEND:
-                    String result=baseFormElement.getValue();
-                    String[] spliter=result.split("\n");
+                    result=baseFormElement.getValue();
+                    spliter=result.split("\n");
                     monitoringInformation.getGraphLegend().clear();
                     for(String temp:spliter){
                         monitoringInformation.getGraphLegend().add(temp);
+                    }
+                    break;
+                case ELEMENT_DEVELOPER:
+                    result=baseFormElement.getValue();
+                    spliter=result.split("\n");
+                    if(spliter.length>0){
+                        if(TextUtils.isEmpty(spliter[0])) {
+                            monitoringInformation.getDeveloper().clear();
+                            monitoringInformation.getDeveloper().add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        } else {
+                            monitoringInformation.getDeveloper().clear();
+                            for (String temp : spliter) {
+                                monitoringInformation.getDeveloper().add(temp);
+                            }
+                        }
                     }
                     break;
                 case ELEMENT_STATUS:
@@ -112,6 +138,10 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         monitoringInformation = dataSnapshot.getValue(MonitoringInformation.class);
+        if(monitoringInformation.getDeveloper().indexOf(FirebaseAuth.getInstance().getCurrentUser().getUid())==-1){
+            this.onStop();
+            Notification.notifyFailure("Restricted Area! Developer's only!");
+        }
         this.mFormBuilder.getFormElement(ELEMENT_HEADER).setTitle(
                 getString(R.string.header_modify_monitor, dataSnapshot.getKey()));
         this.mFormBuilder.getFormElement(ELEMENT_NAME).setValue(monitoringInformation.getName());
@@ -123,6 +153,8 @@ public class ModifyMonitor extends AddModifyMonitor implements ValueEventListene
             this.mFormBuilder.getFormElement(ELEMENT_STATUS).setValue(STATUS_OFF);
         String graphLegend=TextUtils.join("\n",monitoringInformation.getGraphLegend());
         this.mFormBuilder.getFormElement(ELEMENT_GRAPHLEGEND).setValue(graphLegend);
+        String developer=TextUtils.join("\n",monitoringInformation.getDeveloper());
+        this.mFormBuilder.getFormElement(ELEMENT_DEVELOPER).setValue(developer);
         superRecyclerView.getAdapter().notifyDataSetChanged();
         LoadingScreen.hideLoadingScreen();
     }

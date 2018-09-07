@@ -2,6 +2,10 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="developer_monitor_title">Other Developer</string>
+    <string name="developer_monitor_hint">Add other developer to aid you!</string>
+    <string name="uid_settings_menu_hint">This is your id for this apps. it\'s unique and only can be shared if necessary </string>
+    <string name="uid_settings_menu_title">Your user identification</string>
     <string name="comment_box_hint">Type your comment here!</string>
     <string name="graph_loading_message">Fetching data from database</string>
     <string name="date_range_selection_fail">Sorry, you\'re selecting range above the limit.</string>

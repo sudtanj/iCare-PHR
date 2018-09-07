@@ -18,7 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.altmail.displaytextview.DisplayTextView;
 import org.androidannotations.annotations.AfterViews;
@@ -124,14 +127,32 @@ public class LoginScreen extends Activity implements OnCompleteListener<AuthResu
         }
     }
 
-    public void syncUserInformation(FirebaseUser currentUser){
-        UserInformation userInformation = new UserInformation();
-        userInformation.setName(currentUser.getDisplayName());
-        userInformation.setEmail(currentUser.getEmail());
-        HybridReference hybridReference=new HybridReference(FirebaseDatabase
-                .getInstance().getReferenceFromUrl(UserInformation.KEY)
-                .child(currentUser.getUid()));
-        hybridReference.setValue(userInformation);
+    public void syncUserInformation(final FirebaseUser currentUser){
+        FirebaseDatabase.getInstance().getReferenceFromUrl(UserInformation.KEY)
+                .child(currentUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        UserInformation userInformation;
+                        if(!dataSnapshot.exists()) {
+                            userInformation = new UserInformation();
+                        } else {
+                           userInformation=dataSnapshot.getValue(UserInformation.class);
+                        }
+                        userInformation.setName(currentUser.getDisplayName());
+                        userInformation.setEmail(currentUser.getEmail());
+                        HybridReference hybridReference = new HybridReference(FirebaseDatabase
+                                .getInstance().getReferenceFromUrl(UserInformation.KEY)
+                                .child(currentUser.getUid()));
+                        hybridReference.setValue(userInformation);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     //if google auth return result

@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,8 +16,12 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.ramotion.cardslider.CardSliderLayoutManager;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
@@ -27,7 +32,10 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.List;
+
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
+import sud_tanj.com.icare.Backend.Database.UserInformation;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
@@ -87,7 +95,23 @@ public class SensorUi extends Fragment {
     }
 
     private void initFAB(){
-        addingButton.setImageDrawable(IconBuilder.get(IconValue.PLUS,R.color.temperature_text));
+        FirebaseDatabase.getInstance().getReferenceFromUrl(UserInformation.KEY)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        UserInformation userInformation=dataSnapshot.getValue(UserInformation.class);
+                        if(userInformation.getDeveloper()) {
+                            addingButton.setVisibility(View.VISIBLE);
+                            addingButton.setImageDrawable(IconBuilder.get(IconValue.PLUS, R.color.temperature_text));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @Click(R.id.adding_button)
@@ -134,7 +158,7 @@ public class SensorUi extends Fragment {
     private void initSwitchers() {
         //temperatureSwitcher.setTexts(temperatures);
         placeSwitcher.setCurrentText(getString(R.string.monitoring_Descirption_subtitle));
-        clockSwitcher.setTexts(times);
+        //clockSwitcher.setTexts(times);
     }
 
     public void initSwitcher(String text){
@@ -153,6 +177,10 @@ public class SensorUi extends Fragment {
         //monitoringTitle.setCurrentText(text);
         setCountryText(text,true);
         monitoringTitleHelper.setAlpha(0f);
+    }
+
+    public void initMonitorDeveloper(String text){
+        clockSwitcher.setText(text);
     }
 
     public void initMonitorDescription(String text){
@@ -234,8 +262,31 @@ public class SensorUi extends Fragment {
 
         clockSwitcher.setInAnimation(getContext(), animV[0]);
         clockSwitcher.setOutAnimation(getContext(), animV[1]);
-        clockSwitcher.setText(times[pos % times.length]);
+        //clockSwitcher.setText(times[pos % times.length]);
+        final List<String> developers=firebaseMonitoringAdapter
+                .getItem(pos % firebaseMonitoringAdapter.getItemCount()).getDeveloper();
+        FirebaseDatabase.getInstance().getReferenceFromUrl(UserInformation.KEY)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String developer="";
+                        for(DataSnapshot temp:dataSnapshot.getChildren()){
+                            if(!developer.isEmpty()){
+                                developer+=",";
+                            }
+                            if(developers.indexOf(temp.getKey())>-1) {
+                                UserInformation userInformation = temp.getValue(UserInformation.class);
+                                developer += userInformation.getName();
+                            }
+                        }
+                        initMonitorDeveloper(developer);
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
         //descriptionsSwitcher.setText(getString(descriptions[pos % descriptions.length]));
         descriptionsSwitcher.setText(firebaseMonitoringAdapter
                         .getItem(pos % firebaseMonitoringAdapter.getItemCount()).getDescription()

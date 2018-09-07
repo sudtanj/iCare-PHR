@@ -167,6 +167,7 @@
         android:layout_gravity="bottom|right"
         android:clickable="true"
         android:focusable="auto"
+        android:visibility="gone"
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@android:drawable/ic_input_add" />
 </FrameLayout>
