@@ -21,8 +21,10 @@
         <activity android:name=".Frontend.Fragment.SensorCatalogue.ModifyMonitor_"></activity>
         <activity android:name=".Frontend.Fragment.SensorCatalogue.AddMonitor_"></activity>
         <activity android:name=".Frontend.Fragment.DataCatalogue.DataDetail.DataDetails_"></activity>
-
+         <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="14ffcf0e310f5a941f13de9cd71b5084067e19f0" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

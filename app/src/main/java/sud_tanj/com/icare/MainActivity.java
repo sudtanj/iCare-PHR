@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -34,6 +35,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.WindowFeature;
 
+import io.fabric.sdk.android.Fabric;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
 import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
@@ -112,6 +114,8 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         //Init background job
         //new BackgroundRunnable(this).run();
         Tasks.executeInBackground(this,backgroundDataReceiver,backgroundDataReceiver);
+        //init Fabric.io
+        Fabric.with(this,new Crashlytics());
     }
 
     @AfterViews
