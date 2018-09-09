@@ -7,14 +7,8 @@ env:
   global:
   - SDK_VERSION=27
   - GRADLE_USER_HOME=$HOME/.gradle
-  - secure: OKzNYq3Ni1q7izJyC1utDqkfwXVCut9divokrbqZTCUA0NOzncqNEQuOKKTqJCpLqEyoB6WLNEGZShIjWORF/KYCExsNZSNLaSFNQf98mEj/MiLEU74yXnQR/mR8mj+dK+X70ir1PMIyJQ+FDGa5iLtuHQlxXYMY6m/tx4jhZz0bLondn3SyYq6ueQsFv1ZO68vU11rQ+15XshPprkNc6ddNfZ6mTvrgZmgzX8HKoWFbgsESHZZ76ShfuQd7VQNb+1eahIWLgGAm/Uzw6oLBUKZK1QEpvH7bSa5Hrzz07jebJUZIYdrve6JVjNRx7WM9yYQe/ltzfSMuoIKvku0/YobTJFozpCmpJ/boNN864DOd7Pf93zLB09SO9tjGrewbLKlHsum10tH721xz0QOWPMLliUzkxE7ddhQhef3CwsSE8NBK8QhYIAmxSXOb2fpOQebz7Fk19rzcxSCio63ztJIEEhkPjzaCRIYF3T5RJv+JNK8FNX4uXboBnmfPUHbsVuVZwxn3OFX2WBOtmIEFHG/gzYS9siTYhGNfxsA7idroJ3ecWx9/ReKDwWgFv2oQHmwvZ8pe2tqlkvIyxGGo+t8iPH+W1JshTDyLpP3c5sU4XWGkcKenk3r0L0nvthPIh+RBjRNA1M+tAwVGBTSyrnoD7iAek0C5yyWxoHwAzKo=
   matrix:
   - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
-deploy:
-- provider: releases
-  file: "./app/build/outputs/apk/release/app-release.apk"
-  skip_cleanup: true
-  prerelease: true
 after_success:
 - "./gradlew crashlyticsUploadDistributionRelease"
 - "./gradlew generateReleaseJavadoc"
