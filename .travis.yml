@@ -7,15 +7,13 @@ env:
   global:
   - SDK_VERSION=27
   - GRADLE_USER_HOME=$HOME/.gradle
+  - secure: jhK4bc+KlmipGPZMXhJNGlmQzP8g8QWqU52WGQFR48wL5JjNWdzUdrI/giqDFyMiNlMbuMtjjSvyBk52D+S3UkQ9j13l+qCnfxfMVhoZKfnKZWfD6WTMLlj/TaeQViv2AKWsigCSfpU8couGeohHC/XvvzO2W2JwDl+5qpdjXEBsByXtlJwHA5CzjivQ9ah9t3oQqgUH6sx+ClBgnciMFZwgVkntU2Xge1blDhVN9NEmqGNRDoSZS7rH5GUdWBLG+28dbFV75KitkzyP3tznlm7MdxXw/vaYHSIivaK5uvJCRHhw9QyjOje2DKPF191v9Q32GhosMVEozqZEL4Wg6u0rHEsTHpWsWZS6Sp/Bcy5I67XHkmrHK4qUtGaWfaG6l3Bf10akBjl4TmG5VlZXMdzeSBw8MtqVonbKkLdtRTTpiIPGrJ/1+F4ywvsl1fq1bY3cc8uOqBJBaGqKn1AZ9PhJZBT1pkqq/oYv2NTdv58ZQoJAsrSe5l/qG6wpkFMMbN/eFCjl3Jjrqm7Usw+eIpzGP23cIK5JgqmkY4Wx12SFkpS4qSokR7PpHIA8IGjR7VQbgT8QI6V9gyG9nD6PUChAPZqnOhy21KH7/m43XliG5KDRJ9bM99zNmrVdjAdFWVN2kDB8pn3e3fw8qUEWrW+ABpjDUkg8r12EB+1HdCQ=
   matrix:
-  #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-  #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-  #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
   - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 deploy:
 - provider: pages
   skip-cleanup: true
-  github-token: "$GH_TOKEN"
+  github-token: "$GITHUB_TOKEN"
   keep-history: true
   local-dir: "./app/build/docs/javadoc/release"
   target-branch: gh-pages
@@ -65,7 +63,7 @@ android:
   - build-tools;.+
   - platforms;android-.+
 before_install:
-  - openssl aes-256-cbc -K $encrypted_cc11b8c8835f_key -iv $encrypted_cc11b8c8835f_iv
-    -in key.jks.enc -out key.jks -d
+- openssl aes-256-cbc -K $encrypted_cc11b8c8835f_key -iv $encrypted_cc11b8c8835f_iv
+  -in key.jks.enc -out key.jks -d
 script:
-  - ./gradlew build
+- "./gradlew build"
