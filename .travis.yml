@@ -11,12 +11,6 @@ env:
   matrix:
   - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 deploy:
-- provider: pages
-  skip-cleanup: true
-  github-token: "$GITHUB_TOKEN"
-  keep-history: true
-  local-dir: "./app/build/docs/javadoc/release"
-  target-branch: gh-pages
 - provider: releases
   file: "./app/build/outputs/apk/release/app-release.apk"
   skip_cleanup: true
