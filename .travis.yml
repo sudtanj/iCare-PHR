@@ -8,23 +8,7 @@ env:
   - SDK_VERSION=27
   - GRADLE_USER_HOME=$HOME/.gradle
   matrix:
-  #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-  #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-  #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
   - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
-deploy:
-- provider: pages
-  skip-cleanup: true
-  github-token: "$GH_TOKEN"
-  keep-history: true
-  local-dir: "./app/build/docs/javadoc/release"
-  target-branch: gh-pages
-- provider: releases
-  api_key:
-    secure: gv8odqUMRDLyQvuGAjOagQOxRcc2+8eN5BsQnuQwDlH86IOvQc4yFP9n/BPQ1HMIAbLpwVKofvy/2I4xZSIeSmmVxXBQp7NIVF+R7jsHurSubDRKoGQfE8UV+D15+8eFzHTXIcqWH3IL1WjfgLy7CVOJyl2a31Jibdqdr6nCQHs3nuvAi3OMUxVn04XKoZgLvGLPnz0Hogjt8bUVIHb+ZX2T+UJq4a4aoZj2l9mVTZGny/EMxoKjD884EphhLwWxSprgdk0OHP3SqqmoGbHYQCBP63kkfWSpIbsnzwYCdtqFaAU9hZM18ZDcLpVL8AuR0GIhaRpFe269KBXz8codOdCntMRwg+2/VZmOo7z8xm7MPyPhBxkv1BnhpmB4Mnpq2SjZ59pjW/X+oavF4Y2HFpIuI45ESx8Xj0dbf8RgMVNsIWwbzjJvhHklyTYFlhbYUkJ41j7wx9ju4SK8G9VjopxZwpnr4xfzFU+27SzuopJVXCx/iYxI8+Y4mNJ8KnQcFNDpGyXIzq1gMtLhvoHCqBLG/Np0wA1m4G6CG7FwLYgY3kiiS2dBuhgTyCFjPcf357Md9FmF+1Hn9k0B+se4M3g38tPOxbsconnXna0E98dxO1RSMuomJ873/JnMRbsiT5EDglSzn907ly8nyNEmW6M1NMkH422m9awHbeF4vwk=
-  file: "./app/build/outputs/apk/release/app-release.apk"
-  skip_cleanup: true
-  prerelease: true
 after_success:
 - "./gradlew crashlyticsUploadDistributionRelease"
 - "./gradlew generateReleaseJavadoc"
@@ -65,7 +49,7 @@ android:
   - build-tools;.+
   - platforms;android-.+
 before_install:
-  - openssl aes-256-cbc -K $encrypted_26b4962af0e7_key -iv $encrypted_26b4962af0e7_iv
-    -in key.jks.enc -out key.jks -d
+- openssl aes-256-cbc -K $encrypted_cc11b8c8835f_key -iv $encrypted_cc11b8c8835f_iv
+  -in key.jks.enc -out key.jks -d
 script:
-  - ./gradlew build
+- "./gradlew build"
