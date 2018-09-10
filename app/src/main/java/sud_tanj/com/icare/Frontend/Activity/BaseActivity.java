@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.evernote.android.state.StateSaver;
 import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 
+import sud_tanj.com.icare.R;
+
 /**
  * This class is part of iCare Project
  * Any modified within this class without reading the
@@ -19,6 +21,7 @@ public class BaseActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StateSaver.restoreInstanceState(this, savedInstanceState);
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
     }
 

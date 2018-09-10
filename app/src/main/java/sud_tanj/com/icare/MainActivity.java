@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile.OnProfileClickListener;
@@ -40,10 +41,10 @@ import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWr
 import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
+import sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller.LolinESP8266Multi;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Backend.Utility.SystemStatus;
-import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataUi_;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
@@ -56,7 +57,7 @@ import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_NO_TITLE)
-public class MainActivity extends BaseActivity implements OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
+public class MainActivity extends DrawerActivity implements OnProfileClickListener,OnFragmentInteractionListener,DrawerItem.OnItemClickListener,OnSharedPreferenceChangeListener {
     private FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
     @Extra("googleSigninObject")
     GoogleSignInOptions gso;
@@ -85,6 +86,13 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         System.out.println("App done cleanup remaining process! bye!");
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Notification.notifyUser("Bye!");
+        finish();
+    }
+
     @AfterViews
     protected void initActivity(){
         //Init Hybrid Database
@@ -107,7 +115,7 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
             FragmentBuilder.launchLastFragment();
         }
         //Init Notification
-        Notification.init(getApplicationContext());
+        Notification.init(this);
         //Init Hybrid Preferences
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
@@ -116,6 +124,7 @@ public class MainActivity extends BaseActivity implements OnProfileClickListener
         Tasks.executeInBackground(this,backgroundDataReceiver,backgroundDataReceiver);
         //init Fabric.io
         Fabric.with(this,new Crashlytics());
+        LolinESP8266Multi.getInstance();
     }
 
     @AfterViews

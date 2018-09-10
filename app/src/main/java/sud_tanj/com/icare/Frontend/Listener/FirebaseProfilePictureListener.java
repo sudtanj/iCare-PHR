@@ -6,9 +6,8 @@ import android.support.annotation.Nullable;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
-
-import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
 
 /**
  * This class is part of iCare Project
@@ -21,9 +20,9 @@ import sud_tanj.com.icare.Frontend.Activity.BaseActivity;
  */
 public class FirebaseProfilePictureListener extends SimpleTarget<Bitmap> {
     private DrawerProfile drawerProfile;
-    private BaseActivity baseActivity;
+    private DrawerActivity baseActivity;
 
-    public FirebaseProfilePictureListener(DrawerProfile drawerProfile, BaseActivity baseActivity) {
+    public FirebaseProfilePictureListener(DrawerProfile drawerProfile, DrawerActivity baseActivity) {
         this.drawerProfile = drawerProfile;
         this.baseActivity = baseActivity;
     }
