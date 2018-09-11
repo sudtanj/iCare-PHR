@@ -17,13 +17,17 @@ import java.util.List;
 import me.riddhimanadib.formmaster.FormBuilder;
 import me.riddhimanadib.formmaster.listener.OnFormElementValueChangedListener;
 import me.riddhimanadib.formmaster.model.BaseFormElement;
+import me.riddhimanadib.formmaster.model.FormElementSwitch;
 import me.riddhimanadib.formmaster.model.FormElementTextNumber;
 import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.R;
 
 @EFragment(R.layout.fragment_settings)
 public class SettingsFragment extends Fragment implements OnFormElementValueChangedListener,OnSharedPreferenceChangeListener {
+    public static final int AGE_SETTING=0;
+    public static final int BACKGROUND_JOB_SETTING=1;
     public static final String AGE_SETTINGS="age_settings";
+    public static final String BACKGROUND_JOB_SETTINGS="background_job_settings";
     @ViewById(R.id.settings_recycler)
     RecyclerView settingsRecycler;
     private FormBuilder mFormBuilder;
@@ -42,6 +46,13 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
                 .setHint(getString(R.string.age_settings_menu_hint))
                 .setRequired(Boolean.TRUE)
                 .setValue(HybridPreferences.getFirebaseInstance().getString(AGE_SETTINGS,""));
+        FormElementSwitch backgroundElement = FormElementSwitch
+                .createInstance()
+                .setTitle(getString(R.string.background_job_title))
+                .setHint(getString(R.string.background_job_hint))
+                .setSwitchTexts("On","Off")
+                .setRequired(true)
+                .setValue(HybridPreferences.getFirebaseInstance().getString(BACKGROUND_JOB_SETTINGS,"On"));
         FormElementTextNumber uidElement = FormElementTextNumber
                 .createInstance()
                 .setTitle(getString(R.string.uid_settings_menu_title))
@@ -52,6 +63,7 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
         formItems = new ArrayList<>();
         //formItems.add(header);
         formItems.add(ageElement);
+        formItems.add(backgroundElement);
         formItems.add(uidElement);
 
         mFormBuilder.addFormElements(formItems);
@@ -65,18 +77,15 @@ public class SettingsFragment extends Fragment implements OnFormElementValueChan
         if(baseFormElement.getTitle().equals(getString(R.string.age_settings_menu_title))){
             HybridPreferences.getFirebaseInstance().edit().putString(AGE_SETTINGS,baseFormElement.getValue()).commit();
         }
+        if(baseFormElement.getTitle().equals(getString(R.string.background_job_title))){
+            HybridPreferences.getFirebaseInstance().edit().putString(BACKGROUND_JOB_SETTINGS,baseFormElement.getValue()).commit();
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        for(BaseFormElement temp:formItems){
-            if(temp.getTitle().equals(getString(R.string.age_settings_menu_title))){
-                if(!temp.getValue().equals(sharedPreferences.getString(s,""))) {
-                    temp.setValue(sharedPreferences.getString(s, null));
-                    break;
-                }
-            }
-        }
+        formItems.get(AGE_SETTING).setValue(sharedPreferences.getString(AGE_SETTINGS, ""));
+        formItems.get(BACKGROUND_JOB_SETTING).setValue(sharedPreferences.getString(BACKGROUND_JOB_SETTINGS,"On"));
         settingsRecycler.getAdapter().notifyDataSetChanged();
     }
 }

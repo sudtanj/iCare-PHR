@@ -2,6 +2,8 @@
     <string name="app_name">iCare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="background_job_hint">This background monitoring is use to watch any activity occured on the body</string>
+    <string name="background_job_title">Background Monitoring</string>
     <string name="developer_monitor_title">Other Developer</string>
     <string name="developer_monitor_hint">Add other developer to aid you!</string>
     <string name="uid_settings_menu_hint">This is your id for this apps. it\'s unique and only can be shared if necessary </string>

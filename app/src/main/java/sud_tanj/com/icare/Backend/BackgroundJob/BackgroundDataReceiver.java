@@ -5,10 +5,10 @@ import android.util.Log;
 
 import com.nanotasks.BackgroundWork;
 import com.nanotasks.Completion;
-import com.nanotasks.Tasks;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import sud_tanj.com.icare.Backend.Analysis.BaseAnalysis;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
@@ -89,7 +89,8 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
     @Override
     public void onSuccess(Context context, Object result) {
         if(!SystemStatus.getBackgroundJobCancel()) {
-            Tasks.executeInBackground(context, this, this);
+            BackgroundRunnable.weakHandler.postDelayed(BackgroundRunnable.backgroundRunnable,
+                    TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
         }
     }
 
@@ -97,7 +98,8 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
     public void onError(Context context, Exception e) {
         if(!SystemStatus.getBackgroundJobCancel()) {
             Notification.notifyFailure("Something wrong in the background! App is trying to fix the problem...");
-            Tasks.executeInBackground(context, this, this);
+            BackgroundRunnable.weakHandler.postDelayed(BackgroundRunnable.backgroundRunnable,
+                    TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
         }
     }
 }

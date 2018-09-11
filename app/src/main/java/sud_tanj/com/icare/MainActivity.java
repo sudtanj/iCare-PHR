@@ -24,7 +24,6 @@ import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile.OnProfi
 import com.mikepenz.aboutlibraries.Libs.ActivityStyle;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
-import com.nanotasks.Tasks;
 import com.ncapdevi.fragnav.FragNavController;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -39,6 +38,7 @@ import org.androidannotations.annotations.WindowFeature;
 import io.fabric.sdk.android.Fabric;
 import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferencesContextWrapper;
 import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundDataReceiver;
+import sud_tanj.com.icare.Backend.BackgroundJob.BackgroundRunnable;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
 import sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller.LolinESP8266Multi;
@@ -120,8 +120,8 @@ public class MainActivity extends DrawerActivity implements OnProfileClickListen
         HybridPreferences.init(this);
         HybridPreferences.getFirebaseInstance().registerOnSharedPreferenceChangeListener(this);
         //Init background job
-        //new BackgroundRunnable(this).run();
-        Tasks.executeInBackground(this,backgroundDataReceiver,backgroundDataReceiver);
+        BackgroundRunnable.init(this);
+        //Tasks.executeInBackground(this,backgroundDataReceiver,backgroundDataReceiver);
         //init Fabric.io
         Fabric.with(this,new Crashlytics());
         LolinESP8266Multi.getInstance();
@@ -232,6 +232,17 @@ public class MainActivity extends DrawerActivity implements OnProfileClickListen
             drawerProfile.setDescription(sharedPreferences.getString(s,"")+getString(R.string.profile_age_drawer));
             removeProfile(drawerProfile);
             addProfile(drawerProfile);
+        }
+        if(s.equals(SettingsFragment.BACKGROUND_JOB_SETTINGS)){
+            if(sharedPreferences.getString(s,"On").equals("On")){
+                if(SystemStatus.getBackgroundJobCancel()==true) {
+                    SystemStatus.setBackgroundJobCancel(false);
+                    BackgroundRunnable.reRunBackgroundService();
+                }
+            } else {
+                if(SystemStatus.getBackgroundJobCancel()==false)
+                    SystemStatus.setBackgroundJobCancel(true);
+            }
         }
     }
 
