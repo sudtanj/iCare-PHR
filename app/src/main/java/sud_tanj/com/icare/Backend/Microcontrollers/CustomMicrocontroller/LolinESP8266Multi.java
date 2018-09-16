@@ -1,6 +1,12 @@
 package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller;
 
-import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
+import com.dezlum.codelabs.getjson.GetJson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of iCare Project
@@ -12,22 +18,52 @@ import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
  * This class last modified by User
  */
 
-public class LolinESP8266Multi extends BaseMicrocontroller {
+public class LolinESP8266Multi extends ESP8266 {
+    public static final String LOLIN_URL = "http://192.168.4.1/getData";
+    public static final String NEW_IP = "newIp";
+    private static LolinESP8266Multi lolinESP8266Multi = null;
+    private List<String> ipAddress;
 
-    private static LolinESP8266Multi lolinESP8266Multi=null;
-
-    public static LolinESP8266Multi getInstance(){
-        if(lolinESP8266Multi==null)
-            lolinESP8266Multi=new LolinESP8266Multi();
+    public static LolinESP8266Multi getInstance() {
+        if (lolinESP8266Multi == null)
+            lolinESP8266Multi = new LolinESP8266Multi();
         return lolinESP8266Multi;
     }
 
     public LolinESP8266Multi() {
-
+        super();
+        this.ipAddress = new ArrayList<>();
     }
 
     @Override
     public void run() {
+        if (wifi.isWifiEnabled()) {
+            try {
+                String response = new GetJson()
+                        .AsString(LOLIN_URL);
+                JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
+                JsonArray jsonArray = jsonObject.get(NEW_IP).getAsJsonArray();
+                for (JsonElement temp : jsonArray) {
+                    String result = temp.getAsString();
+                    if (this.ipAddress.indexOf(result) == -1) {
+                        this.ipAddress.add(result);
+                    }
+                }
+                fireEventListener(jsonObject);
+            } catch (Exception e) {
 
+            }
+
+            for (int i=0;i<ipAddress.size();i++) {
+                try {
+                    String response = new GetJson()
+                            .AsString(ipAddress.get(i));
+                    JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
+                    fireEventListener(jsonObject);
+                } catch (Exception e) {
+                    ipAddress.remove(i);
+                }
+            }
+        }
     }
 }

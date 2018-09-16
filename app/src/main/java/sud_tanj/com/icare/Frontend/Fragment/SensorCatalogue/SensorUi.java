@@ -102,8 +102,10 @@ public class SensorUi extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         UserInformation userInformation=dataSnapshot.getValue(UserInformation.class);
                         if(userInformation.getDeveloper()) {
-                            addingButton.setVisibility(View.VISIBLE);
-                            addingButton.setImageDrawable(IconBuilder.get(IconValue.PLUS, R.color.temperature_text));
+                            if(addingButton!=null) {
+                                addingButton.setVisibility(View.VISIBLE);
+                                addingButton.setImageDrawable(IconBuilder.get(IconValue.PLUS, R.color.temperature_text));
+                            }
                         }
                     }
 

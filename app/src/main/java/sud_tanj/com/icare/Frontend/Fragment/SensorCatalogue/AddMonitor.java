@@ -3,6 +3,7 @@ package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -79,6 +80,7 @@ public class AddMonitor extends AddModifyMonitor {
         for(String temp:spliter){
             monitoringInformation.getGraphLegend().add(temp);
         }
+        monitoringInformation.getDeveloper().add(FirebaseAuth.getInstance().getCurrentUser().getUid());
         hybridReference.setValue(monitoringInformation);
         Notification.notifySuccessful(getString(R.string.add_new_monitor_successful_notification,reference.getKey()));
         this.onStop();

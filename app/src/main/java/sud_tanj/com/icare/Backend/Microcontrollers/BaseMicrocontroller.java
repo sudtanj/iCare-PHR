@@ -21,6 +21,8 @@ import sud_tanj.com.icare.Backend.BaseAbstractComponent;
  * This class last modified by User
  */
 public abstract class BaseMicrocontroller extends BaseAbstractComponent<MicrocontrollerListener,JsonObject> {
+    public static final String SENSOR_ID="sensorid";
+    public static final String DATA_TAG="tag";
     @Getter(AccessLevel.PROTECTED)
     private static Context context;
     @Getter

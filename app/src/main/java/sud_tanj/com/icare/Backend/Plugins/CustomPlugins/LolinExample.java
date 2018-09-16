@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
+import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
 import sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller.LolinESP8266;
 import sud_tanj.com.icare.Backend.Microcontrollers.MicrocontrollerListener;
 import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
@@ -20,6 +21,13 @@ import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
  */
 public class LolinExample extends BasePlugin implements MicrocontrollerListener {
     public static final String IDENTIFICATION="-LKPKW2mpUT3VBCT5XWk";
+
+    @Override
+    public void onDispose() {
+        super.onDispose();
+        arduinoExample=null;
+    }
+
     private String value="";
     private static LolinExample arduinoExample=null;
     public static LolinExample getInstance(){
@@ -29,7 +37,7 @@ public class LolinExample extends BasePlugin implements MicrocontrollerListener 
     }
     @Override
     public void onDataReceived(JsonObject data) {
-        if(data.get("sensorid")
+        if(data.get(BaseMicrocontroller.SENSOR_ID)
                 .getAsString().equals(IDENTIFICATION)){
             value=data.get("value").getAsString();
             HybridReference hybridReference=new HybridReference(FirebaseDatabase.getInstance().getReferenceFromUrl(HealthData.KEY)
