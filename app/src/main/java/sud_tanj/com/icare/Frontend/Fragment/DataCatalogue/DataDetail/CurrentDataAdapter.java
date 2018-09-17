@@ -14,7 +14,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import java.util.List;
 
 import lombok.Getter;
-import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.R;
 
 /**
@@ -26,7 +25,7 @@ import sud_tanj.com.icare.R;
  * <p>
  * This class last modified by User
  */
-public class CurrentDataAdapter extends FirebaseRecyclerAdapter<HealthData,CurrentDataAdapter.DataHolder> {
+public class CurrentDataAdapter extends FirebaseRecyclerAdapter<Integer,CurrentDataAdapter.DataHolder> {
 
 
     private List<String> units;
@@ -37,7 +36,7 @@ public class CurrentDataAdapter extends FirebaseRecyclerAdapter<HealthData,Curre
      *
      * @param options
      */
-    public CurrentDataAdapter(@NonNull FirebaseRecyclerOptions<HealthData> options, List<String> units) {
+    public CurrentDataAdapter(@NonNull FirebaseRecyclerOptions<Integer> options, List<String> units) {
         super(options);
         this.units = units;
     }
@@ -52,8 +51,8 @@ public class CurrentDataAdapter extends FirebaseRecyclerAdapter<HealthData,Curre
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull DataHolder holder, int position, @NonNull HealthData model) {
-        holder.valueView.setText(model.getDataList().get(position).toString());
+    protected void onBindViewHolder(@NonNull DataHolder holder, int position, @NonNull Integer model) {
+        holder.valueView.setText(model.toString());
         if(!units.isEmpty() && units.size()>position)
             holder.unitView.setText(units.get(position));
     }

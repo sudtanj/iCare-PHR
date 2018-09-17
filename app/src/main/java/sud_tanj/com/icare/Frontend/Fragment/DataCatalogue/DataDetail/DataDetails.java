@@ -77,6 +77,8 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
     private DatePickerDialog dpd=null;
     private ChatMessage chatMessage=null;
     private MonitoringInformation monitoringInformation=null;
+    private ValueEventListener currentDataListener=null;
+    private Query firebaseCurrentHealthDataQuery=null;
 
     @AfterExtras
     protected void initActionBar(){
@@ -188,18 +190,34 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
     private void initLatestData(){
         LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         firstRecyclerView.setLayoutManager(firstManager);
-        Query query = FirebaseDatabase.getInstance()
+        currentDataListener=new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) {
+                    Query query = dataSnapshot1.getRef().child("dataList");
+
+                    FirebaseRecyclerOptions<Integer> options =
+                            new FirebaseRecyclerOptions.Builder<Integer>()
+                                    .setQuery(query, Integer.class)
+                                    .setLifecycleOwner(DataDetails.this)
+                                    .build();
+                    currentDataAdapter = new CurrentDataAdapter(options, monitoringInformation.getGraphLegend());
+                    firstRecyclerView.setAdapter(currentDataAdapter);
+                    break;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        firebaseCurrentHealthDataQuery=FirebaseDatabase.getInstance()
                 .getReferenceFromUrl(HealthData.KEY)
                 .child(id)
                 .orderByKey().limitToLast(1);
-
-        FirebaseRecyclerOptions<HealthData> options =
-                new FirebaseRecyclerOptions.Builder<HealthData>()
-                        .setQuery(query, HealthData.class)
-                        .setLifecycleOwner(this)
-                        .build();
-        currentDataAdapter=new CurrentDataAdapter(options,monitoringInformation.getGraphLegend());
-        firstRecyclerView.setAdapter(currentDataAdapter);
+        firebaseCurrentHealthDataQuery.addValueEventListener(currentDataListener);
     }
 
     private void setGraphViewBy(Calendar from,Calendar to){
@@ -225,6 +243,9 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
             firebaseQuery.removeEventListener(graphEventListener);
         if(firebaseCommentQuery!=null){
             firebaseCommentQuery.removeEventListener(commentEventListener);
+        }
+        if(currentDataListener!=null && firebaseCurrentHealthDataQuery!=null){
+            firebaseCurrentHealthDataQuery.removeEventListener(currentDataListener);
         }
     }
 

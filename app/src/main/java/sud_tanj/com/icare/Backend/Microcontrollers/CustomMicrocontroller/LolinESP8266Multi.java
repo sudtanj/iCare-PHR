@@ -41,6 +41,7 @@ public class LolinESP8266Multi extends ESP8266 {
             try {
                 String response = new GetJson()
                         .AsString(LOLIN_URL);
+                System.out.println(response);
                 JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
                 JsonArray jsonArray = jsonObject.get(NEW_IP).getAsJsonArray();
                 for (JsonElement temp : jsonArray) {
@@ -57,10 +58,12 @@ public class LolinESP8266Multi extends ESP8266 {
             for (int i=0;i<ipAddress.size();i++) {
                 try {
                     String response = new GetJson()
-                            .AsString(ipAddress.get(i));
+                            .AsString("http://"+ipAddress.get(i)+"/getData");
+                    System.out.println(response);
                     JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
                     fireEventListener(jsonObject);
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     ipAddress.remove(i);
                 }
             }
