@@ -2,6 +2,7 @@ package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail;
 
 import android.support.annotation.NonNull;
 
+import com.github.lzyzsd.randomcolor.RandomColor;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -46,18 +47,26 @@ public class GraphEventListener implements ValueEventListener {
                         for (String temp : monitoringInformation.getGraphLegend()) {
                             entries.add(new ArrayList<Entry>());
                         }
+                        long firstTimeStamp=0;
                         for (DataSnapshot temp : dataSnapshot.getChildren()) {
                             HealthData healthData = temp.getValue(HealthData.class);
+                            if(firstTimeStamp==0){
+                                firstTimeStamp=healthData.getTimeStamp();
+                                HourAxisValueFormatter.referenceTimestamp=firstTimeStamp;
+                            }
                             for (int i = 0; i < healthData.getDataList().size(); i++) {
-                                entries.get(i).add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
+                                //System.out.println(healthData.getDataList().get(i).floatValue());
+                                entries.get(i).add(new Entry(healthData.getTimeStamp()-firstTimeStamp, healthData.getDataList().get(i).floatValue()));
                                 //entries.add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
                             }
                         }
                         int i = 0;
+                        RandomColor randomColor = new RandomColor();
                         for (String temp : monitoringInformation.getGraphLegend()) {
                             if (!entries.get(i).isEmpty()) {
                                 LineDataSet lineDataSet = new LineDataSet(entries.get(i), temp);
                                 lineDataSet.setDrawValues(false);
+                                lineDataSet.setColor(randomColor.randomColor());
                                 lineData.addDataSet(lineDataSet);
                                 i++;
                             }

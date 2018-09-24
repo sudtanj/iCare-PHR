@@ -129,7 +129,8 @@ public class DataDetails extends AppCompatActivity implements OnBMClickListener,
         lineChartView.getAxisLeft().setDrawGridLines(false);
         lineChartView.getXAxis().setDrawGridLines(false);
         lineChartView.getAxisRight().setDrawGridLines(false);
-        lineChartView.getXAxis().setValueFormatter(new DayAxisValueFormatter(lineChartView));
+        //lineChartView.getXAxis().setValueFormatter(new DayAxisValueFormatter(lineChartView));
+        lineChartView.getXAxis().setValueFormatter(new HourAxisValueFormatter());
         if(graphEventListener==null){
             graphEventListener=new GraphEventListener(monitoringInformation,lineChartView);
         }
