@@ -15,6 +15,9 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath false
+                arguments = [
+                        'androidManifestFile': 'app\\build\\intermediates\\merged_manifests\\debug\\processDebugManifest\\merged\\AndroidManifest.xml'
+                ]
             }
         }
     }

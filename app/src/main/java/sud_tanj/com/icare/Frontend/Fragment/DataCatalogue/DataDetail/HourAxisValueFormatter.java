@@ -5,6 +5,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -36,13 +37,19 @@ public class HourAxisValueFormatter implements IAxisValueFormatter
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
         // convertedTimestamp = originalTimestamp - referenceTimestamp
-        long convertedTimestamp = (long) value;
+        int result=Arrays.binarySearch(axis.mEntries,value);
+        if(result==(int)(axis.mEntryCount/2)
+    || value==0 || result==axis.mEntryCount-1) {
+            long convertedTimestamp = (long) value;
 
-        // Retrieve original timestamp
-        long originalTimestamp = referenceTimestamp + convertedTimestamp;
+            // Retrieve original timestamp
+            long originalTimestamp = referenceTimestamp + convertedTimestamp;
+            SimpleDateFormat format2 = new SimpleDateFormat("MM/dd HH:mm:ss");
+            axis.setGranularity(1f);
 
-        SimpleDateFormat format2 = new SimpleDateFormat("MM/dd HH:mm:ss");
-        return format2.format(new Date((originalTimestamp)));
+            return format2.format(new Date((originalTimestamp)));
+        }
+        return "";
         // Convert timestamp to hour:minute
         //return getHour(originalTimestamp);
     }
