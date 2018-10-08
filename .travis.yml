@@ -5,7 +5,7 @@ jdk:
 - oraclejdk8
 env:
   global:
-  - SDK_VERSION=27
+  - SDK_VERSION=28
   - GRADLE_USER_HOME=$HOME/.gradle
   matrix:
   - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
@@ -41,7 +41,7 @@ android:
   - extra
   - android-$SDK_VERSION
   - sys-img-$ANDROID_ABI-$ANDROID_TAG_COMPONENT-$ANDROID_API
-  - build-tools-$SDK_VERSION.0.3
+  - build-tools-$SDK_VERSION.0.2
   licenses:
   - android-sdk-preview-license-52d11cd2
   - android-sdk-license-.+
