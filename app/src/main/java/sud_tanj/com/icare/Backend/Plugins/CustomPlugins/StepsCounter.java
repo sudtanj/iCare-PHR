@@ -1,12 +1,19 @@
 package sud_tanj.com.icare.Backend.Plugins.CustomPlugins;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import lombok.NoArgsConstructor;
 import sud_tanj.com.icare.Backend.Analysis.AnalysisListener;
 import sud_tanj.com.icare.Backend.Analysis.CustomAnalysis.StepsAnalysis;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
+import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Backend.Database.PersonalData.DataAnalysis;
 import sud_tanj.com.icare.Backend.Database.PersonalData.HealthData;
 import sud_tanj.com.icare.Backend.Plugins.BasePlugin;
@@ -24,7 +31,7 @@ import sud_tanj.com.icare.Backend.Utility.AnalysisDataSynchronizer;
  * This class last modified by User
  */
 @NoArgsConstructor
-public class StepsCounter extends BasePlugin implements SensorListener, AnalysisListener {
+public class StepsCounter extends BasePlugin implements ValueEventListener,SensorListener, AnalysisListener {
     public static final String IDENTIFICATION="-LJXvUiu95PkUihaMlmn";
     private static StepsCounter stepsCounter=null;
     private double valueResult=-1;
@@ -38,7 +45,9 @@ public class StepsCounter extends BasePlugin implements SensorListener, Analysis
     @Override
     public void run() {
         //listen to sensor result
-        Pedometer.getInstance().addListener(this);
+        FirebaseDatabase.getInstance()
+                .getReferenceFromUrl(MonitoringInformation.KEY)
+                .child(IDENTIFICATION).addListenerForSingleValueEvent(this);
     }
 
     @Override
@@ -74,5 +83,20 @@ public class StepsCounter extends BasePlugin implements SensorListener, Analysis
         dataAnalysis.setCondition(personCondition);
         dataAnalysis.setAnalysisMessage(message);
         AnalysisDataSynchronizer.sync(IDENTIFICATION,dataAnalysis);
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        MonitoringInformation monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
+        if(monitoringInformation.getMuteStatus().get(FirebaseAuth.getInstance()
+                .getCurrentUser().getUid()).equals(false))
+        {
+            Pedometer.getInstance().addListener(this);
+        }
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
     }
 }

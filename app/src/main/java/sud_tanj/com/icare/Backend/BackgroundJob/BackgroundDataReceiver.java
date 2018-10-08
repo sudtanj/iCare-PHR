@@ -8,7 +8,6 @@ import com.nanotasks.Completion;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import sud_tanj.com.icare.Backend.Analysis.BaseAnalysis;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
@@ -33,9 +32,7 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
     List<BasePlugin> basePlugins;
 
     @Override
-    public Object doInBackground() throws Exception {
-        if(SystemStatus.getBackgroundJobCancel())
-            return null;
+    public Object doInBackground() {
         Logger.i(this.toString(),"Started Background Job");
         BasePlugin.init();
         basePlugins=BasePlugin.getBasePluginList();
@@ -43,44 +40,26 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
         for(int i=0;i<basePlugins.size();i++){
             basePlugins.get(i).run();
             basePlugins.get(i).fireEventListener(null);
-            if(SystemStatus.getBackgroundJobCancel())
-                return null;
         }
-        if(SystemStatus.getBackgroundJobCancel())
-            return null;
         runnableMicrocontrollers = BaseMicrocontroller.getBaseMicrocontrollerList();
         Logger.i(this.toString(),runnableMicrocontrollers.toString());
         for(int i=0;i<runnableMicrocontrollers.size();i++){
             runnableMicrocontrollers.get(i).run();
-            if(SystemStatus.getBackgroundJobCancel())
-                return null;
         }
-        if(SystemStatus.getBackgroundJobCancel())
-            return null;
         baseSensors=BaseSensor.getBaseSensors();
         Logger.i(this.toString(),baseSensors.toString());
         for(int i=0;i<baseSensors.size();i++){
             baseSensors.get(i).run();
             baseSensors.get(i).onDispose();
-            if(SystemStatus.getBackgroundJobCancel())
-                return null;
         }
-        if(SystemStatus.getBackgroundJobCancel())
-            return null;
         baseAnalyses=BaseAnalysis.getBaseAnalysisList();
         Logger.i(this.toString(),baseAnalyses.toString());
         for(int i=0;i<baseAnalyses.size();i++){
             baseAnalyses.get(i).run();
             baseAnalyses.get(i).onDispose();
-            if(SystemStatus.getBackgroundJobCancel())
-                return null;
         }
-        if(SystemStatus.getBackgroundJobCancel())
-            return null;
         for(int i=0;i<basePlugins.size();i++){
             basePlugins.get(i).onDispose();
-            if(SystemStatus.getBackgroundJobCancel())
-                return null;
         }
         Logger.i(this.toString(),"End Background Job");
         return null;
@@ -88,18 +67,24 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
 
     @Override
     public void onSuccess(Context context, Object result) {
-        if(!SystemStatus.getBackgroundJobCancel()) {
-            BackgroundRunnable.weakHandler.postDelayed(BackgroundRunnable.backgroundRunnable,
-                    TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
+        if(SystemStatus.getBackgroundJobCancel().equals(false)) {
+            //BackgroundRunnable.backgroundDataReceive=new BackgroundDataReceiver();
+            //BackgroundRunnable.weakHandler.postDelayed(BackgroundRunnable.backgroundRunnable,
+              //      TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
+            //Tasks.executeInBackground(context,this,this);
+            BackgroundRunnable.reRunBackgroundService();
         }
     }
 
     @Override
     public void onError(Context context, Exception e) {
-        if(!SystemStatus.getBackgroundJobCancel()) {
+        if(SystemStatus.getBackgroundJobCancel().equals(false)) {
             Notification.notifyFailure("Something wrong in the background! App is trying to fix the problem...");
-            BackgroundRunnable.weakHandler.postDelayed(BackgroundRunnable.backgroundRunnable,
-                    TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
+            //BackgroundRunnable.backgroundDataReceive=new BackgroundDataReceiver();
+            //BackgroundRunnable.weakHandler.postDelayed(BackgroundRunnable.backgroundRunnable,
+               //     TimeUnit.SECONDS.toMillis(BackgroundRunnable.BACKGROUND_EXECUTION_TIME));
+            //Tasks.executeInBackground(context,this,this);
+            BackgroundRunnable.reRunBackgroundService();
         }
     }
 }

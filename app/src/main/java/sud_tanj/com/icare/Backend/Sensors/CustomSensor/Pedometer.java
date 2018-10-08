@@ -34,6 +34,8 @@ public class Pedometer extends BuiltInSensor implements SensorEventListener {
 
     protected Pedometer(){
         super();
+        System.out.println("System supporrt Step : "+getContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER));
         if (getContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)){
             SensorManager sensorManager = (SensorManager) getContext()

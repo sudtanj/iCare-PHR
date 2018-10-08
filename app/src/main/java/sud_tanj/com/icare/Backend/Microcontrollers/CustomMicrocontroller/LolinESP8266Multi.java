@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,18 +40,20 @@ public class LolinESP8266Multi extends ESP8266 {
     public void run() {
         if (wifi.isWifiEnabled()) {
             try {
-                String response = new GetJson()
-                        .AsString(LOLIN_URL);
-                System.out.println(response);
-                JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
-                JsonArray jsonArray = jsonObject.get(NEW_IP).getAsJsonArray();
-                for (JsonElement temp : jsonArray) {
-                    String result = temp.getAsString();
-                    if (this.ipAddress.indexOf(result) == -1) {
-                        this.ipAddress.add(result);
+                if(InetAddress.getByName(LOLIN_URL).isReachable(3000)) {
+                    String response = new GetJson()
+                            .AsString(LOLIN_URL);
+                    System.out.println(response);
+                    JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
+                    JsonArray jsonArray = jsonObject.get(NEW_IP).getAsJsonArray();
+                    for (JsonElement temp : jsonArray) {
+                        String result = temp.getAsString();
+                        if (this.ipAddress.indexOf(result) == -1) {
+                            this.ipAddress.add(result);
+                        }
                     }
+                    fireEventListener(jsonObject);
                 }
-                fireEventListener(jsonObject);
             } catch (Exception e) {
 
             }

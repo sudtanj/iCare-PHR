@@ -235,13 +235,10 @@ public class MainActivity extends DrawerActivity implements OnProfileClickListen
         }
         if(s.equals(SettingsFragment.BACKGROUND_JOB_SETTINGS)){
             if(sharedPreferences.getString(s,"On").equals("On")){
-                if(SystemStatus.getBackgroundJobCancel()==true) {
-                    SystemStatus.setBackgroundJobCancel(false);
-                    BackgroundRunnable.reRunBackgroundService();
-                }
+                SystemStatus.setBackgroundJobCancel(false);
+                BackgroundRunnable.reRunBackgroundService();
             } else {
-                if(SystemStatus.getBackgroundJobCancel()==false)
-                    SystemStatus.setBackgroundJobCancel(true);
+                SystemStatus.setBackgroundJobCancel(true);
             }
         }
     }
