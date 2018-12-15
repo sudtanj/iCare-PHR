@@ -89,9 +89,11 @@ public class StepsCounter extends BasePlugin implements ValueEventListener,Senso
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         MonitoringInformation monitoringInformation=dataSnapshot.getValue(MonitoringInformation.class);
         if(monitoringInformation.getMuteStatus().get(FirebaseAuth.getInstance()
-                .getCurrentUser().getUid()).equals(false))
-        {
-            Pedometer.getInstance().addListener(this);
+                .getCurrentUser().getUid())!=null) {
+            if (monitoringInformation.getMuteStatus().get(FirebaseAuth.getInstance()
+                    .getCurrentUser().getUid()).equals(false)) {
+                Pedometer.getInstance().addListener(this);
+            }
         }
     }
 
