@@ -11,7 +11,7 @@ package sud_tanj.com.icare.Backend.Sensors;
  */
 public abstract class BaseMicrocontrollerSensor extends BaseSensor{
 
-    abstract Double calculateResult();
+    protected abstract Double calculateResult();
 
     public void onDispose(){
         if(BaseSensor.baseSensors.indexOf(this)>-1)

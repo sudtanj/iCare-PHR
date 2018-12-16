@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "713034949688-343p9j9te55cm5g7orea4d8j64gltb0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sud_tanj.com.icare",
+            "certificate_hash": "08d663b1e701cc74e9b2b3f43b90619117df3717"
+          }
+        },
+        {
           "client_id": "713034949688-85becbtnb3inr12mo6uo1k5jcdsccc3a.apps.googleusercontent.com",
           "client_type": 3
         }

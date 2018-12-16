@@ -3,8 +3,6 @@ package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller;
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
 
-import java.net.InetAddress;
-
 /**
  * This class is part of iCare Project
  * Any modified within this class without reading the
@@ -31,16 +29,22 @@ public class LolinESP8266 extends ESP8266{
 
     @Override
     public void run() {
+        System.out.println("Run LOLIN!");
         if(wifi.isWifiEnabled()) {
+            System.out.println("WIFI ENABLE");
             try {
-                if(InetAddress.getByName(LOLIN_URL).isReachable(3000)) {
+                //if(InetAddress.getByName(LOLIN_URL).isReachable(3000)) {
+                    System.out.println("LOLIN WORKING!");
                     String response = new GetJson()
                             .AsString(LOLIN_URL);
                     JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
                     fireEventListener(jsonObject);
-                }
+               // }
+               // else {
+                  //  System.out.println("LOLIN FAILED!");
+               // }
             } catch (Exception e) {
-
+                System.out.println(e.getMessage());
             }
         }
     }
