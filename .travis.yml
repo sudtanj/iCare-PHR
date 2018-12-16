@@ -53,4 +53,4 @@ before_install:
   -in key.jks.enc -out key.jks -d
 - yes | sdkmanager "platforms;android-27"
 script:
-- "./gradlew build"
+- "./gradlew build --continue"
