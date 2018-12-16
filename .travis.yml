@@ -24,15 +24,15 @@ before_script:
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-cache:
-  apt: true
-  directories:
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
-  - "$HOME/.android/build-cache"
-  - "$TRAVIS_BUILD_DIR/gradle/caches/"
-  - "$TRAVIS_BUILD_DIR/gradle/wrapper/dists/"
-  - "$TRAVIS_BUILD_DIR/android-sdk/extras/"
+#cache:
+#  apt: true
+#  directories:
+#  - "$HOME/.gradle/caches/"
+#  - "$HOME/.gradle/wrapper/"
+#  - "$HOME/.android/build-cache"
+#  - "$TRAVIS_BUILD_DIR/gradle/caches/"
+#  - "$TRAVIS_BUILD_DIR/gradle/wrapper/dists/"
+#  - "$TRAVIS_BUILD_DIR/android-sdk/extras/"
 android:
   components:
   - tools
@@ -53,4 +53,5 @@ before_install:
   -in key.jks.enc -out key.jks -d
 - yes | sdkmanager "platforms;android-27"
 script:
+- "./gradlew clean --refresh-dependencies"
 - "./gradlew build --refresh-dependencies"
