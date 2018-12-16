@@ -3,6 +3,10 @@ sudo: false
 dist: precise
 jdk:
 - oraclejdk8
+addons:
+    apt:
+        packages:
+        - oracle-java8-installer
 env:
   global:
   - SDK_VERSION=28
@@ -42,6 +46,9 @@ android:
   - android-$SDK_VERSION
   - sys-img-$ANDROID_ABI-$ANDROID_TAG_COMPONENT-$ANDROID_API
   - build-tools-$SDK_VERSION.0.2
+  - extra-android-support
+  - extra-android-m2repository
+  - extra-google-m2repository
   licenses:
   - android-sdk-preview-license-52d11cd2
   - android-sdk-license-.+
