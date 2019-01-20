@@ -44,6 +44,9 @@ public class BackgroundDataReceiver implements BackgroundWork, Completion {
         runnableMicrocontrollers = BaseMicrocontroller.getBaseMicrocontrollerList();
         Logger.i(this.toString(),runnableMicrocontrollers.toString());
         for(int i=0;i<runnableMicrocontrollers.size();i++){
+            System.out.println(i);
+            System.out.println(runnableMicrocontrollers.size());
+            System.out.println(runnableMicrocontrollers.get(i));
             runnableMicrocontrollers.get(i).run();
         }
         baseSensors=BaseSensor.getBaseSensors();

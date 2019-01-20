@@ -101,7 +101,9 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
                 Logger.i(this.toString(),recv);
                 try {
                     fireEventListener(this.jsonParser.parse(recv).getAsJsonObject());
-                } catch (Exception e){}
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }
