@@ -7,6 +7,7 @@ import java.util.List;
 
 import lombok.Getter;
 import sud_tanj.com.icare.Backend.BaseAbstractComponent;
+import sud_tanj.com.icare.Backend.Plugins.CustomPlugins.AirQualitySensor;
 import sud_tanj.com.icare.Backend.Plugins.CustomPlugins.ArduinoExample;
 import sud_tanj.com.icare.Backend.Plugins.CustomPlugins.HCSR04UltrasonicSensor;
 import sud_tanj.com.icare.Backend.Plugins.CustomPlugins.LolinExample;
@@ -39,6 +40,7 @@ public abstract class BasePlugin extends BaseAbstractComponent<PluginListener,Da
         LolinExample.getInstance();
         LolinMultiExample.getInstance();
         HCSR04UltrasonicSensor.getInstance();
+        AirQualitySensor.getInstance();
     }
 
     @Override

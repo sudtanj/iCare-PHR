@@ -46,14 +46,11 @@ import sud_tanj.com.icare.Backend.Preferences.HybridPreferences;
 import sud_tanj.com.icare.Backend.Sensors.BuiltInSensor;
 import sud_tanj.com.icare.Backend.Utility.SystemStatus;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
-import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataUi_;
 import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
-import sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.SensorUi_;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.Frontend.Listener.FirebaseProfilePictureListener;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
 import sud_tanj.com.icare.Frontend.Settings.SettingsFragment;
-import sud_tanj.com.icare.Frontend.Settings.SettingsFragment_;
 
 @EActivity(R.layout.activity_main)
 @WindowFeature(Window.FEATURE_NO_TITLE)
@@ -110,7 +107,7 @@ public class MainActivity extends DrawerActivity implements OnProfileClickListen
         //init fragment manager
         FragmentBuilder.init(getIntent().getExtras(),getSupportFragmentManager());
         if(FragmentBuilder.getLastFragment()==null){
-           FragmentBuilder.changeFragment(DataUi_.builder().build());
+          // FragmentBuilder.changeFragment(DataUi_.builder().build());
         } else {
             FragmentBuilder.launchLastFragment();
         }
@@ -191,15 +188,15 @@ public class MainActivity extends DrawerActivity implements OnProfileClickListen
     @Override
     public void onClick(DrawerItem drawerItem, long l, int position) {
         if(drawerItem.getTextPrimary().equals(getString(R.string.Health_Data_Menu_Title))){
-            FragmentBuilder.changeFragment(DataUi_.builder().build());
+            //FragmentBuilder.changeFragment(DataUi_.builder().build());
         }
         if(drawerItem.getTextPrimary().equals(getString(R.string.sensor_catalogue_menu_title))){
-            FragmentBuilder.changeFragment(SensorUi_.builder().build());
+            //FragmentBuilder.changeFragment(SensorUi_.builder().build());
             getSupportActionBar().setTitle(R.string.sensor_catalogue_menu_title);
         }
         if(drawerItem.getTextPrimary().equals(getString(R.string.settings_menu_title))){
             //SettingsFragment settingsFragment=new SettingsFragment_();
-            FragmentBuilder.changeFragment(SettingsFragment_.builder().build());
+            //FragmentBuilder.changeFragment(SettingsFragment_.builder().build());
             getSupportActionBar().setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+getString(R.string.settings_personal_information_headings));
         }
         if (drawerItem.getTextPrimary().equals(getString(R.string.about_menu_title))){

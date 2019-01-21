@@ -38,7 +38,6 @@ import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.UserInformation;
 import sud_tanj.com.icare.Frontend.Animation.LoadingScreen;
 import sud_tanj.com.icare.Frontend.Notification.Notification;
-import sud_tanj.com.icare.MainActivity_;
 import sud_tanj.com.icare.R;
 
 @Fullscreen
@@ -174,7 +173,7 @@ public class LoginScreen extends Activity implements OnCompleteListener<AuthResu
         }
     }
     private void startMainActivity(){
-        MainActivity_.intent(LoginScreen.this).gso(gso).start();
+       //MainActivity_.intent(LoginScreen.this).gso(gso).start();
         Bungee.swipeRight(LoginScreen.this);
     }
 }

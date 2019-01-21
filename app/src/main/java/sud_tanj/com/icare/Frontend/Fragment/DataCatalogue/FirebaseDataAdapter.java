@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import lombok.Getter;
 import sud_tanj.com.icare.Backend.Database.HybridReference;
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
-import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail.DataDetails_;
 import sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.FirebaseDataAdapter.DataHolder;
 import sud_tanj.com.icare.R;
 
@@ -51,7 +50,7 @@ public class FirebaseDataAdapter extends FirebaseRecyclerAdapter<MonitoringInfor
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataDetails_.intent(holder.itemView.getContext()).id(getRef(position).getKey()).start();
+                //DataDetails_.intent(holder.itemView.getContext()).id(getRef(position).getKey()).start();
             }
         });
         DataFlowListener.listen(holder.dataStatusButton,getRef(position).getKey());

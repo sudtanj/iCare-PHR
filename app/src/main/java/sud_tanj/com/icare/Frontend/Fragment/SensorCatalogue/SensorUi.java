@@ -36,7 +36,6 @@ import java.util.List;
 
 import sud_tanj.com.icare.Backend.Database.Monitoring.MonitoringInformation;
 import sud_tanj.com.icare.Backend.Database.UserInformation;
-import sud_tanj.com.icare.Frontend.Fragment.FragmentBuilder;
 import sud_tanj.com.icare.Frontend.Icon.IconBuilder;
 import sud_tanj.com.icare.R;
 import sumimakito.android.advtextswitcher.AdvTextSwitcher;
@@ -118,13 +117,13 @@ public class SensorUi extends Fragment {
 
     @Click(R.id.adding_button)
     protected void addingButtonClicked(){
-        AddMonitor_.intent(this.getContext()).startForResult(ACTIVITY_ADDING_MODIFY);
+        //AddMonitor_.intent(this.getContext()).startForResult(ACTIVITY_ADDING_MODIFY);
         // /FragmentBuilder.changeFragment(AddMonitor_.builder().build());
     }
 
     @OnActivityResult(ACTIVITY_ADDING_MODIFY)
     protected void onResult(Integer resultCode, Intent data) {
-        FragmentBuilder.changeFragment(SensorUi_.builder().build());
+        //FragmentBuilder.changeFragment(SensorUi_.builder().build());
     }
 
     private void initRecyclerView() {
