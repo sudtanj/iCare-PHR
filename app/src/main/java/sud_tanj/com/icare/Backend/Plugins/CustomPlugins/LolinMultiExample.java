@@ -35,9 +35,9 @@ public class LolinMultiExample extends BasePlugin implements MicrocontrollerList
         return lolinMultiExample;
     }
 
-
     @Override
     public void run() {
+        LolinESP8266Multi.getInstance().setBruteForce(true);
         LolinESP8266Multi.getInstance().addListener(this);
     }
 

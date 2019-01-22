@@ -54,7 +54,7 @@ public class GraphEventListener implements ValueEventListener {
                                 firstTimeStamp=healthData.getTimeStamp();
                                 HourAxisValueFormatter.referenceTimestamp=firstTimeStamp;
                             }
-                            for (int i = 0; i < healthData.getDataList().size(); i++) {
+                            for (int i = 0; i < entries.size(); i++) {
                                 //System.out.println(healthData.getDataList().get(i).floatValue());
                                 entries.get(i).add(new Entry(healthData.getTimeStamp()-firstTimeStamp, healthData.getDataList().get(i).floatValue()));
                                 //entries.add(new Entry(healthData.getTimeStamp(), healthData.getDataList().get(i).floatValue()));
