@@ -14,7 +14,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
@@ -29,8 +31,8 @@ import sud_tanj.com.icare.Backend.Microcontrollers.BaseMicrocontroller;
  * This class last modified by User
  */
 public abstract class ESP8266 extends BaseMicrocontroller {
+    private static Map<String,Boolean> urlListStatus=new HashMap<>();
     protected JsonParser jsonParser=null;
-    private boolean executed=false;
     private static GetJson getJson=new GetJson();
     protected static WifiManager wifi=(WifiManager)BaseMicrocontroller.getContext()
             .getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -44,25 +46,29 @@ public abstract class ESP8266 extends BaseMicrocontroller {
                 System.out.println("WIFI ENABLE");
                 try {
                     //if(InetAddress.getByName(LOLIN_URL).isReachable(3000)) {
-                    if (isServerReachable(url)) {
+                    if(urlListStatus.get(url)==false){
+                        urlListStatus.put(url,isServerReachable(url));
+                    }
+                    if (urlListStatus.get(url)==true) {
                         System.out.println("LOLIN WORKING!");
                         String response = getJson
                                 .AsString(url);
                         System.out.println("Parsing JSON");
                         for (ESP8266 esp8266 : esp8266List) {
+                            System.out.println("ESP8266 abstract :"+esp8266);
                             esp8266.onDataDownloaded(url, response);
-                            esp8266.executed=true;
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    urlList.clear();
-                    esp8266List.clear();
+                    //urlList.clear();
+                    //esp8266List.clear();
+                    urlListStatus.put(url,false);
                 }
             }
         }
-        urlList.clear();
-        esp8266List.clear();
+        //urlList.clear();
+        //esp8266List.clear();
     }
 
     @Getter
@@ -72,12 +78,12 @@ public abstract class ESP8266 extends BaseMicrocontroller {
     public static void addURL(String url){
         if(!urlList.contains(url)){
             urlList.add(url);
+            urlListStatus.put(url,false);
         }
     }
 
     public ESP8266() {
         super();
-        this.executed=false;
         this.jsonParser=new JsonParser();
     }
 

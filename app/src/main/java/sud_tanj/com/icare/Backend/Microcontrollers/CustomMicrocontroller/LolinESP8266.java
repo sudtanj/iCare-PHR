@@ -36,10 +36,13 @@ public class LolinESP8266 extends ESP8266{
         super();
         ESP8266.addURL(LOLIN_URL);
         ESP8266.getEsp8266List().add(this);
+
     }
 
     @Override
     void onDataDownloaded(String url, String data) {
+        System.out.println(url);
+        System.out.println(data);
         if(url.equals(LOLIN_URL)) {
             JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
             fireEventListener(jsonObject);
