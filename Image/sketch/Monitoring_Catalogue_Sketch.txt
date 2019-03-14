@@ -1,0 +1,31 @@
+1.
+User Interaction :
+None
+Uses :
+Displaying the name for selected monitoring 
+that listed is called.
+2.
+User Interaction :
+None
+Uses :
+Displaying the status of the particular monitoring if
+it's currently available to use by the user
+3. 
+User Interaction :
+This UI Component can be swipe by user to view
+other item that available on the right. 
+Uses :
+Displaying the image representing what want to be 
+monitored
+4. 
+User Interaction :
+None
+Uses :
+To describe in word about kind of monitoring that it
+doing for the user
+5.
+User Interaction :
+None
+Uses :
+Displaying a credit to developer that developing this
+particular plugins for the monitoring process.

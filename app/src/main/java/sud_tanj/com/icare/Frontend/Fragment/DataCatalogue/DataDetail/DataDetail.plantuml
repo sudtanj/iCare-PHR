@@ -1,0 +1,213 @@
+@startuml
+
+title __DATADETAIL's Class Diagram__\n
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class AnalysisAdapter {
+              + AnalysisAdapter()
+              # onBindViewHolder()
+              + onCreateViewHolder()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DataHolder {
+              # analysisView : TextView
+              # dateView : TextView
+              + DataHolder()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class CommentEventListener {
+              - chatView : ChatView
+              + onDataChange()
+              + onCancelled()
+              + CommentEventListener()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class CurrentDataAdapter {
+              - units : List<String>
+              + CurrentDataAdapter()
+              + onCreateViewHolder()
+              # onBindViewHolder()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DataHolder {
+              # valueView : TextView
+              # unitView : TextView
+              + DataHolder()
+              + getValueView()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DataDetails {
+              {static} + REALTIME : String
+              {static} + FROM_TO : String
+              # id : String
+              # firstRecyclerView : SuperRecyclerView
+              # lineChartView : LineChart
+              # spinner : AwesomeSpinner
+              # commentView : ChatView
+              # boomButton : BoomMenuButton
+              # analysisRecycler : SuperRecyclerView
+              - firebaseQuery : Query
+              - firebaseCommentQuery : Query
+              - dpd : DatePickerDialog
+              - chatMessage : ChatMessage
+              - currentDataListener : ValueEventListener
+              - firebaseCurrentHealthDataQuery : Query
+              # initActionBar()
+              # initUI()
+              # initAnalysis()
+              - setAnalysisBy()
+              - initGraph()
+              # initSpinner()
+              # initCommentView()
+              - setCommentBy()
+              - initLatestData()
+              - setGraphViewBy()
+              # onStop()
+              # backButtonClicked()
+              + onDataChange()
+              + onCancelled()
+              + onItemSelected()
+              + onDateSet()
+              + sendMessage()
+              + onBoomButtonClick()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DayAxisValueFormatter {
+              # mMonths : String[]
+              - chart : BarLineChartBase<?>
+              + DayAxisValueFormatter()
+              + getFormattedValue()
+              - getDaysForMonth()
+              - determineMonth()
+              - determineDayOfMonth()
+              - determineYear()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class GraphEventListener {
+              - lineChartView : LineChart
+              + onDataChange()
+              + onCancelled()
+              + GraphEventListener()
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class HourAxisValueFormatter {
+              {static} + referenceTimestamp : long
+              - mDataFormat : DateFormat
+              - mDate : Date
+              + HourAxisValueFormatter()
+              + getFormattedValue()
+              - getHour()
+          }
+        }
+      }
+    }
+  }
+  
+
+  AnalysisAdapter -up-|> FirebaseRecyclerAdapter
+  AnalysisAdapter +-down- DataHolder
+  DataHolder -up-|> ViewHolder
+  CommentEventListener -up-|> ValueEventListener
+  CurrentDataAdapter -up-|> FirebaseRecyclerAdapter
+  CurrentDataAdapter +-down- DataHolder
+  DataHolder -up-|> ViewHolder
+  DataDetails -up-|> OnBMClickListener
+  DataDetails -up-|> OnSentMessageListener
+  DataDetails -up-|> ValueEventListener
+  DataDetails -up-|> onSpinnerItemClickListener
+  DataDetails -up-|> OnDateSetListener
+  DataDetails -up-|> AppCompatActivity
+  DataDetails o-- CurrentDataAdapter : currentDataAdapter
+  DataDetails o-- GraphEventListener : graphEventListener
+  DataDetails o-- CommentEventListener : commentEventListener
+  DataDetails o-- MonitoringInformation : monitoringInformation
+  HostCallbacks -up-|> FragmentHostCallback
+  DayAxisValueFormatter -up-|> IAxisValueFormatter
+  GraphEventListener -up-|> ValueEventListener
+  GraphEventListener o-- MonitoringInformation : monitoringInformation
+  HourAxisValueFormatter -up-|> IAxisValueFormatter
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

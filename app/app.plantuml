@@ -1,0 +1,2201 @@
+@startuml
+
+title __APP's Class Diagram__\n
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        abstract class AddModifyMonitor {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class AddMonitor {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class AddMonitor_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class AddMonitor_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Analysis {
+        package sud_tanj.com.icare.Backend.Analysis.CustomAnalysis {
+          class AirQualityAnalysis {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        package sud_tanj.com.icare.Backend.Plugins.CustomPlugins {
+          class AirQualitySensor {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class AnalysisAdapter {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Utility {
+        class AnalysisDataSynchronizer {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Analysis {
+        interface AnalysisListener {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        package sud_tanj.com.icare.Backend.Plugins.CustomPlugins {
+          class ArduinoExample {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Microcontrollers {
+        package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller {
+          class ArduinoUnoCH340 {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.BackgroundJob {
+        class BackgroundDataReceiver {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.BackgroundJob {
+        class BackgroundRunnable {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      abstract class BaseAbstractComponent {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Activity {
+      class BaseActivity {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Analysis {
+        abstract class BaseAnalysis {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Microcontrollers {
+        abstract class BaseMicrocontroller {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Sensors {
+        abstract class BaseMicrocontrollerSensor {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        abstract class BasePlugin {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Sensors {
+        abstract class BaseSensor {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class BuildConfig {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class BuildConfig {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Sensors {
+        abstract class BuiltInSensor {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue.Cards {
+          class CardsUpdater {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class CommentEventListener {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class CurrentDataAdapter {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        package sud_tanj.com.icare.Backend.Database.PersonalData {
+          class DataAnalysis {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        package sud_tanj.com.icare.Backend.Database.PersonalData {
+          class DataComment {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DataDetails {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DataDetails_ {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DataDetails_ {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        class DataFlowListener {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        class DataUi {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        class DataUi_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        class DataUi_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class DayAxisValueFormatter {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Analysis {
+        package sud_tanj.com.icare.Backend.Analysis.CustomAnalysis {
+          class DistanceAnalysis {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Microcontrollers {
+        package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller {
+          abstract class ESP8266 {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class ExampleInstrumentedTest {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        class FirebaseDataAdapter {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class FirebaseMonitoringAdapter {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Listener {
+      class FirebaseProfilePictureListener {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      class FragmentBuilder {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class GraphEventListener {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Sensors {
+        package sud_tanj.com.icare.Backend.Sensors.CustomSensor {
+          class HCSR04Sensor {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        package sud_tanj.com.icare.Backend.Plugins.CustomPlugins {
+          class HCSR04UltrasonicSensor {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        package sud_tanj.com.icare.Backend.Database.PersonalData {
+          class HealthData {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue {
+        package sud_tanj.com.icare.Frontend.Fragment.DataCatalogue.DataDetail {
+          class HourAxisValueFormatter {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Preferences {
+        class HybridPreferences {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        class HybridReference {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Icon {
+      class IconBuilder {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Animation {
+      class LoadingScreen {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.AuthiCare {
+      class LoginScreen {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.AuthiCare {
+      class LoginScreen_ {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.AuthiCare {
+      class LoginScreen_ {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Microcontrollers {
+        package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller {
+          class LolinESP8266 {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Microcontrollers {
+        package sud_tanj.com.icare.Backend.Microcontrollers.CustomMicrocontroller {
+          class LolinESP8266Multi {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        package sud_tanj.com.icare.Backend.Plugins.CustomPlugins {
+          class LolinExample {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        package sud_tanj.com.icare.Backend.Plugins.CustomPlugins {
+          class LolinMultiExample {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class MainActivity {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class MainActivity_ {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class MainActivity_ {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Microcontrollers {
+        interface MicrocontrollerListener {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class ModifyMonitor {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class ModifyMonitor_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class ModifyMonitor_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        package sud_tanj.com.icare.Backend.Database.Monitoring {
+          class MonitoringInformation {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Notification {
+      class Notification {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    interface OnFragmentInteractionListener {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Sensors {
+        package sud_tanj.com.icare.Backend.Sensors.CustomSensor {
+          class Pedometer {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        interface PluginListener {
+        }
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.tasks {
+    class R {
+    }
+  }
+  
+
+  package io.fabric.sdk.android {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.iid {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.plus {
+    class R {
+    }
+  }
+  
+
+  package com.bumptech.glide {
+    class R {
+    }
+  }
+  
+
+  package co.intentservice.chatui {
+    class R {
+    }
+  }
+  
+
+  package com.ramotion.cardslider {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.stats {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.ads_identifier {
+    class R {
+    }
+  }
+  
+
+  package in.championswimmer.libsocialbuttons {
+    class R {
+    }
+  }
+  
+
+  package com.nanotasks {
+    class R {
+    }
+  }
+  
+
+  package com.mikepenz.fastadapter {
+    class R {
+    }
+  }
+  
+
+  package com.borax12.materialdaterangepicker {
+    class R {
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    package com.crashlytics.android.beta {
+      class R {
+      }
+    }
+  }
+  
+
+  package android.support.mediacompat {
+    class R {
+    }
+  }
+  
+
+  package android.support.compat {
+    class R {
+    }
+  }
+  
+
+  package com.evernote.android.state {
+    class R {
+    }
+  }
+  
+
+  package me.riddhimanadib.formmaster {
+    class R {
+    }
+  }
+  
+
+  package com.orhanobut.logger {
+    class R {
+    }
+  }
+  
+
+  package com.bumptech.glide {
+    class R {
+    }
+  }
+  
+
+  package com.bumptech.glide {
+    package com.bumptech.glide.gifdecoder {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.firebase.ui.database {
+    class R {
+    }
+  }
+  
+
+  package android.support.graphics.drawable {
+    class R {
+    }
+  }
+  
+
+  package com.potterhsu.usblistener {
+    class R {
+    }
+  }
+  
+
+  package me.shaohui.bottomdialog {
+    class R {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class R {
+    }
+  }
+  
+
+  package me.zhanghai.android.materialprogressbar {
+    class R {
+    }
+  }
+  
+
+  package me.shaohui.bottomdialog {
+    class R {
+    }
+  }
+  
+
+  package com.kaopiz.kprogresshud {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.plus {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.auth {
+    package com.google.android.gms.auth.api {
+      package com.google.android.gms.auth.api.phone {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.support.graphics.drawable {
+    package android.support.graphics.drawable.animated {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.mikepenz.aboutlibraries {
+    class R {
+    }
+  }
+  
+
+  package com.malinskiy.superrecyclerview {
+    class R {
+    }
+  }
+  
+
+  package android.support.coreui {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.viewmodel {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    class R {
+    }
+  }
+  
+
+  package io.paperdb {
+    class R {
+    }
+  }
+  
+
+  package android.support.v7.recyclerview {
+    class R {
+    }
+  }
+  
+
+  package com.badoo.mobile.util {
+    class R {
+    }
+  }
+  
+
+  package com.borax12.materialdaterangepicker {
+    class R {
+    }
+  }
+  
+
+  package com.dezlum.codelabs.getjson {
+    class R {
+    }
+  }
+  
+
+  package android.support.mediacompat {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.common {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.common {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.iid {
+      package com.google.firebase.iid.internal {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.support.v7.cardview {
+    class R {
+    }
+  }
+  
+
+  package android.support.design {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.flags {
+    class R {
+    }
+  }
+  
+
+  package sumimakito.android.advtextswitcher {
+    class R {
+    }
+  }
+  
+
+  package com.heinrichreimersoftware.materialdrawer {
+    class R {
+    }
+  }
+  
+
+  package com.firebase.ui.common {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.auth {
+    package com.google.android.gms.auth.api {
+      class R {
+      }
+    }
+  }
+  
+
+  package android.support.transition {
+    class R {
+    }
+  }
+  
+
+  package android.arch.core {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    class R {
+    }
+  }
+  
+
+  package android.support.v4 {
+    class R {
+    }
+  }
+  
+
+  package com.ncapdevi.fragnav {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.analytics.connector {
+      package com.google.firebase.analytics.connector.impl {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package com.mikepenz.fastadapter {
+    class R {
+    }
+  }
+  
+
+  package android.support.fragment {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.ads_identifier {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.stats {
+    class R {
+    }
+  }
+  
+
+  package co.intentservice.chatui {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.iid {
+      package com.google.firebase.iid.internal {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    class R {
+    }
+  }
+  
+
+  package net.steamcrafted.materialiconlib {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.auth {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.firebase_core {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    package com.crashlytics.android.beta {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.getkeepsafe.taptargetview {
+    class R {
+    }
+  }
+  
+
+  package android.support.customtabs {
+    class R {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    class R {
+    }
+  }
+  
+
+  package android.support.graphics.drawable {
+    class R {
+    }
+  }
+  
+
+  package com.firebase.ui.common {
+    class R {
+    }
+  }
+  
+
+  package android.support.constraint {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.livedata {
+      package android.arch.lifecycle.livedata.core {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.livedata {
+      class R {
+      }
+    }
+  }
+  
+
+  package io.fabric.sdk.android {
+    class R {
+    }
+  }
+  
+
+  package net.steamcrafted.materialiconlib {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.measurement {
+      package com.google.firebase.measurement_impl {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package pl.tajchert.waitingdots {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    class R {
+    }
+  }
+  
+
+  package me.riddhimanadib.formmaster {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.flags {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.measurement.api {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.base {
+    class R {
+    }
+  }
+  
+
+  package com.potterhsu.usblistener {
+    class R {
+    }
+  }
+  
+
+  package com.heinrichreimersoftware.materialdrawer {
+    class R {
+    }
+  }
+  
+
+  package android.support.transition {
+    class R {
+    }
+  }
+  
+
+  package com.ramotion.cardslider {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.extensions {
+      class R {
+      }
+    }
+  }
+  
+
+  package spencerstudios.com.bungeelib {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.iid {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.measurement_base {
+    class R {
+    }
+  }
+  
+
+  package org.altmail.displaytextview {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.extensions {
+      class R {
+      }
+    }
+  }
+  
+
+  package kr.pe.burt.android.lib.animategradientview {
+    class R {
+    }
+  }
+  
+
+  package android.support.compat {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.tasks {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.auth {
+      package com.google.firebase.auth.internal {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package com.firebase.ui.auth {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.database {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.auth {
+      class R {
+      }
+    }
+  }
+  
+
+  package sumimakito.android.advtextswitcher {
+    class R {
+    }
+  }
+  
+
+  package com.nightonke.boommenu {
+    class R {
+    }
+  }
+  
+
+  package org.altmail.displaytextview {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.measurement {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.measurement {
+      package com.google.firebase.measurement_impl {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.viewmodel {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.firebase_core {
+      class R {
+      }
+    }
+  }
+  
+
+  package android.support.graphics.drawable {
+    package android.support.graphics.drawable.animated {
+      class R {
+      }
+    }
+  }
+  
+
+  package android.arch.core {
+    class R {
+    }
+  }
+  
+
+  package android.support.coreui {
+    class R {
+    }
+  }
+  
+
+  package com.ramotion.foldingcell {
+    class R {
+    }
+  }
+  
+
+  package me.zhanghai.android.materialprogressbar {
+    class R {
+    }
+  }
+  
+
+  package es.dmoral.toasty {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.auth {
+    class R {
+    }
+  }
+  
+
+  package com.ramotion.foldingcell {
+    class R {
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    class R {
+    }
+  }
+  
+
+  package sharefirebasepreferences.crysxd.de.lib {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.analytics.connector {
+      class R {
+      }
+    }
+  }
+  
+
+  package android.support.multidex {
+    class R {
+    }
+  }
+  
+
+  package es.dmoral.toasty {
+    class R {
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    package com.crashlytics.android.answers {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.auth {
+    class R {
+    }
+  }
+  
+
+  package sharefirebasepreferences.crysxd.de.lib {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.database {
+      package com.google.firebase.database.collection {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.support.coreutils {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.measurement {
+      class R {
+      }
+    }
+  }
+  
+
+  package android.support.v7.cardview {
+    class R {
+    }
+  }
+  
+
+  package android.support.v7.recyclerview {
+    class R {
+    }
+  }
+  
+
+  package com.mikepenz.iconics.core {
+    class R {
+    }
+  }
+  
+
+  package com.nanotasks {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.livedata {
+      package android.arch.lifecycle.livedata.core {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.measurement.api {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.auth {
+    package com.google.android.gms.auth.api {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.auth {
+      package com.google.firebase.auth.internal {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package com.isapanah.awesomespinner {
+    class R {
+    }
+  }
+  
+
+  package com.dezlum.codelabs.getjson {
+    class R {
+    }
+  }
+  
+
+  package com.nightonke.boommenu {
+    class R {
+    }
+  }
+  
+
+  package com.orhanobut.logger {
+    class R {
+    }
+  }
+  
+
+  package io.paperdb {
+    class R {
+    }
+  }
+  
+
+  package com.mikepenz.iconics.core {
+    class R {
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    package com.crashlytics.android.core {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.kaopiz.kprogresshud {
+    class R {
+    }
+  }
+  
+
+  package com.mikepenz.aboutlibraries {
+    class R {
+    }
+  }
+  
+
+  package com.isapanah.awesomespinner {
+    class R {
+    }
+  }
+  
+
+  package android.support.v4 {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    class R {
+    }
+  }
+  
+
+  package android.arch.lifecycle {
+    package android.arch.lifecycle.livedata {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.ncapdevi.fragnav {
+    class R {
+    }
+  }
+  
+
+  package android.support.multidex {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.database {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.firebase.ui.database {
+    class R {
+    }
+  }
+  
+
+  package com.github.lzyzsd.randomcolor {
+    class R {
+    }
+  }
+  
+
+  package com.firebase.ui.auth {
+    class R {
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    package com.crashlytics.android.answers {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.auth {
+    package com.google.android.gms.auth.api {
+      package com.google.android.gms.auth.api.phone {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package in.championswimmer.libsocialbuttons {
+    class R {
+    }
+  }
+  
+
+  package kr.pe.burt.android.lib.animategradientview {
+    class R {
+    }
+  }
+  
+
+  package android.support.coreutils {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.base {
+    class R {
+    }
+  }
+  
+
+  package android.support.constraint {
+    class R {
+    }
+  }
+  
+
+  package com.evernote.android.state {
+    class R {
+    }
+  }
+  
+
+  package android.support.v7.appcompat {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.measurement_base {
+    class R {
+    }
+  }
+  
+
+  package com.badoo.mobile.util {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.analytics.connector {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.github.lzyzsd.randomcolor {
+    class R {
+    }
+  }
+  
+
+  package android.support.customtabs {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.database {
+      package com.google.firebase.database.collection {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.support.design {
+    class R {
+    }
+  }
+  
+
+  package com.google.android.gms.audience {
+    class R {
+    }
+  }
+  
+
+  package com.getkeepsafe.taptargetview {
+    class R {
+    }
+  }
+  
+
+  package pl.tajchert.waitingdots {
+    class R {
+    }
+  }
+  
+
+  package com.malinskiy.superrecyclerview {
+    class R {
+    }
+  }
+  
+
+  package android.support.fragment {
+    class R {
+    }
+  }
+  
+
+  package spencerstudios.com.bungeelib {
+    class R {
+    }
+  }
+  
+
+  package com.google.firebase {
+    package com.google.firebase.analytics.connector {
+      package com.google.firebase.analytics.connector.impl {
+        class R {
+        }
+      }
+    }
+  }
+  
+
+  package android.support.v7.appcompat {
+    class R {
+    }
+  }
+  
+
+  package com.bumptech.glide {
+    package com.bumptech.glide.gifdecoder {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.crashlytics.android {
+    package com.crashlytics.android.core {
+      class R {
+      }
+    }
+  }
+  
+
+  package com.google.android.gms.audience {
+    class R {
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Sensors {
+        interface SensorListener {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class SensorUi {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class SensorUi_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class SensorUi_ {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Settings {
+      class SettingsFragment {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Settings {
+      class SettingsFragment_ {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Settings {
+      class SettingsFragment_ {
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Analysis {
+        package sud_tanj.com.icare.Backend.Analysis.CustomAnalysis {
+          class StepsAnalysis {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Plugins {
+        package sud_tanj.com.icare.Backend.Plugins.CustomPlugins {
+          class StepsCounter {
+          }
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        abstract class SyncableObject {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Utility {
+        class SystemStatus {
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Backend {
+      package sud_tanj.com.icare.Backend.Database {
+        class UserInformation {
+        }
+      }
+    }
+  }
+  
+
+  AddModifyMonitor -up-|> OnFormElementValueChangedListener
+  AddModifyMonitor -up-|> Activity
+  AddMonitor -up-|> AddModifyMonitor
+  AddMonitor_ -up-|> HasViews
+  AddMonitor_ -up-|> OnViewChangedListener
+  AddMonitor_ -up-|> HasViews
+  AddMonitor_ -up-|> OnViewChangedListener
+  AddMonitor_ -up-|> AddMonitor
+  AirQualityAnalysis -up-|> BaseAnalysis
+  AirQualitySensor -up-|> MicrocontrollerListener
+  AirQualitySensor -up-|> AnalysisListener
+  AirQualitySensor -up-|> BasePlugin
+  AnalysisAdapter -up-|> FirebaseRecyclerAdapter
+  AnalysisDataSynchronizer -up-|> ValueEventListener
+  AnalysisDataSynchronizer o-- DataAnalysis : dataAnalysis
+  ArduinoExample -up-|> MicrocontrollerListener
+  ArduinoExample -up-|> BasePlugin
+  ArduinoUnoCH340 -up-|> OnUsbListener
+  ArduinoUnoCH340 -up-|> BaseMicrocontroller
+  BackgroundDataReceiver -up-|> BackgroundWork
+  BackgroundDataReceiver -up-|> Completion
+  BackgroundRunnable -up-|> Runnable
+  BaseAbstractComponent -up-|> Runnable
+  BaseActivity -up-|> DrawerActivity
+  BaseAnalysis -up-|> BaseAbstractComponent
+  BaseMicrocontroller -up-|> BaseAbstractComponent
+  BaseMicrocontrollerSensor -up-|> BaseSensor
+  BasePlugin -up-|> Runnable
+  BasePlugin -up-|> BaseAbstractComponent
+  BaseSensor -up-|> BaseAbstractComponent
+  BuiltInSensor -up-|> BaseSensor
+  CardsUpdater -up-|> DefaultViewUpdater
+  CommentEventListener -up-|> ValueEventListener
+  CurrentDataAdapter -up-|> FirebaseRecyclerAdapter
+  DataAnalysis -up-|> SyncableObject
+  DataComment -up-|> SyncableObject
+  DataDetails -up-|> OnBMClickListener
+  DataDetails -up-|> OnSentMessageListener
+  DataDetails -up-|> ValueEventListener
+  DataDetails -up-|> onSpinnerItemClickListener
+  DataDetails -up-|> OnDateSetListener
+  DataDetails -up-|> AppCompatActivity
+  DataDetails o-- CurrentDataAdapter : currentDataAdapter
+  DataDetails o-- GraphEventListener : graphEventListener
+  DataDetails o-- CommentEventListener : commentEventListener
+  DataDetails o-- MonitoringInformation : monitoringInformation
+  DataDetails_ -up-|> HasViews
+  DataDetails_ -up-|> OnViewChangedListener
+  DataDetails_ -up-|> DataDetails
+  DataDetails_ -up-|> HasViews
+  DataDetails_ -up-|> OnViewChangedListener
+  DataFlowListener -up-|> ChildEventListener
+  DataFlowListener -up-|> Runnable
+  DataUi -up-|> Fragment
+  DataUi o-- FirebaseDataAdapter : firebaseDataAdapter
+  DataUi_ -up-|> HasViews
+  DataUi_ -up-|> OnViewChangedListener
+  DataUi_ -up-|> HasViews
+  DataUi_ -up-|> OnViewChangedListener
+  DataUi_ -up-|> DataUi
+  DayAxisValueFormatter -up-|> IAxisValueFormatter
+  DistanceAnalysis -up-|> BaseAnalysis
+  ESP8266 -up-|> BaseMicrocontroller
+  FirebaseDataAdapter -up-|> FirebaseRecyclerAdapter
+  FirebaseDataAdapter o-- DataUi : dataUi
+  FirebaseMonitoringAdapter -up-|> FirebaseRecyclerAdapter
+  FirebaseMonitoringAdapter o-- SensorUi : sensorUi
+  FirebaseProfilePictureListener -up-|> SimpleTarget
+  GraphEventListener -up-|> ValueEventListener
+  GraphEventListener o-- MonitoringInformation : monitoringInformation
+  HCSR04Sensor -up-|> BaseMicrocontrollerSensor
+  HCSR04UltrasonicSensor -up-|> MicrocontrollerListener
+  HCSR04UltrasonicSensor -up-|> AnalysisListener
+  HCSR04UltrasonicSensor -up-|> BasePlugin
+  HealthData -up-|> SyncableObject
+  HourAxisValueFormatter -up-|> IAxisValueFormatter
+  HybridReference -up-|> CompletionListener
+  LoginScreen -up-|> OnCompleteListener
+  LoginScreen -up-|> Activity
+  LoginScreen_ -up-|> HasViews
+  LoginScreen_ -up-|> OnViewChangedListener
+  LoginScreen_ -up-|> LoginScreen
+  LoginScreen_ -up-|> HasViews
+  LoginScreen_ -up-|> OnViewChangedListener
+  LolinESP8266 -up-|> ESP8266
+  LolinESP8266Multi -up-|> ESP8266
+  LolinExample -up-|> MicrocontrollerListener
+  LolinExample -up-|> BasePlugin
+  LolinMultiExample -up-|> MicrocontrollerListener
+  LolinMultiExample -up-|> BasePlugin
+  LolinMultiExample o-- HealthData : healthData
+  MainActivity -up-|> OnProfileClickListener
+  MainActivity -up-|> OnFragmentInteractionListener
+  MainActivity -up-|> OnItemClickListener
+  MainActivity -up-|> OnSharedPreferenceChangeListener
+  MainActivity -up-|> DrawerActivity
+  MainActivity o-- BackgroundDataReceiver : backgroundDataReceiver
+  MainActivity_ -up-|> HasViews
+  MainActivity_ -up-|> OnViewChangedListener
+  MainActivity_ -up-|> HasViews
+  MainActivity_ -up-|> OnViewChangedListener
+  MainActivity_ -up-|> MainActivity
+  ModifyMonitor -up-|> ValueEventListener
+  ModifyMonitor -up-|> AddModifyMonitor
+  ModifyMonitor o-- MonitoringInformation : monitoringInformation
+  ModifyMonitor_ -up-|> HasViews
+  ModifyMonitor_ -up-|> OnViewChangedListener
+  ModifyMonitor_ -up-|> HasViews
+  ModifyMonitor_ -up-|> OnViewChangedListener
+  ModifyMonitor_ -up-|> ModifyMonitor
+  MonitoringInformation -up-|> SyncableObject
+  Pedometer -up-|> SensorEventListener
+  Pedometer -up-|> BuiltInSensor
+  SensorUi -up-|> Fragment
+  SensorUi o-- FirebaseMonitoringAdapter : firebaseMonitoringAdapter
+  SensorUi_ -up-|> HasViews
+  SensorUi_ -up-|> OnViewChangedListener
+  SensorUi_ -up-|> SensorUi
+  SensorUi_ -up-|> HasViews
+  SensorUi_ -up-|> OnViewChangedListener
+  SettingsFragment -up-|> OnFormElementValueChangedListener
+  SettingsFragment -up-|> OnSharedPreferenceChangeListener
+  SettingsFragment -up-|> Fragment
+  SettingsFragment_ -up-|> HasViews
+  SettingsFragment_ -up-|> OnViewChangedListener
+  SettingsFragment_ -up-|> HasViews
+  SettingsFragment_ -up-|> OnViewChangedListener
+  SettingsFragment_ -up-|> SettingsFragment
+  StepsAnalysis -up-|> BaseAnalysis
+  StepsCounter -up-|> ValueEventListener
+  StepsCounter -up-|> SensorListener
+  StepsCounter -up-|> AnalysisListener
+  StepsCounter -up-|> BasePlugin
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

@@ -1,0 +1,25 @@
+1.
+User Interaction :
+None
+Uses :
+Displaying the user's current monitoring variable result and previous
+result. 
+2.
+User Interaction :
+Clicking the dropdown will show Year, Month, and Day
+options for the Graph at (1). A popup will appear for the
+user to choose which specific Year or Month or Day did he/she want.
+Uses :
+it will displaying the data on the graph
+in the the specific way depend on the options choosed
+by the user.
+3.
+User Interaction :
+None
+Uses :
+it will display day by day analysis for the displayed
+data in the graph at (1). It will also displaying day 
+by day analysis even options at (2) is Month. 
+(for example, it will display 30 analysis for graph 
+shown by monthly). It will not output anything if options
+at (2) is Year.

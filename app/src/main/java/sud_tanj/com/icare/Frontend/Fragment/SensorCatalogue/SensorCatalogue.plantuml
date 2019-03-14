@@ -1,0 +1,179 @@
+@startuml
+
+title __SENSORCATALOGUE's Class Diagram__\n
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        abstract class AddModifyMonitor {
+            {static} + ELEMENT_IMAGE : int
+            {static} + ELEMENT_NAME : int
+            {static} + ELEMENT_DESCRIPTION : int
+            {static} + ELEMENT_GRAPHLEGEND : int
+            {static} + ELEMENT_STATUS : int
+            {static} + ELEMENT_HEADER : int
+            {static} + ELEMENT_DEVELOPER : int
+            {static} + STATUS_ON : String
+            {static} + STATUS_OFF : String
+            # mFormBuilder : FormBuilder
+            # formItems : List<BaseFormElement>
+            + onStop()
+            + initUI()
+            {abstract} # getRecyclerView()
+            {abstract} # formValueChanged()
+            {abstract} # getFormHeader()
+            + onValueChanged()
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class AddMonitor {
+            ~ superRecyclerView : RecyclerView
+            ~ saveButton : FloatingActionButton
+            # deleteButton : FloatingActionButton
+            # init()
+            # getRecyclerView()
+            # formValueChanged()
+            # getFormHeader()
+            # saveButtonClicked()
+            # deleteButtonClicked()
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class FirebaseMonitoringAdapter {
+            + FirebaseMonitoringAdapter()
+            # onBindViewHolder()
+            + onCreateViewHolder()
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class MonitoringHolder {
+            ~ imageView : ImageView
+            + MonitoringHolder()
+            + getImageView()
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class ModifyMonitor {
+            # superRecyclerView : RecyclerView
+            # saveButton : FloatingActionButton
+            # deleteButton : FloatingActionButton
+            # id : String
+            # init()
+            # getRecyclerView()
+            # formValueChanged()
+            # getFormHeader()
+            + onDataChange()
+            # saveButtonClicked()
+            # deleteButtonClicked()
+            + onCancelled()
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class SensorUi {
+            {static} + ACTIVITY_ADDING_MODIFY : int
+            - temperatures : String[]
+            - times : String[]
+            - layoutManger : CardSliderLayoutManager
+            # temperatureSwitcher : AdvTextSwitcher
+            # placeSwitcher : AdvTextSwitcher
+            # clockSwitcher : AdvTextSwitcher
+            # descriptionsSwitcher : AdvTextSwitcher
+            # monitoringTitle : AdvTextSwitcher
+            # monitoringTitleHelper : AdvTextSwitcher
+            - countryOffset1 : int
+            - countryOffset2 : int
+            - countryAnimDuration : long
+            - currentPosition : int
+            # sensorCatalogue : RecyclerView
+            # catalogueDescriptionIcon : ImageView
+            # sensorAuthorIcon : ImageView
+            # addingButton : FloatingActionButton
+            - query : Query
+            # init()
+            - initFAB()
+            # addingButtonClicked()
+            # onResult()
+            - initRecyclerView()
+            - initSwitchers()
+            + initSwitcher()
+            + initMonitorTitle()
+            + initMonitorDeveloper()
+            + initMonitorDescription()
+            + setCountryText()
+            - onActiveCardChange()
+            - onActiveCardChange()
+        }
+      }
+    }
+  }
+  
+
+  package sud_tanj.com.icare {
+    package sud_tanj.com.icare.Frontend.Fragment {
+      package sud_tanj.com.icare.Frontend.Fragment.SensorCatalogue {
+        class TextViewFactory {
+            ~ styleId : int
+            ~ center : boolean
+            ~ TextViewFactory()
+            + makeView()
+        }
+      }
+    }
+  }
+  
+
+  AddModifyMonitor -up-|> OnFormElementValueChangedListener
+  AddModifyMonitor -up-|> Activity
+  AddMonitor -up-|> AddModifyMonitor
+  FirebaseMonitoringAdapter -up-|> FirebaseRecyclerAdapter
+  FirebaseMonitoringAdapter o-- SensorUi : sensorUi
+  FirebaseMonitoringAdapter +-down- MonitoringHolder
+  MonitoringHolder -up-|> ViewHolder
+  ModifyMonitor -up-|> ValueEventListener
+  ModifyMonitor -up-|> AddModifyMonitor
+  ModifyMonitor o-- MonitoringInformation : monitoringInformation
+  SensorUi -up-|> Fragment
+  SensorUi o-- FirebaseMonitoringAdapter : firebaseMonitoringAdapter
+  SensorUi +-down- TextViewFactory
+  TextViewFactory -up-|> ViewFactory
+  SavedState -up-|> Parcelable
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

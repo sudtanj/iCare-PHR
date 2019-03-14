@@ -95,10 +95,16 @@ public class ArduinoUnoCH340 extends BaseMicrocontroller implements OnUsbListene
     @Override
     public void run() {
         if(usbAttached) {
+            System.out.println("USB OTG Request Start time");
+            System.out.println(System.currentTimeMillis());
             bufferLength = ch34xUARTDriver.ReadData(buffer, 4096);
             if (bufferLength > 0) {
                 String recv = new String(buffer, 0, bufferLength, Charset.forName("US-ASCII"));
                 Logger.i(this.toString(),recv);
+                System.out.println("USB OTG Data");
+                System.out.println(recv);
+                System.out.println("USB OTG Request end time");
+                System.out.println(System.currentTimeMillis());
                 try {
                     fireEventListener(this.jsonParser.parse(recv).getAsJsonObject());
                 } catch (Exception e){

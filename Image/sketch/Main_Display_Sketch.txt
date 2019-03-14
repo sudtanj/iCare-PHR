@@ -1,0 +1,26 @@
+1. 
+User Interaction : 
+This UI Component can be swipe by the user 
+Uses :
+It's use to display the monitoring variables from the specific person body parts.
+2.
+User Interaction :
+None
+Uses :
+It's use to tell the user about the name of collections of variables at (1) is called.
+3.
+User Interaction :
+None
+Uses :
+Displaying if it currently monitoring the variables or not.
+4.
+User Interaction :
+Clicking the UI Component will displaying a comment popup. (Refer to Comment Popup Sketch)
+Uses :
+Displaying a popup of comment for user to commenting about his/her body condition and for doctor to commenting about the user body condition from medical perspective.
+5.
+User Interaction :
+Click the Ui Component will open more detailed informations about the monitoring (Refer to Monitoring Details Sketch)
+Uses :
+It will displaying a more detail informations about user monitoring result
+like data from the previous monitoring and automatic analysis from the app

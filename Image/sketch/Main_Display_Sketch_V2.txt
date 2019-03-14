@@ -1,0 +1,15 @@
+1.
+User Interaction : 
+Clicking on the body of the card
+Uses :
+It will redirect user to data details activity (Refer to Data_Details sketch)
+2.
+User Interaction :
+None
+Uses :
+It will show user about the monitoring state (on (data flowing) / off (data not flowing)).
+3.
+User Interaction :
+Clicking button
+Uses :
+It provide user the ability to mute until user unmute the monitoring 
